@@ -1,11 +1,11 @@
-import Link from "next/link";
 import { useState } from "react";
 
 interface LoginProps {
   onLogin: (email: string, password: string) => void;
+  errorMsg?: string;
 }
 
-const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
+const LoginForm: React.FC<LoginProps> = ({ onLogin, errorMsg }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +22,11 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
     try {
       onLogin(email, password);
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        alert(`${error.message}`);
+      } else {
+        alert(`Sign-up Error: ${error}`);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -42,6 +46,7 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
           value={email}
           placeholder="email@example.com"
           onChange={handleEmailChange}
+          required
         />
       </div>
       <div className="mb-4">
@@ -53,8 +58,10 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
           type="password"
           value={password}
           onChange={handlePasswordChange}
+          required
         />
       </div>
+      {errorMsg && <p className="mb-2 text-sm text-red-500">{errorMsg}</p>}
       <button type="submit" disabled={isLoading} className="btn mb-4">
         {isLoading ? "Logging in..." : "Log In"}
       </button>
