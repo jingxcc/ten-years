@@ -2,9 +2,10 @@ import { useState } from "react";
 
 interface SignUpProps {
   onSignUp: (email: string, password: string) => void;
+  errorMsg?: string;
 }
 
-const SignUpForm: React.FC<SignUpProps> = ({ onSignUp }) => {
+const SignUpForm: React.FC<SignUpProps> = ({ onSignUp, errorMsg }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +22,11 @@ const SignUpForm: React.FC<SignUpProps> = ({ onSignUp }) => {
     try {
       onSignUp(email, password);
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        alert(`${error.message}`);
+      } else {
+        alert(`Sign-up Error: ${error}`);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -41,6 +46,7 @@ const SignUpForm: React.FC<SignUpProps> = ({ onSignUp }) => {
           value={email}
           placeholder="email@example.com"
           onChange={handleEmailChange}
+          required
         />
       </div>
       <div className="mb-4">
@@ -52,8 +58,10 @@ const SignUpForm: React.FC<SignUpProps> = ({ onSignUp }) => {
           type="password"
           value={password}
           onChange={handlePasswordChange}
+          required
         />
       </div>
+      {errorMsg && <p className="mb-2 text-sm text-red-500">{errorMsg}</p>}
       <button type="submit" disabled={isLoading} className="btn">
         Sign Up
       </button>
