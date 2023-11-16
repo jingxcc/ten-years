@@ -4,6 +4,7 @@ import { auth } from "@/lib/firebase/initialize";
 import { AuthErrorCodes, createUserWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // const getAuthErrorMsg = (error: FirebaseError): string => {
 //   console.log(error);
@@ -17,6 +18,8 @@ import { useState } from "react";
 
 export default function SignUpPage() {
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const router = useRouter();
+
   const handleSignUp = async (
     email: string,
     password: string,
@@ -31,6 +34,9 @@ export default function SignUpPage() {
       );
       const user = userCredential.user;
       console.log(user);
+
+      alert("Sign-up success");
+      router.push("/setup");
     } catch (error) {
       if (error instanceof FirebaseError) {
         // const errorCode = error.code;

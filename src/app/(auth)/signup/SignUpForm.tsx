@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useState } from "react";
 
 interface SignUpProps {
@@ -32,40 +33,44 @@ const SignUpForm: React.FC<SignUpProps> = ({ onSignUp, errorMsg }) => {
     }
   };
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="mx-auto my-8 flex max-w-sm flex-col"
-    >
-      <div className="mb-4">
-        <label htmlFor="email" className="mb-1 block text-sm">
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          placeholder="email@example.com"
-          onChange={handleEmailChange}
-          required
-        />
+    <div className="mx-auto mt-8 max-w-sm">
+      <form onSubmit={handleSubmit} className="flex flex-col">
+        <div className="mb-4">
+          <label htmlFor="email" className="mb-1 block text-sm">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            placeholder="email@example.com"
+            onChange={handleEmailChange}
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="password" className="mb-1 block text-sm">
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+            required
+          />
+        </div>
+        {errorMsg && <p className="mb-2 text-sm text-red-500">{errorMsg}</p>}
+        <button type="submit" disabled={isLoading} className="btn">
+          Sign Up
+        </button>
+      </form>
+      <div className="flex justify-center">
+        <Link href="/login" className="p-3 text-sm">
+          Already have an count
+        </Link>
       </div>
-      <div className="mb-4">
-        <label htmlFor="password" className="mb-1 block text-sm">
-          Password
-        </label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-          required
-        />
-      </div>
-      {errorMsg && <p className="mb-2 text-sm text-red-500">{errorMsg}</p>}
-      <button type="submit" disabled={isLoading} className="btn">
-        Sign Up
-      </button>
-    </form>
+    </div>
   );
 };
 

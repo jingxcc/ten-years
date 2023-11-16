@@ -40,12 +40,19 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
 // // check user's login state
-// onAuthStateChanged(auth, (user) => {
-//   if (user) {
-//     const uid = user.uid;
-//   } else {
-//   }
-// });
+
+// const monitorAuthState = async () => {
+//   onAuthStateChanged(auth, (user) => {
+//     if (user) {
+//       console.log("user info", user);
+//       showloginstate
+
+//       const uid = user.uid;
+//     } else {
+//       // user log out
+//     }
+//   });
+// };
 
 // // log out
 // signOut(auth)

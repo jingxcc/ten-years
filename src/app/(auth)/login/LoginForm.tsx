@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useState } from "react";
 
 interface LoginProps {
@@ -25,47 +26,51 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin, errorMsg }) => {
       if (error instanceof Error) {
         alert(`${error.message}`);
       } else {
-        alert(`Sign-up Error: ${error}`);
+        alert(`Login Error: ${error}`);
       }
     } finally {
       setIsLoading(false);
     }
   };
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="mx-auto mt-8 flex max-w-sm flex-col"
-    >
-      <div className="mb-4">
-        <label htmlFor="email" className="mb-1 block text-sm">
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          placeholder="email@example.com"
-          onChange={handleEmailChange}
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="password" className="mb-1 block text-sm">
-          Password
-        </label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-          required
-        />
-      </div>
-      {errorMsg && <p className="mb-2 text-sm text-red-500">{errorMsg}</p>}
-      <button type="submit" disabled={isLoading} className="btn mb-4">
-        {isLoading ? "Logging in..." : "Log In"}
-      </button>
-    </form>
+    <div className="mx-auto mt-8 max-w-sm">
+      <form onSubmit={handleSubmit} className="flex flex-col">
+        <div className="mb-4">
+          <label htmlFor="email" className="mb-1 block text-sm">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            placeholder="email@example.com"
+            onChange={handleEmailChange}
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="password" className="mb-1 block text-sm">
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+            required
+          />
+        </div>
+        {errorMsg && <p className="mb-2 text-sm text-red-500">{errorMsg}</p>}
+        <button type="submit" disabled={isLoading} className="btn">
+          {isLoading ? "Logging in..." : "Log In"}
+        </button>
+        <div className="flex justify-center">
+          <Link href="/signup" className="block p-3 text-center text-sm">
+            Create New Account
+          </Link>
+        </div>
+      </form>
+    </div>
   );
 };
 

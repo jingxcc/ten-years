@@ -1,11 +1,12 @@
 "use client";
-import Link from "next/link";
 import LoginForm from "./LoginForm";
 import { auth } from "@/lib/firebase/initialize";
 import { AuthErrorCodes, signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
+// user-friendly message
 // const getAuthErrorMsg = (error: FirebaseError): string => {
 //   console.log(error);
 
@@ -18,6 +19,8 @@ import { useState } from "react";
 
 export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const router = useRouter();
+
   const handleLogin = async (
     email: string,
     password: string,
@@ -32,6 +35,9 @@ export default function LoginPage() {
       );
       const user = userCredential.user;
       console.log(user);
+
+      alert("Login success");
+      router.push("/chat");
     } catch (error) {
       if (error instanceof FirebaseError) {
         // const errorCode = error.code;
@@ -47,12 +53,7 @@ export default function LoginPage() {
   return (
     <>
       <p>Login page</p>
-      <div className="md: mx-3 ">
-        <LoginForm onLogin={handleLogin} errorMsg={errorMsg} />
-        <Link href="/signup" className="block p-2 text-center text-sm">
-          Create New Account
-        </Link>
-      </div>
+      <LoginForm onLogin={handleLogin} errorMsg={errorMsg} />
     </>
   );
 }
