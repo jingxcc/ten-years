@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "@/lib/firebase/initialize";
 import { UserData } from "@/types/UserData";
-import ProfileSetUpForm from "./ProfileSetUpFrom";
+import GetStartForm from "./GetStartFrom";
 
 const addUserDocument = async (user: UserData | null) => {
   if (!user) {
@@ -30,7 +30,7 @@ const addUserDocument = async (user: UserData | null) => {
   }
 };
 
-export default function profileSetUpPage() {
+export default function getStartPage() {
   const [isDocAdded, setIsDocAdded] = useState<boolean>(false);
   const { user, isUserLoading } = useUser();
   const route = useRouter();
@@ -60,8 +60,8 @@ export default function profileSetUpPage() {
 
   return (
     <div>
-      <p>profile set-up page</p>
-      <ProfileSetUpForm></ProfileSetUpForm>
+      <p>profile get-start page</p>
+      <GetStartForm></GetStartForm>
     </div>
   );
 }

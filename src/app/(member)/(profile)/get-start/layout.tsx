@@ -1,6 +1,6 @@
 import { UserProvider } from "./userContext";
 
-export default function profileSetUpLayout({
+export default function getStartLayout({
   children,
 }: {
   children: React.ReactNode;

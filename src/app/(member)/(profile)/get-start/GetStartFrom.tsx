@@ -21,7 +21,7 @@ const expectedRelationshipOptions = [
 ] as const;
 type ExpectedRelationshipOptions = (typeof expectedRelationshipOptions)[number];
 
-interface ProfileSetUpFormData {
+interface GetStartFormData {
   nickname: string;
   gender: GenderOptions;
   relationshipStatus: RelationshipStatus;
@@ -30,8 +30,8 @@ interface ProfileSetUpFormData {
   profilePicture: File[];
 }
 
-const ProfileSetUpForm: React.FC = () => {
-  const [formData, setFormData] = useState<ProfileSetUpFormData>({
+const GetStartForm: React.FC = () => {
+  const [formData, setFormData] = useState<GetStartFormData>({
     nickname: "",
     gender: genderOptions[0],
     relationshipStatus: relationshipStatusOptions[0],
@@ -50,7 +50,7 @@ const ProfileSetUpForm: React.FC = () => {
   const handleMultiSelectChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     let newSelectedItems = [
-      ...formData[name as keyof ProfileSetUpFormData],
+      ...formData[name as keyof GetStartFormData],
     ] as string[];
     if (newSelectedItems.includes(value)) {
       newSelectedItems = newSelectedItems.filter((item) => item !== value);
@@ -144,4 +144,4 @@ const ProfileSetUpForm: React.FC = () => {
   );
 };
 
-export default ProfileSetUpForm;
+export default GetStartForm;
