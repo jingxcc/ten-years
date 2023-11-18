@@ -1,5 +1,14 @@
 # Ten Years
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+## folder structure
+
+- /app: routes, logic for application
+- /lib: utility functions
+- /public: static assets
+<!-- - /scripts: populate database
+- /types: define types -->
 
 ## Getting Started
 
