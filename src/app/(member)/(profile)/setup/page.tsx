@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "@/lib/firebase/initialize";
 import { UserData } from "@/types/UserData";
+import ProfileSetUpForm from "./ProfileSetUpFrom";
 
 const addUserDocument = async (user: UserData | null) => {
   if (!user) {
@@ -50,7 +51,7 @@ export default function profileSetUpPage() {
     checkAddUserDocument();
   }, [isUserLoading]);
 
-  // console.log("Loading", isUserLoading);
+  console.log("Loading", isUserLoading);
   console.log("user", user);
 
   // if (isUserLoading) {
@@ -60,6 +61,7 @@ export default function profileSetUpPage() {
   return (
     <div>
       <p>profile set-up page</p>
+      <ProfileSetUpForm></ProfileSetUpForm>
     </div>
   );
 }
