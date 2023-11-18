@@ -66,10 +66,6 @@ interface GetStartFormProps {
 }
 
 const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
-  if (!user) {
-    return null;
-  }
-
   const [imgFiles, setImgFiles] = useState<File[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [formData, setFormData] = useState<GetStartFormData>({
@@ -83,8 +79,11 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
     imageUrls: [],
     // imageUrls: ["/team04.jpeg", "/team03.jpg", "/team01.jpeg", "/team02.webbp"],
   });
-
   const route = useRouter();
+
+  if (!user) {
+    return null;
+  }
 
   const handleSelectChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -242,11 +241,8 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
           </label>
           <div className="mt-2 flex flex-wrap items-center">
             {matchgGenderOptions.map((item) => (
-              <div className="mb-2 mr-4">
-                <label
-                  key={item}
-                  className=" flex items-center rounded border border-gray-300 p-2"
-                >
+              <div key={item} className="mb-2 mr-4">
+                <label className=" flex items-center rounded border border-gray-300 p-2">
                   <input
                     type="radio"
                     name="matchGender"
@@ -269,11 +265,8 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
           </label>
           <div className="mt-2 flex flex-wrap items-center">
             {relationshipStatusOptions.map((item) => (
-              <div className="mb-2 mr-4">
-                <label
-                  key={item}
-                  className=" flex items-center rounded border border-gray-300 p-2"
-                >
+              <div key={item} className="mb-2 mr-4">
+                <label className=" flex items-center rounded border border-gray-300 p-2">
                   <input
                     type="radio"
                     name="relationshipStatus"
@@ -296,11 +289,8 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
           </label>
           <div className="mt-2 flex flex-wrap items-center">
             {expectedRelationshipOptions.map((item) => (
-              <div className="mb-2 mr-4">
-                <label
-                  key={item}
-                  className="flex items-center rounded border border-gray-300 p-2"
-                >
+              <div key={item} className="mb-2 mr-4">
+                <label className="flex items-center rounded border border-gray-300 p-2">
                   <input
                     type="checkbox"
                     name="expectedRelationships"
@@ -323,11 +313,8 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
           </label>
           <div className="mt-2 flex flex-wrap items-center justify-center">
             {interestOptions.map((item) => (
-              <div className="mb-2 mr-4">
-                <label
-                  key={item}
-                  className="flex items-center rounded border border-gray-300 p-2"
-                >
+              <div key={item} className="mb-2 mr-4">
+                <label className="flex items-center rounded border border-gray-300 p-2">
                   <input
                     type="checkbox"
                     name="interests"

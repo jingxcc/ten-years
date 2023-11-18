@@ -30,15 +30,15 @@ const addUserDocument = async (user: UserData | null) => {
   }
 };
 
-export default function getStartPage() {
+export default function GetStartPage() {
   const [isDocAdded, setIsDocAdded] = useState<boolean>(false);
   const { user, isUserLoading } = useUser();
   const route = useRouter();
 
+  if (!isUserLoading && !user) {
+    route.push("/");
+  }
   useEffect(() => {
-    if (!isUserLoading && !user) {
-      route.push("/");
-    }
     const checkAddUserDocument = async () => {
       if (!isDocAdded && user) {
         const result = await addUserDocument(user);
@@ -49,7 +49,7 @@ export default function getStartPage() {
       }
     };
     checkAddUserDocument();
-  }, [isUserLoading]);
+  }, [isUserLoading, isDocAdded, user]);
 
   // console.log("Loading", isUserLoading);
   // console.log("user", user);
