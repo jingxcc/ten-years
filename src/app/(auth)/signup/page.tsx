@@ -36,7 +36,7 @@ export default function SignUpPage() {
       console.log(user);
 
       alert("Signup success");
-      router.push("/setup");
+      router.push("/get-start");
     } catch (error) {
       if (error instanceof FirebaseError) {
         // const errorCode = error.code;
