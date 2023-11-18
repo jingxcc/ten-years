@@ -51,8 +51,8 @@ export default function getStartPage() {
     checkAddUserDocument();
   }, [isUserLoading]);
 
-  console.log("Loading", isUserLoading);
-  console.log("user", user);
+  // console.log("Loading", isUserLoading);
+  // console.log("user", user);
 
   // if (isUserLoading) {
   //   return <div>Loading...</div>;
@@ -61,7 +61,7 @@ export default function getStartPage() {
   return (
     <div>
       <p>profile get-start page</p>
-      <GetStartForm></GetStartForm>
+      <GetStartForm user={user}></GetStartForm>
     </div>
   );
 }

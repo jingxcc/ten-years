@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 // import { getAnalytics } from "firebase/analytics";
 
 interface FireBaseConfig {
@@ -40,6 +41,7 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth();
 const firestore = getFirestore();
+const storage = getStorage();
 // const analytics = getAnalytics(app);
 
-export { firestore, auth };
+export { auth, firestore, storage };
