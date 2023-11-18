@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState<string>("");
-  const router = useRouter();
+  const route = useRouter();
 
   const handleLogin = async (
     email: string,
@@ -37,7 +37,7 @@ export default function LoginPage() {
       console.log(user);
 
       alert("Login success");
-      router.push("/chat");
+      route.push("/chat");
     } catch (error) {
       if (error instanceof FirebaseError) {
         // const errorCode = error.code;
