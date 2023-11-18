@@ -6,7 +6,7 @@ import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import Sidebar from "./SideBar";
 
-export default function chatPage() {
+export default function ChatPage() {
   const router = useRouter();
 
   const handleSignOut = async () => {
