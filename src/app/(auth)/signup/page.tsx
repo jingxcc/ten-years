@@ -35,7 +35,7 @@ export default function SignUpPage() {
       const user = userCredential.user;
       console.log(user);
 
-      alert("Sign-up success");
+      alert("Signup success");
       router.push("/setup");
     } catch (error) {
       if (error instanceof FirebaseError) {
