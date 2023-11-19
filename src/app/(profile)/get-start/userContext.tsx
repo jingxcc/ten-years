@@ -27,13 +27,14 @@ const UserContext = createContext<UserContextType>({
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserData | null>(null);
   const [isUserLoading, setIsUserLoading] = useState(true);
-  // const route = useRouter();
+
   console.log("UserProvider");
 
   // firebase
   useEffect(() => {
-    const monitorAuthState = async () => {
-      onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
         if (user) {
           const userData: UserData = {
             email: user.email,
@@ -41,17 +42,18 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
           };
           setUser(userData);
         } else {
-          // user log out
-          // route.push("/");
           setUser(null);
         }
         setIsUserLoading(false);
-      });
-    };
+      },
+      (error) => {
+        alert(`Auth Error: ${error}`);
+      },
+    );
 
     // clean up
     return () => {
-      monitorAuthState();
+      unsubscribe();
     };
   }, []);
 
