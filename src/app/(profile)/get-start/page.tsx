@@ -51,8 +51,8 @@ export default function GetStartPage() {
     checkAddUserDocument();
   }, [isUserLoading, isDocAdded, user]);
 
-  // console.log("Loading", isUserLoading);
-  // console.log("user", user);
+  console.log("Loading", isUserLoading);
+  console.log("user", user);
 
   // if (isUserLoading) {
   //   return <div>Loading...</div>;
