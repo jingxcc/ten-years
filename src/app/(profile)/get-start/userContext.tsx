@@ -52,9 +52,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     );
 
     // clean up
-    return () => {
-      unsubscribe();
-    };
+    // return () => {
+    //   unsubscribe();
+    // };
   }, []);
 
   return (
