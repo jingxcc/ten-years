@@ -33,6 +33,9 @@ export default function ChatPage() {
         <button className="btn" onClick={handleSignOut}>
           Log out
         </button>
+        <button className="btn mt-2" onClick={() => router.push("/get-start")}>
+          {"start (test)"}
+        </button>
       </Sidebar>
       <main className="ml-32 px-2">
         <p>chat page</p>
