@@ -41,10 +41,6 @@ export default function GetStartPage() {
     }
   }, [isUserLoading, user, route]);
 
-  // if (!isUserLoading && !user) {
-  //   route.push("/");
-  // }
-
   useEffect(() => {
     const checkAddUserDocument = async () => {
       if (!isDocAdded && user) {
