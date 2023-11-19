@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 interface SideBarProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 const Sidebar: React.FC<SideBarProps> = ({ children }) => {
