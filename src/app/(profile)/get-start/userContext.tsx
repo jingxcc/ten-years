@@ -16,7 +16,7 @@ interface UserContextType {
 }
 
 interface UserProviderProps {
-  children?: ReactNode;
+  children?: React.ReactNode;
 }
 
 const UserContext = createContext<UserContextType>({
