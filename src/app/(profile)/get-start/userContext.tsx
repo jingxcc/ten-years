@@ -16,7 +16,7 @@ interface UserContextType {
 }
 
 interface UserProviderProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 const UserContext = createContext<UserContextType>({
@@ -27,13 +27,17 @@ const UserContext = createContext<UserContextType>({
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserData | null>(null);
   const [isUserLoading, setIsUserLoading] = useState(true);
-  // const route = useRouter();
+
   console.log("UserProvider");
 
   // firebase
   useEffect(() => {
-    const monitorAuthState = async () => {
-      onAuthStateChanged(auth, (user) => {
+    // console.log("UserProvider useEffect Loading", isUserLoading);
+    // console.log("UserProvider useEffect user", user);
+
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
         if (user) {
           const userData: UserData = {
             email: user.email,
@@ -41,19 +45,48 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
           };
           setUser(userData);
         } else {
-          // user log out
-          // route.push("/");
           setUser(null);
         }
         setIsUserLoading(false);
-      });
-    };
+      },
+      (error) => {
+        alert(`Auth Error: ${error}`);
+      },
+    );
 
     // clean up
     return () => {
-      monitorAuthState();
+      unsubscribe();
     };
   }, []);
+
+  // useEffect(() => {
+  //   // 此函數將在用戶登入狀態改變時被調用
+  //   const unsubscribe = onAuthStateChanged(
+  //     auth,
+  //     (user) => {
+  //       if (user) {
+  //         const userData: UserData = {
+  //           email: user.email,
+  //           uid: user.uid,
+  //         };
+  //         setUser(userData);
+  //       } else {
+  //         setUser(null);
+  //       }
+  //       setIsUserLoading(false);
+  //     },
+  //     (error) => {
+  //       // 處理可能出現的錯誤
+  //       alert(`Auth Error: ${error}`);
+  //     },
+  //   );
+
+  //   // clean up
+  //   return () => {
+  //     unsubscribe(); // 正確取消訂閱
+  //   };
+  // }, []);
 
   return (
     <UserContext.Provider value={{ user, isUserLoading }}>

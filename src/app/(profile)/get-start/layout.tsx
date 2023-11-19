@@ -7,8 +7,8 @@ export default function GetStartPageLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <section>
       <UserProvider>{children}</UserProvider>
-    </div>
+    </section>
   );
 }

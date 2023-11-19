@@ -35,28 +35,39 @@ export default function GetStartPage() {
   const { user, isUserLoading } = useUser();
   const route = useRouter();
 
-  if (!isUserLoading && !user) {
-    route.push("/");
-  }
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      route.push("/");
+    }
+  }, [isUserLoading, user, route]);
+
+  // if (!isUserLoading && !user) {
+  //   route.push("/");
+  // }
+
   useEffect(() => {
     const checkAddUserDocument = async () => {
       if (!isDocAdded && user) {
-        const result = await addUserDocument(user);
+        try {
+          const result = await addUserDocument(user);
 
-        if (result) {
-          setIsDocAdded(true);
+          if (result) {
+            setIsDocAdded(true);
+          }
+        } catch (error) {
+          alert(`Firestore Error: , ${error}`);
         }
       }
     };
     checkAddUserDocument();
-  }, [isUserLoading, isDocAdded, user]);
+  }, [isDocAdded, user]);
 
-  console.log("Loading", isUserLoading);
+  // console.log("Loading", isUserLoading);
   console.log("user", user);
 
-  // if (isUserLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  if (isUserLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
