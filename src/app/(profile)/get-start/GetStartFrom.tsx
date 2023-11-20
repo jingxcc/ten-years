@@ -197,6 +197,9 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
   return (
     <div className="mx-auto mb-4 mt-8 max-w-4xl">
       <form onSubmit={handleSubmit} className="mx-auto max-w-xl space-y-4">
+        <h2 className="mb-4 text-center text-lg font-bold ">
+          Getting Start...
+        </h2>
         {/* text */}
         <div>
           <label htmlFor="nickname" className="block text-sm font-medium">
