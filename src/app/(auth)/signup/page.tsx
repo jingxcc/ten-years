@@ -51,7 +51,6 @@ export default function SignUpPage() {
 
   return (
     <>
-      <p>SignUp page</p>
       <SignUpForm onSignUp={handleSignUp} errorMsg={errorMsg} />
     </>
   );

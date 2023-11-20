@@ -1,14 +1,10 @@
 "use client";
-import { UserProvider } from "./userContext";
+import { UserProvider } from "../../../context/userContext";
 
 export default function GetStartPageLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <section>
-      <UserProvider>{children}</UserProvider>
-    </section>
-  );
+  return <section>{children}</section>;
 }
