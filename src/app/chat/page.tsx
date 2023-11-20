@@ -5,9 +5,19 @@ import { FirebaseError } from "firebase/app";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import Sidebar from "./SideBar";
+import { useUser } from "@/context/userContext";
+import { useEffect } from "react";
 
 export default function ChatPage() {
+  const { user, isUserLoading } = useUser();
+  const route = useRouter();
+
   const router = useRouter();
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      route.push("/");
+    }
+  }, [isUserLoading, user, route]);
 
   const handleSignOut = async () => {
     console.log("sign out");

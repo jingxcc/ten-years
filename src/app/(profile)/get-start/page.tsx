@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useUser } from "./userContext";
+import { useUser } from "../../../context/userContext";
 import { useEffect, useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "@/lib/firebase/initialize";
