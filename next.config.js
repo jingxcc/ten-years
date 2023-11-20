@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    loader: "custom",
-    loaderFile: "./src/image/storageLoader.js",
+    remotePatterns: [
+      { protocol: "https", hostname: "firebasestorage.googleapis.com" },
+    ],
   },
 };
 
