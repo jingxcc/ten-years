@@ -37,6 +37,10 @@ export default function ChatPage() {
     }
   };
 
+  if (isUserLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
       <Sidebar>
