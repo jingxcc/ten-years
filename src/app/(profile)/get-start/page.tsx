@@ -67,7 +67,6 @@ export default function GetStartPage() {
 
   return (
     <div>
-      <p>profile get-start page</p>
       <GetStartForm user={user}></GetStartForm>
     </div>
   );

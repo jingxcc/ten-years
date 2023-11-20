@@ -35,6 +35,7 @@ const SignUpForm: React.FC<SignUpProps> = ({ onSignUp, errorMsg }) => {
   return (
     <div className="mx-auto mt-8 max-w-sm">
       <form onSubmit={handleSubmit} className="flex flex-col">
+        <h2 className="mb-4 text-center text-lg font-bold ">Sign Up</h2>
         <div className="mb-4">
           <label htmlFor="email" className="mb-1 block text-sm">
             Email

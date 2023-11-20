@@ -35,6 +35,7 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin, errorMsg }) => {
   return (
     <div className="mx-auto mt-8 max-w-sm">
       <form onSubmit={handleSubmit} className="flex flex-col">
+        <h2 className="mb-4 text-center text-lg font-bold ">Log In</h2>
         <div className="mb-4">
           <label htmlFor="email" className="mb-1 block text-sm">
             Email
@@ -65,7 +66,10 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin, errorMsg }) => {
           {isLoading ? "Logging in..." : "Log In"}
         </button>
         <div className="flex justify-center">
-          <Link href="/signup" className="block p-3 text-center text-sm">
+          <Link
+            href="/signup"
+            className="block p-3 text-center text-sm text-sky-500"
+          >
             Create New Account
           </Link>
         </div>
