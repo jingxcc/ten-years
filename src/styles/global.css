@@ -2,21 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   @apply text-neutral-700;
 }
 
-@layer components{
+@layer components {
   input {
-    @apply placeholder-neutral-400 w-full rounded border border-neutral-300 px-3 py-2 shadow-sm  focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500;
+    @apply w-full rounded border border-neutral-300 px-3 py-2 placeholder-neutral-400 shadow-sm  focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500;
+  }
+
+  label {
+    @apply mb-2 block text-sm;
   }
 
   .btn {
-    @apply rounded bg-sky-300 px-4 py-2 font-bold text-white enabled:hover:bg-sky-500 disabled:opacity-75 focus:outline-none focus:ring-4 focus:ring-blue-100;
+    @apply rounded bg-sky-300 px-4 py-2 font-bold text-white focus:outline-none focus:ring-4 focus:ring-blue-100 enabled:hover:bg-sky-500 disabled:opacity-75;
   }
   .btn-secondary {
     /* @apply rounded bg-sky-300 px-4 py-2 font-bold text-white enabled:hover:bg-sky-50  enabled:hover:text-sky-300 disabled:hover:bg-sky-50  disabled:hover:text-sky-300 ; */
-    @apply rounded bg-sky-50 px-4 py-2 font-bold text-sky-300 enabled:hover:bg-sky-300  enabled:hover:text-white disabled:hover:bg-sky-300  disabled:hover:text-white ;
+    @apply rounded bg-sky-50 px-4 py-2 font-bold text-sky-300 enabled:hover:bg-sky-300  enabled:hover:text-white disabled:hover:bg-sky-300  disabled:hover:text-white;
   }
 }
