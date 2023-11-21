@@ -37,9 +37,7 @@ const SignUpForm: React.FC<SignUpProps> = ({ onSignUp, errorMsg }) => {
       <form onSubmit={handleSubmit} className="flex flex-col">
         <h2 className="mb-4 text-center text-lg font-bold ">Sign Up</h2>
         <div className="mb-4">
-          <label htmlFor="email" className="mb-1 block text-sm">
-            Email
-          </label>
+          <label htmlFor="email">Email</label>
           <input
             id="email"
             type="email"
@@ -50,9 +48,7 @@ const SignUpForm: React.FC<SignUpProps> = ({ onSignUp, errorMsg }) => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="password" className="mb-1 block text-sm">
-            Password
-          </label>
+          <label htmlFor="password">Password</label>
           <input
             id="password"
             type="password"
