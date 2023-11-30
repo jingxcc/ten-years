@@ -1,7 +1,7 @@
-import { firestore, storage } from "@/lib/firebase/initialize";
+import { storage } from "@/lib/firebase/initialize";
 import { UserData } from "@/types/UserData";
-import { FirebaseError } from "firebase/app";
-import { doc, updateDoc } from "firebase/firestore";
+import { GetStartFormData, FormOption } from "@/types/GetStartForm";
+
 import {
   StorageError,
   getDownloadURL,
@@ -10,40 +10,41 @@ import {
 } from "firebase/storage";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import updateGetStartFormDoc from "@/lib/firebase/firestore/updateGetStartFormDoc";
 
-const genderOptions = [
+interface GetStartFormProps {
+  user: UserData | null;
+}
+
+const genderOptions: FormOption[] = [
   { id: "1", value: "男性" },
   { id: "2", value: "女性" },
-] as const;
-type GenderOptions = (typeof genderOptions)[number];
+];
 
-const relationshipStatusOptions = [
+const relationshipStatusOptions: FormOption[] = [
   { id: "1", value: "單身" },
   { id: "2", value: "交往中" },
   { id: "3", value: "已婚" },
   { id: "4", value: "剛分手" },
   { id: "5", value: "一言難盡" },
-] as const;
-type RelationshipStatus = (typeof relationshipStatusOptions)[number];
+];
 
-const matchGenderOptions = [
+const matchGenderOptions: FormOption[] = [
   { id: "1", value: "男性" },
   { id: "2", value: "女性" },
   { id: "3", value: "都可以" },
-] as const;
-type MatchGenderOptions = (typeof matchGenderOptions)[number];
+];
 
-const expectedRelationshipOptions = [
+const expectedRelationshipOptions: FormOption[] = [
   { id: "1", value: "閒聊" },
   { id: "2", value: "朋友" },
   { id: "3", value: "交往" },
   { id: "4", value: "結婚" },
   { id: "5", value: "長久關係" },
-] as const;
-type ExpectedRelationshipOptions = (typeof expectedRelationshipOptions)[number];
+];
 
-const interestOptions = [
+const interestOptions: FormOption[] = [
   { id: "1", value: "聊天" },
   { id: "2", value: "聽音樂" },
   { id: "3", value: "唱歌" },
@@ -54,22 +55,7 @@ const interestOptions = [
   { id: "8", value: "看展覽" },
   { id: "9", value: "旅遊" },
   { id: "10", value: "健身" },
-] as const;
-type InterestOptions = (typeof interestOptions)[number];
-interface GetStartFormData {
-  // isStartProfileCompleted: boolean;
-  nickname: string;
-  gender: GenderOptions["value"];
-  relationshipStatus: RelationshipStatus["value"];
-  matchGender: MatchGenderOptions["value"];
-  expectedRelationships: ExpectedRelationshipOptions["value"][];
-  interests: InterestOptions["value"][];
-  imageUrls: string[];
-  // profilePictures: File[];
-}
-interface GetStartFormProps {
-  user: UserData | null;
-}
+];
 
 const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
   const [imgFiles, setImgFiles] = useState<File[]>([]);
@@ -85,6 +71,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
     imageUrls: [],
     // imageUrls: ["/team04.jpeg", "/team03.jpg", "/team01.jpeg", "/team02.webbp"],
   });
+  // const [storageUploadPercent, setStorageUploadPercent] = useState(0);
   const route = useRouter();
 
   if (!user) {
@@ -177,26 +164,24 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    const userRef = doc(firestore, "users", user.uid);
 
     try {
-      const dataToUpdate = { ...formData };
-      await updateDoc(userRef, dataToUpdate);
-      alert("個人資料設定成功");
-      route.push("/chat");
+      const result = await updateGetStartFormDoc(formData, user);
+
+      if (result) {
+        setErrorMsg("");
+        alert("個人資料設定成功");
+        route.push("/chat");
+      }
     } catch (error) {
-      if (error instanceof FirebaseError) {
-        // const errorCode = error.code;
-        // const errorMessage = error.message;
-        // const errorMessage = getAuthErrorMsg(error);
+      if (error instanceof Error) {
         setErrorMsg(error.message);
       } else {
-        alert(`Submit Error: ${error}`);
+        setErrorMsg("Error submitting form: unknown error");
       }
     }
-
-    console.log(formData);
   };
+
   console.log("formData.imageUrls", formData.imageUrls);
   console.log("imgFiles", imgFiles);
 
@@ -337,7 +322,8 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
         <div>
           <label className="mb-2 font-medium text-gray-700">個人圖片</label>
 
-          <div className=" flex items-center justify-start space-x-4">
+          {/* <div className=" flex items-center justify-start space-x-4"> */}
+          <div className="grid grid-cols-4 gap-2">
             <label className="mb-2 flex h-32 w-32 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300">
               <input
                 type="file"
@@ -347,7 +333,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
               <span className="text-gray-500">+</span>
             </label>
 
-            {/* {formData.imageUrls.map((url, index) => (
+            {formData.imageUrls.map((url, index) => (
               <div key={index} className="relative h-32 w-32">
                 <Image
                   src={url}
@@ -357,9 +343,9 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
                   className="rounded-md"
                 />
               </div>
-            ))} */}
+            ))}
 
-            {formData.imageUrls.length > 0 && (
+            {/* {formData.imageUrls.length > 0 && (
               <div key={0} className="relative h-32 w-32">
                 <Image
                   src={formData.imageUrls[0]}
@@ -389,7 +375,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
                   className="z-0 rounded-md"
                 />
               </div>
-            )}
+            )} */}
           </div>
         </div>
         {errorMsg && <p className="mb-2 text-sm text-red-500">{errorMsg}</p>}
