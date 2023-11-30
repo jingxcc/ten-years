@@ -105,22 +105,32 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
       const file = event.target.files[0];
       // setImgFiles([...imgFiles, file]);
-      console.log("--> Upload img start:", file);
+      console.log("--> Upload imgFile start:", file);
       uploadImage(file);
       // console.log(...event.target.files);
     }
-    function uploadImage(img: File) {
+    function uploadImage(imgFile: File) {
       const imageMetadata = {
         contentType: "image/jpeg",
       };
-      const storageRef = ref(storage, `users/${user?.uid}/${img.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, img, imageMetadata);
+      const timestamp = new Date().getTime();
+      const storageRef = ref(
+        storage,
+        `users/${user?.uid}/${timestamp}_${imgFile.name}`,
+      );
+      const uploadTask = uploadBytesResumable(
+        storageRef,
+        imgFile,
+        imageMetadata,
+      );
 
       uploadTask.on(
         "state_changed",
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+          // setStorageUploadPercent(progress);
           console.log(`Image upload is ${progress} % done`);
 
           switch (snapshot.state) {
@@ -132,31 +142,25 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
               break;
           }
         },
-        (error: StorageError) => {
-          // error handle
-          // console.log(`Image Upload Error: ${error.code}`);
+        (error) => {
           if (error instanceof StorageError) {
-            // const errorCode = error.code;
-            // const errorMessage = error.message;
-            // const errorMessage = getAuthErrorMsg(error);
-            setErrorMsg(error.message);
+            console.error("Image Upload Error: ", error.message);
           } else {
-            alert(`Image Upload Error: ${error}`);
+            console.error("Image Upload Error: ", error);
           }
         },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
-            console.log("你有沒有進來????");
+        async () => {
+          const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
 
-            console.log("() image", img);
-            console.log("() url", downloadUrl);
+          console.log("Image uploaded success", imgFile);
+          console.log("image url", downloadUrl);
 
-            setImgFiles([...imgFiles, img]);
-            setFormData({
-              ...formData,
-              imageUrls: [...formData.imageUrls, downloadUrl],
-            });
+          setImgFiles([...imgFiles, imgFile]);
+          setFormData({
+            ...formData,
+            imageUrls: [...formData.imageUrls, downloadUrl],
           });
+          // setStorageUploadPercent(0);
         },
       );
     }
