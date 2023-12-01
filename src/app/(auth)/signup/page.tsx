@@ -5,6 +5,7 @@ import { AuthErrorCodes, createUserWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import createUserDocument from "@/lib/firebase/firestore/createUserDocument";
 
 // const getAuthErrorMsg = (error: FirebaseError): string => {
 //   console.log(error);
@@ -32,17 +33,26 @@ export default function SignUpPage() {
         email,
         password,
       );
-      const user = userCredential.user;
-      console.log(user);
+
+      console.log("Sign up user", userCredential.user);
+      const user = {
+        uid: userCredential.user.uid,
+        email: userCredential.user.email,
+      };
+
+      createUserDocument(user);
 
       alert("Signup success");
       router.push("/get-start");
     } catch (error) {
       if (error instanceof FirebaseError) {
         // const errorCode = error.code;
+        // console.log(error.code);
         // const errorMessage = error.message;
         // const errorMessage = getAuthErrorMsg(error);
         setErrorMsg(error.message);
+      } else if (error instanceof Error) {
+        console.error(`Sign-up Error: ${error.message}`);
       } else {
         console.log(`Sign-up Error: ${error}`);
       }

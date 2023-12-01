@@ -1,7 +1,14 @@
-import { firestore, storage } from "@/lib/firebase/initialize";
+import { storage } from "@/lib/firebase/initialize";
 import { UserData } from "@/types/UserData";
-import { FirebaseError } from "firebase/app";
-import { doc, updateDoc } from "firebase/firestore";
+import { GetStartFormData } from "@/types/GetStartForm";
+import {
+  genderOptions,
+  relationshipStatusOptions,
+  matchGenderOptions,
+  expectedRelationshipOptions,
+  interestOptions,
+} from "@/constants/GetStartForm";
+
 import {
   StorageError,
   getDownloadURL,
@@ -10,57 +17,9 @@ import {
 } from "firebase/storage";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import updateGetStartFormDoc from "@/lib/firebase/firestore/updateGetStartFormDoc";
 
-const genderOptions = ["男性", "女性"] as const;
-type GenderOptions = (typeof genderOptions)[number];
-
-const relationshipStatusOptions = [
-  "單身",
-  "交往中",
-  "已婚",
-  "剛分手",
-  "一言難盡",
-] as const;
-type RelationshipStatus = (typeof relationshipStatusOptions)[number];
-
-const matchgGenderOptions = ["男性", "女性", "都可以"] as const;
-type MatchGenderOptions = (typeof matchgGenderOptions)[number];
-
-const expectedRelationshipOptions = [
-  "閒聊",
-  "朋友",
-  "交往",
-  "結婚",
-  "長久關係",
-] as const;
-type ExpectedRelationshipOptions = (typeof expectedRelationshipOptions)[number];
-
-const interestOptions = [
-  "聊天",
-  "聽音樂",
-  "唱歌",
-  "踏青",
-  "逛街",
-  "玩遊戲",
-  "畫畫",
-  "看展覽",
-  "旅遊",
-  "健身",
-] as const;
-type InterestOptions = (typeof interestOptions)[number];
-
-interface GetStartFormData {
-  // isStartProfileCompleted: boolean;
-  nickname: string;
-  gender: GenderOptions;
-  relationshipStatus: RelationshipStatus;
-  matchGender: MatchGenderOptions;
-  expectedRelationships: ExpectedRelationshipOptions[];
-  interests: InterestOptions[];
-  imageUrls: string[];
-  // profilePictures: File[];
-}
 interface GetStartFormProps {
   user: UserData | null;
 }
@@ -71,14 +30,15 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
   const [formData, setFormData] = useState<GetStartFormData>({
     // isStartProfileCompleted: false,
     nickname: "",
-    gender: genderOptions[0],
-    relationshipStatus: relationshipStatusOptions[0],
-    matchGender: matchgGenderOptions[0],
+    gender: genderOptions[0]["value"],
+    relationshipStatus: relationshipStatusOptions[0]["value"],
+    matchGender: matchGenderOptions[0]["value"],
     expectedRelationships: [],
     interests: [],
     imageUrls: [],
     // imageUrls: ["/team04.jpeg", "/team03.jpg", "/team01.jpeg", "/team02.webbp"],
   });
+  // const [storageUploadPercent, setStorageUploadPercent] = useState(0);
   const route = useRouter();
 
   if (!user) {
@@ -112,22 +72,32 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
       const file = event.target.files[0];
       // setImgFiles([...imgFiles, file]);
-      console.log("--> Upload img start:", file);
+      console.log("--> Upload imgFile start:", file);
       uploadImage(file);
       // console.log(...event.target.files);
     }
-    function uploadImage(img: File) {
+    function uploadImage(imgFile: File) {
       const imageMetadata = {
         contentType: "image/jpeg",
       };
-      const storageRef = ref(storage, `users/${user?.uid}/${img.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, img, imageMetadata);
+      const timestamp = new Date().getTime();
+      const storageRef = ref(
+        storage,
+        `users/${user?.uid}/${timestamp}_${imgFile.name}`,
+      );
+      const uploadTask = uploadBytesResumable(
+        storageRef,
+        imgFile,
+        imageMetadata,
+      );
 
       uploadTask.on(
         "state_changed",
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+          // setStorageUploadPercent(progress);
           console.log(`Image upload is ${progress} % done`);
 
           switch (snapshot.state) {
@@ -139,31 +109,25 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
               break;
           }
         },
-        (error: StorageError) => {
-          // error handle
-          // console.log(`Image Upload Error: ${error.code}`);
+        (error) => {
           if (error instanceof StorageError) {
-            // const errorCode = error.code;
-            // const errorMessage = error.message;
-            // const errorMessage = getAuthErrorMsg(error);
-            setErrorMsg(error.message);
+            console.error("Image Upload Error: ", error.message);
           } else {
-            alert(`Image Upload Error: ${error}`);
+            console.error("Image Upload Error: ", error);
           }
         },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
-            console.log("你有沒有進來????");
+        async () => {
+          const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
 
-            console.log("() image", img);
-            console.log("() url", downloadUrl);
+          console.log("Image uploaded success", imgFile);
+          console.log("image url", downloadUrl);
 
-            setImgFiles([...imgFiles, img]);
-            setFormData({
-              ...formData,
-              imageUrls: [...formData.imageUrls, downloadUrl],
-            });
+          setImgFiles([...imgFiles, imgFile]);
+          setFormData({
+            ...formData,
+            imageUrls: [...formData.imageUrls, downloadUrl],
           });
+          // setStorageUploadPercent(0);
         },
       );
     }
@@ -171,26 +135,24 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    const userRef = doc(firestore, "users", user.uid);
 
     try {
-      const dataToUpdate = { ...formData };
-      await updateDoc(userRef, dataToUpdate);
-      alert("個人資料設定成功");
-      route.push("/chat");
+      const result = await updateGetStartFormDoc(formData, user);
+
+      if (result) {
+        setErrorMsg("");
+        alert("個人資料設定成功");
+        route.push("/chat");
+      }
     } catch (error) {
-      if (error instanceof FirebaseError) {
-        // const errorCode = error.code;
-        // const errorMessage = error.message;
-        // const errorMessage = getAuthErrorMsg(error);
+      if (error instanceof Error) {
         setErrorMsg(error.message);
       } else {
-        alert(`Submit Error: ${error}`);
+        setErrorMsg("Error submitting form: unknown error");
       }
     }
-
-    console.log(formData);
   };
+
   console.log("formData.imageUrls", formData.imageUrls);
   console.log("imgFiles", imgFiles);
 
@@ -202,7 +164,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
         </h2>
         {/* text */}
         <div>
-          <label htmlFor="nickname" className="block text-sm font-medium">
+          <label htmlFor="nickname" className="mb-2 font-medium">
             暱稱
           </label>
           <input
@@ -211,14 +173,14 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
             name="nickname"
             value={formData.nickname}
             onChange={handleSelectChange}
-            className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
             required
           />
         </div>
 
         {/* single-select */}
         <div>
-          <label htmlFor="gender" className="block text-sm font-medium">
+          <label htmlFor="gender" className="mb-2 font-medium">
             性別
           </label>
           <select
@@ -226,12 +188,12 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
             name="gender"
             value={formData.gender}
             onChange={handleSelectChange}
-            className="mt-2 block w-full rounded-md border-gray-300 px-4 py-2 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+            className=" block w-full rounded-md border-gray-300 px-4 py-2 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
             required
           >
             {genderOptions.map((gender) => (
-              <option key={gender} value={gender}>
-                {gender}
+              <option key={gender.id} value={gender.value}>
+                {gender.value}
               </option>
             ))}
           </select>
@@ -239,22 +201,20 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
         {/* select-radio */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            配對性別
-          </label>
-          <div className="mt-2 flex flex-wrap items-center">
-            {matchgGenderOptions.map((item) => (
-              <div key={item} className="mb-2 mr-4">
-                <label className=" flex items-center rounded border border-gray-300 p-2">
+          <label className="mb-2 font-medium text-gray-700">配對性別</label>
+          <div className="flex flex-wrap items-center">
+            {matchGenderOptions.map((item) => (
+              <div key={item.id} className="mb-2 mr-4">
+                <label className="mb-2 flex items-center rounded border border-gray-300 p-2">
                   <input
                     type="radio"
                     name="matchGender"
-                    value={item}
-                    checked={formData.matchGender === item}
+                    value={item.value}
+                    checked={formData.matchGender === item.value}
                     onChange={handleSelectChange}
                     className="h-4 w-4 focus:ring-indigo-500"
                   />
-                  <span className="ml-2 text-sm">{item}</span>
+                  <span className="ml-2 text-sm">{item.value}</span>
                 </label>
               </div>
             ))}
@@ -263,22 +223,20 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
         {/* select-radio */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            感情狀況
-          </label>
+          <label className=" font-medium text-gray-700">感情狀況</label>
           <div className="mt-2 flex flex-wrap items-center">
             {relationshipStatusOptions.map((item) => (
-              <div key={item} className="mb-2 mr-4">
+              <div key={item.id} className="mb-2 mr-4">
                 <label className=" flex items-center rounded border border-gray-300 p-2">
                   <input
                     type="radio"
                     name="relationshipStatus"
-                    value={item}
-                    checked={formData.relationshipStatus === item}
+                    value={item.value}
+                    checked={formData.relationshipStatus === item.value}
                     onChange={handleSelectChange}
                     className="h-4 w-4 focus:ring-indigo-500"
                   />
-                  <span className="ml-2 text-sm">{item}</span>
+                  <span className="ml-2 text-sm">{item.value}</span>
                 </label>
               </div>
             ))}
@@ -287,22 +245,22 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
         {/* multi-checkbox */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            期望關係
-          </label>
+          <label className="mb-2 font-medium text-gray-700">期望關係</label>
           <div className="mt-2 flex flex-wrap items-center">
             {expectedRelationshipOptions.map((item) => (
-              <div key={item} className="mb-2 mr-4">
-                <label className="flex items-center rounded border border-gray-300 p-2">
+              <div key={item.id} className="mb-2 mr-4">
+                <label className="mb-2 flex items-center rounded border border-gray-300 p-2">
                   <input
                     type="checkbox"
                     name="expectedRelationships"
-                    value={item}
-                    checked={formData.expectedRelationships.includes(item)}
+                    value={item.value}
+                    checked={formData.expectedRelationships.includes(
+                      item.value,
+                    )}
                     onChange={handleMultiSelectChange}
                     className="h-4 w-4 focus:ring-indigo-500"
                   />
-                  <span className="ml-2 text-sm">{item}</span>
+                  <span className="ml-2 text-sm">{item.value}</span>
                 </label>
               </div>
             ))}
@@ -311,22 +269,20 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
         {/* multi-checkbox */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            興趣
-          </label>
-          <div className="mt-2 flex flex-wrap items-center justify-center">
+          <label className="mb-2 font-medium text-gray-700">興趣</label>
+          <div className="flex flex-wrap items-center justify-center">
             {interestOptions.map((item) => (
-              <div key={item} className="mb-2 mr-4">
-                <label className="flex items-center rounded border border-gray-300 p-2">
+              <div key={item.id} className="mb-2 mr-4">
+                <label className="mb-2 flex items-center rounded border border-gray-300 p-2">
                   <input
                     type="checkbox"
                     name="interests"
-                    value={item}
-                    checked={formData.interests.includes(item)}
+                    value={item.value}
+                    checked={formData.interests.includes(item.value)}
                     onChange={handleMultiSelectChange}
                     className="h-4 w-4 focus:ring-indigo-500"
                   />
-                  <span className="ml-2 text-sm">{item}</span>
+                  <span className="ml-2 text-sm">{item.value}</span>
                 </label>
               </div>
             ))}
@@ -335,12 +291,11 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
         {/* file */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            個人圖片
-          </label>
+          <label className="mb-2 font-medium text-gray-700">個人圖片</label>
 
-          <div className="mt-2 flex items-center justify-start space-x-4">
-            <label className="flex h-32 w-32 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300">
+          {/* <div className=" flex items-center justify-start space-x-4"> */}
+          <div className="grid grid-cols-4 gap-2">
+            <label className="mb-2 flex h-32 w-32 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300">
               <input
                 type="file"
                 className="hidden"
@@ -349,7 +304,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
               <span className="text-gray-500">+</span>
             </label>
 
-            {/* {formData.imageUrls.map((url, index) => (
+            {formData.imageUrls.map((url, index) => (
               <div key={index} className="relative h-32 w-32">
                 <Image
                   src={url}
@@ -359,9 +314,9 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
                   className="rounded-md"
                 />
               </div>
-            ))} */}
+            ))}
 
-            {formData.imageUrls.length > 0 && (
+            {/* {formData.imageUrls.length > 0 && (
               <div key={0} className="relative h-32 w-32">
                 <Image
                   src={formData.imageUrls[0]}
@@ -391,7 +346,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
                   className="z-0 rounded-md"
                 />
               </div>
-            )}
+            )} */}
           </div>
         </div>
         {errorMsg && <p className="mb-2 text-sm text-red-500">{errorMsg}</p>}
