@@ -8,14 +8,14 @@ interface Props {
   user: UserData | null;
   messages: Message[];
   currentRecipientUId: string;
-  onNewMessage: (message: Message) => void;
+  //   onNewMessage: (message: Message) => void;
 }
 
 const Chat: React.FC<Props> = ({
   user,
   messages,
   currentRecipientUId,
-  onNewMessage,
+  //   onNewMessage,
 }) => {
   const [newMessage, setNewMessage] = useState("");
   if (!user) {
@@ -40,7 +40,7 @@ const Chat: React.FC<Props> = ({
       };
       console.log();
 
-      onNewMessage(newMessageObj);
+      //   onNewMessage(newMessageObj);
       setNewMessage("");
     }
   };
