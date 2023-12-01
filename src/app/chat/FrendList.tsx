@@ -3,18 +3,27 @@ import { UserData } from "@/types/UserData";
 
 type Props = {
   friends: ChatUser[];
+  currentUser: ChatUser | null;
+  onClickRecipient: (recipientUId: string) => void;
   //   user: UserData;
 };
 
-const FriendList: React.FC<Props> = ({ friends }) => {
+const FriendList: React.FC<Props> = ({
+  friends,
+  currentUser,
+  onClickRecipient,
+}) => {
   return (
-    <div className="bodrder-gray-700 container h-full max-w-xs ">
-      <h2></h2>
-      <ul className="divide-y divide-gray-200">
+    <div className="bodrder-gray-700 container h-full max-w-xs border-r ">
+      <h2 className="px-4 py-4 text-lg font-bold ">
+        {currentUser?.nickname ?? ""}
+      </h2>
+      <ul className="">
         {friends.map((friend) => (
           <li
             key={friend.uid}
-            className="flex cursor-pointer items-center py-4"
+            className="flex cursor-pointer items-center px-4 py-4 hover:bg-sky-100 focus:bg-sky-100"
+            onClick={() => onClickRecipient(friend.uid)}
           >
             <img
               className="h-10 w-10 rounded-full"
@@ -26,7 +35,6 @@ const FriendList: React.FC<Props> = ({ friends }) => {
                 {friend.nickname}
               </p>
               {/* <p className="text-sm text-gray-500">Last seen 3 hours ago</p>{" "} */}
-              {/* Replace with dynamic data */}
             </div>
           </li>
         ))}
