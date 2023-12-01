@@ -19,5 +19,8 @@ interface MatchUser extends UpdateGetStartFormData {
 interface MatchData {
   users: string[];
   matchOn: string;
+  liked?: Boolean;
+  likedUser?: string;
+
   //   status: "pending" | "active" | "finished";
 }
