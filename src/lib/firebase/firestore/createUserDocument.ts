@@ -4,7 +4,7 @@ import { FirestoreError, doc, setDoc } from "firebase/firestore";
 
 const createUserDocument = async (user: UserData | null): Promise<boolean> => {
   if (!user) {
-    console.error("No user data provided");
+    console.error("Error: No user data provided");
     return false;
   }
 

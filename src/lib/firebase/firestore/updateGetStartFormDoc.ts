@@ -22,7 +22,7 @@ const updateGetStartFormDoc = async (
     } else if (error instanceof Error) {
       console.error("Error updating user document: ", error.message);
     } else {
-      console.error(error);
+      console.error("Error updating user document: ", error);
     }
 
     throw new Error("Error submitting the form");
