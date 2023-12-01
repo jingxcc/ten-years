@@ -14,6 +14,7 @@ import {
   getDocs,
   or,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { auth, firestore } from "@/lib/firebase/initialize";
@@ -30,6 +31,8 @@ import { FirebaseError } from "firebase/app";
 export default function MatchPage() {
   const { user, isUserLoading } = useUser();
   const [matchUsers, setMatchUsers] = useState<MatchUser[]>([]);
+  const [matches, setMatches] = useState<MatchData[]>([]);
+  const [likedUser, setLikedUser] = useState<string>("");
   const route = useRouter();
 
   useEffect(() => {
@@ -41,6 +44,7 @@ export default function MatchPage() {
   useEffect(() => {
     const fetchMatches = async () => {
       let selectedMatches: MatchUser[] = [];
+      let likedMatchUser: string = "";
       if (!user) {
         return false;
       }
@@ -60,11 +64,12 @@ export default function MatchPage() {
       // check matches data
       // const matchData: MatchData = matchDocResult;
       selectedMatches = matchDocResult ? matchDocResult["users"] : [];
-      // console.log("selectedMatches from doc", selectedMatches);
+
+      console.log("selectedMatches from doc", selectedMatches);
       const matchOn: string = matchDocResult ? matchDocResult["matchOn"] : "";
       const today = new Date().toISOString().split("T")[0];
       // document just created, or not today matches
-      if (!matchOn.startsWith(today)) {
+      if (!matchOn.startsWith(today) || selectedMatches.length === 0) {
         const currentUserDoc = await fetchUserDoc(user);
         if (!currentUserDoc) {
           return false;
@@ -128,12 +133,13 @@ export default function MatchPage() {
             where("isStartProfileCompleted", "==", true),
             where("uid", "not-in", [...currentUser.friends, user.uid]),
           );
+          // tmp: remove some condtions
         } else {
           q = query(
             usersRef,
             where("isStartProfileCompleted", "==", true),
             where("uid", "not-in", [...currentUser.friends, user.uid]),
-            where("gender", "==", genderOptionValues),
+            // where("gender", "==", genderOptionValues),
           );
         }
 
@@ -176,12 +182,15 @@ export default function MatchPage() {
         // console.log("selectedMatches", selectedMatches);
 
         await updateMatchDoc(user, selectedMatches);
+        likedMatchUser = "";
       } else {
         // console.log("selectedMatches", selectedMatches);
 
         // read
         const fetchDocResult = await fetchMatchDoc(user);
         const matchUIds = fetchDocResult ? fetchDocResult["users"] : [];
+        likedMatchUser = fetchDocResult ? fetchDocResult["likedUser"] : "";
+
         const matchPromises = matchUIds.map((id: string) => {
           const userRef = doc(firestore, "users", id);
           return getDoc(userRef);
@@ -200,13 +209,24 @@ export default function MatchPage() {
         // console.log("selectedMatches", selectedMatches);
       }
       setMatchUsers(selectedMatches);
+      setLikedUser(likedMatchUser);
     };
 
     fetchMatches();
   }, [user]);
 
-  const handleLike = async (userId: string) => {
-    console.log(userId);
+  const handleLike = async (matchUserId: string) => {
+    console.log(matchUserId);
+    if (!user) return false;
+    const matchRef = doc(firestore, "matches", user.uid);
+    // Update the user's 'liked' status in Firebase
+    await updateDoc(matchRef, {
+      liked: true,
+      likedUser: matchUserId,
+    });
+
+    setLikedUser(matchUserId);
+    console.log("Liked user", matchUserId);
   };
 
   // console.log("Loading", isUserLoading);
@@ -217,10 +237,22 @@ export default function MatchPage() {
   }
 
   return (
-    <div>
+    <div className="absolute h-full w-full">
       {/* <Sidebar onSignOut={handleSignOut}></Sidebar> */}
       <Sidebar></Sidebar>
-      <MatchCard matchUsers={matchUsers} onLike={handleLike}></MatchCard>
+      <main className="mw-[900px] container mx-auto ml-32 mt-16 px-2">
+        <h2 className="mb-8 text-center text-lg font-bold ">Today's Match !</h2>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {matchUsers.map((matchUser) => (
+            <MatchCard
+              key={matchUser.uid}
+              matchUser={matchUser}
+              likedUser={likedUser}
+              onLike={handleLike}
+            ></MatchCard>
+          ))}
+        </div>
+      </main>
     </div>
   );
 }
