@@ -398,7 +398,7 @@ export default function ChatPage() {
           user={user}
           messages={messages}
           currentRecipientUId={currentRecipientUId}
-          onNewMessage={handleNewMessage}
+          // onNewMessage={handleNewMessage}
         />
       </main>
     </div>
