@@ -241,7 +241,9 @@ export default function MatchPage() {
       {/* <Sidebar onSignOut={handleSignOut}></Sidebar> */}
       <Sidebar></Sidebar>
       <main className="mw-[900px] container mx-auto ml-32 mt-16 px-2">
-        <h2 className="mb-8 text-center text-lg font-bold ">Today's Match !</h2>
+        <h2 className="mb-8 text-center text-lg font-bold ">
+          {"Today's Match !"}
+        </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {matchUsers.map((matchUser) => (
             <MatchCard
