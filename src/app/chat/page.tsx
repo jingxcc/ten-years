@@ -6,13 +6,17 @@ import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 
 import { useUser } from "@/context/userContext";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  QuerySnapshot,
+  and,
   collection,
   doc,
   documentId,
   getDoc,
   onSnapshot,
+  or,
+  orderBy,
   query,
   setDoc,
   where,
@@ -20,10 +24,11 @@ import {
 import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import Sidebar from "../../components/SideBar/SideBar";
 import FriendList from "./FrendList";
-import { ChatUser, Friend } from "@/types/ChatPage";
+import { ChatUser, Friend, Message } from "@/types/ChatPage";
 import fetchMatchDoc from "@/lib/firebase/firestore/fetchMatchDoc";
 import { createFriendDoc } from "@/lib/firebase/firestore/createFriendDoc";
 import { UserData } from "@/types/UserData";
+import Chat from "./Chat";
 
 // get matches doc
 const fetchLikedMatch = async (user: UserData) => {
@@ -44,6 +49,12 @@ const fetchLikedMatch = async (user: UserData) => {
       friendId: likedMatchUId,
       addedOn: new Date(),
     });
+
+    await createFriendDoc(likedMatchUId, {
+      friendId: user.uid,
+      addedOn: new Date(),
+    });
+
     console.log("likedMatchUId", likedMatchUId);
     return likedMatchUId;
 
@@ -51,6 +62,36 @@ const fetchLikedMatch = async (user: UserData) => {
     // console.log("Like Match Doc Created");
   }
 };
+
+// const mergeMessages = (
+//   existingMessages: Message[],
+//   newMessages: Message[],
+// ): Message[] => {
+//   const allMessages = [...existingMessages, ...newMessages].sort((a, b) => {
+//     // Convert Firestore Timestamps to JavaScript Date objects, handling null cases
+//     const dateA = a.timestamp?.toDate() ?? new Date(0); // Use toDate() for Firestore Timestamp
+//     const dateB = b.timestamp?.toDate() ?? new Date(0);
+
+//     return dateA.getTime() - dateB.getTime();
+//   });
+//   console.log("allMessages", allMessages);
+
+//   // function sortCompareMessages(a, b) {
+//   //   // messages.sort((a, b) => {
+//   //   // Convert Firestore Timestamps to JavaScript Date objects
+//   //   const dateA = a.timestamp ? a.timestamp.toDate() : new Date(0); // Fallback to epoch time if timestamp is null
+//   //   const dateB = b.timestamp ? b.timestamp.toDate() : new Date(0);
+
+//   //   // Compare the Date objects using getTime
+//   //   return dateA.getTime() - dateB.getTime();
+//   //   // });
+//   // }
+
+//   return allMessages;
+//   // return allMessages.sort(
+//   //   (a, b) => (a.timestamp?.getTime() ?? 0) - (b.timestamp?.getTime() ?? 0),
+//   // );
+// };
 
 // const fetchFriendData = async (user, friendUIds) => {
 //   const usersCollectionRef = collection(firestore, "users");
@@ -71,9 +112,12 @@ const fetchLikedMatch = async (user: UserData) => {
 export default function ChatPage() {
   const { user, isUserLoading } = useUser();
   const [friends, setFriends] = useState<ChatUser[]>([]);
-  // const [friendUIds, setFriendUIds] = useState<string[]>([]);
+  const [currentUser, setCurrentUser] = useState<ChatUser | null>(null);
+  const [currentRecipientUId, setCurrentRecipientUId] = useState<string>("");
   const [likedMatch, setlikedMatch] = useState<string>("");
-  // const { userData, setUserData } = useState({});
+  const [messages, setMessages] = useState<Message[]>([]);
+  const latestMessagesRef = useRef<Message[]>([]);
+
   const route = useRouter();
 
   const router = useRouter();
@@ -82,6 +126,21 @@ export default function ChatPage() {
       route.push("/");
     }
   }, [isUserLoading, user, route]);
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      if (!user) {
+        return false;
+      }
+      const fetchUserDocResult = await fetchUserDoc(user);
+
+      if (fetchUserDocResult) {
+        console.log("fetchUserDocResult", fetchUserDocResult["data"]);
+        setCurrentUser({ ...(fetchUserDocResult["data"] as ChatUser) });
+      }
+    };
+    fetchCurrentUser();
+  }, [user]);
 
   useEffect(() => {
     const checkFriendDocExist = async () => {
@@ -95,8 +154,7 @@ export default function ChatPage() {
         setlikedMatch(addLikedMatchResult);
       }
     };
-
-    checkFriendDocExist();
+    const fetchUserData = checkFriendDocExist();
   }, [user]);
 
   useEffect(() => {
@@ -155,6 +213,7 @@ export default function ChatPage() {
               return { ...userDoc.data() } as ChatUser;
             });
             setFriends(friendsData);
+            setCurrentRecipientUId(friendsData[0]["uid"]);
           })
           .catch((error) => {
             console.error("Error fetching friend data:", error);
@@ -169,11 +228,132 @@ export default function ChatPage() {
     fetchFriendData();
   }, [user, likedMatch]);
 
+  useEffect(() => {
+    if (user) {
+      const messagesRef = collection(firestore, "messages");
+
+      // const querySentMessages = query(
+      //   messagesRef,
+      //   where("fromUserId", "==", user.uid),
+      //   where("toUserId", "==", currentRecipientUId),
+      //   orderBy("timestamp", "desc"),
+      // );
+
+      // const queryReceivedMessages = query(
+      //   messagesRef,
+      //   where("fromUserId", "==", currentRecipientUId),
+      //   where("toUserId", "==", user.uid),
+      //   orderBy("timestamp", "desc"),
+      // );
+
+      // send and receive
+      const queryMessages = query(
+        messagesRef,
+        or(
+          and(
+            where("fromUserId", "==", user.uid),
+            where("toUserId", "==", currentRecipientUId),
+          ),
+          and(
+            where("fromUserId", "==", currentRecipientUId),
+            where("toUserId", "==", user.uid),
+          ),
+        ),
+        orderBy("timestamp", "desc"),
+      );
+
+      // const handleSnapshot = (
+      //   snapshot: QuerySnapshot,
+      //   type: "sent" | "received",
+      // ) => {
+      //   const newMessages = snapshot.docs.map((doc) => ({
+      //     id: doc.id,
+      //     ...(doc.data() as Message),
+      //   }));
+      //   latestMessagesRef.current =
+      //     type === "sent"
+      //       ? mergeMessages(latestMessagesRef.current, newMessages)
+      //       : mergeMessages(newMessages, latestMessagesRef.current);
+      //   setMessages([...latestMessagesRef.current]);
+      // };
+
+      // const unsubscribeSent = onSnapshot(querySentMessages, (snapshot) =>
+      //   handleSnapshot(snapshot, "sent"),
+      // );
+      // const unsubscribeReceived = onSnapshot(
+      //   queryReceivedMessages,
+      //   (snapshot) => handleSnapshot(snapshot, "received"),
+      // );
+
+      const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
+        const newMessages = snapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...(doc.data() as Message),
+          }))
+          .sort((a, b) => {
+            // Convert Firestore Timestamps to JavaScript Date objects, handling null cases
+            const dateA = a.timestamp?.toDate() ?? new Date(0); // Use toDate() for Firestore Timestamp
+            const dateB = b.timestamp?.toDate() ?? new Date(0);
+
+            return dateA.getTime() - dateB.getTime();
+          });
+        console.log("newMessages", newMessages);
+
+        setMessages(newMessages);
+      });
+
+      // const unsubscribeSent = onSnapshot(querySentMessages, (snapshot) => {
+      //   const sentMessages = snapshot.docs.map((doc) => ({
+      //     id: doc.id,
+      //     ...(doc.data() as Message),
+      //   }));
+      //   setMessages((prevMessages) =>
+      //     mergeMessages(prevMessages, sentMessages),
+      //   );
+      //   console.log(123);
+      // });
+
+      // const unsubscribeReceived = onSnapshot(
+      //   queryReceivedMessages,
+      //   (snapshot) => {
+      //     const receivedMessages = snapshot.docs.map((doc) => ({
+      //       id: doc.id,
+      //       ...(doc.data() as Message),
+      //     }));
+      //     setMessages((prevMessages) =>
+      //       mergeMessages(prevMessages, receivedMessages),
+      //     );
+      //     console.log(123);
+      //   },
+      // );
+
+      return () => {
+        // unsubscribeSent();
+        // unsubscribeReceived();
+        unsubscribe();
+      };
+    }
+  }, [user, currentRecipientUId]);
+
+  const handleClickRecipient = (recipientUId: string) => {
+    setCurrentRecipientUId(recipientUId);
+  };
+
+  // tmp: useCallback? useMemo?
+  const handleNewMessage = (newMessage: Message) => {
+    setMessages((prev) => [newMessage, ...prev]);
+    console.log("是你 render?");
+  };
+
   // useEffect(() => {
   //   console.log("friendUIds", friendUIds);
   // }, [friendUIds]);
 
+  console.log("crrentRecipientUId", currentRecipientUId);
+
   console.log("friend", friends);
+  console.log("messages", messages);
 
   // const fetchUserData = async () => {
   //   if (!user) {
@@ -205,16 +385,21 @@ export default function ChatPage() {
   }
 
   return (
-    <div>
-      <Sidebar>
-        {/* <button className="btn mt-2" onClick={() => router.push("/get-start")}>
-          {"start (test)"}
-        </button> */}
-      </Sidebar>
-      <main className="ml-32 px-2">
-        <FriendList friends={friends} />
-        {/* <h3 className="text-lg">{userData.nickname}</h3> */}
-        {/* <p>chat page</p> */}
+    <div className="absolute h-full w-full">
+      <Sidebar></Sidebar>
+      <main className="ml-32 flex h-full">
+        <FriendList
+          friends={friends}
+          currentUser={currentUser}
+          onClickRecipient={handleClickRecipient}
+        />
+        <Chat
+          key={currentRecipientUId}
+          user={user}
+          messages={messages}
+          currentRecipientUId={currentRecipientUId}
+          onNewMessage={handleNewMessage}
+        />
       </main>
     </div>
   );

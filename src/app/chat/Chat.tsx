@@ -1,65 +1,80 @@
-// import { useState, useEffect } from "react";
-// import {
-//   collection,
-//   addDoc,
-//   query,
-//   orderBy,
-//   onSnapshot,
-// } from "firebase/firestore";
-// import { firestore } from "@/lib/firebase/initialize";
-// import { Message } from "@/types/ChatPage";
+import React, { useState } from "react";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { Message } from "@/types/ChatPage";
+import { firestore } from "@/lib/firebase/initialize";
+import { UserData } from "@/types/UserData";
 
-// const Chat = () => {
-//   const [messages, setMessages] = useState<Message[]>([]);
-//   const [newMessage, setNewMessage] = useState("");
+interface Props {
+  user: UserData | null;
+  messages: Message[];
+  currentRecipientUId: string;
+  onNewMessage: (message: Message) => void;
+}
 
-//   // Firestore = real-time
-//   useEffect(() => {
-//     const messagesQuery = query(
-//       collection(firestore, "messages"),
-//       orderBy("timestamp"),
-//     );
-//     const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
-//       const messagesData = snapshot.docs.map((doc) => ({
-//         ...doc.data(),
-//         id: doc.id,
-//       }));
-//       setMessages(messagesData);
-//     });
+const Chat: React.FC<Props> = ({
+  user,
+  messages,
+  currentRecipientUId,
+  onNewMessage,
+}) => {
+  const [newMessage, setNewMessage] = useState("");
+  if (!user) {
+    return null;
+  }
 
-//     return unsubscribe;
-//   }, []);
+  const handleSendMessage = async () => {
+    if (newMessage.trim() !== "") {
+      const docRef = await addDoc(collection(firestore, "messages"), {
+        text: newMessage,
+        fromUserId: user.uid,
+        toUserId: currentRecipientUId,
+        timestamp: serverTimestamp(),
+      });
 
-//   // send a message
-//   const sendMessage = async () => {
-//     if (newMessage.trim() !== "") {
-//       await addDoc(collection(firestore, "messages"), {
-//         text: newMessage,
-//         timestamp: new Date(),
-//       });
-//       setNewMessage(""); // Clear the input after sending
-//     }
-//   };
+      const newMessageObj: Message = {
+        id: docRef.id,
+        text: newMessage,
+        fromUserId: user.uid,
+        toUserId: currentRecipientUId,
+        timestamp: null,
+      };
+      console.log();
 
-//   return (
-//     <div className="chat-container">
-//       <ul className="messages-list">
-//         {messages.map((message) => (
-//           <li key={message.id}>{message.text}</li>
-//         ))}
-//       </ul>
-//       <input
-//         type="text"
-//         value={newMessage}
-//         onChange={(e) => setNewMessage(e.target.value)}
-//         placeholder="Type a message"
-//         className="message-input"
-//       />
-//       <button onClick={sendMessage} className="send-message-button">
-//         Send
-//       </button>
-//     </div>
-//   );
-// };
+      onNewMessage(newMessageObj);
+      setNewMessage("");
+    }
+  };
 
-// export default Chat;
+  return (
+    <div className="flex h-full flex-1 flex-col">
+      <ul className="flex-1 overflow-y-auto">
+        {messages.map((message) => (
+          <li
+            key={message.id}
+            className={`my-2 max-w-[40%] rounded-2xl border-none p-2 ${
+              message.fromUserId === user.uid
+                ? "ml-auto mr-2 bg-blue-300 text-white"
+                : "ml-2 bg-gray-200"
+            }`}
+          >
+            {message.text}
+          </li>
+        ))}
+      </ul>
+      <div className="flex p-2">
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder="Type a message"
+          className="flex-1 rounded border border-gray-300 p-2"
+        />
+        <button onClick={handleSendMessage} className="btn ml-2">
+          Send
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Chat;
