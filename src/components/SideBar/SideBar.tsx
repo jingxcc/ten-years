@@ -38,7 +38,7 @@ const Sidebar: React.FC<SideBarProps> = ({ children }) => {
         Log out
       </button>
 
-      <button className="btn mb-4" onClick={() => route.push("/matches")}>
+      <button className="btn mb-4" onClick={() => route.push("/potentials")}>
         Matches
       </button>
       <button className="btn mb-4" onClick={() => route.push("/chat")}>

@@ -3,7 +3,7 @@ import { useUser } from "@/context/userContext";
 import MatchCard from "./MatchCard";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MatchData, MatchUser } from "@/types/MatchPage";
+import { MatchData, MatchUser } from "@/types/PotentialMatchesPage";
 
 import { genderOptions, matchGenderOptions } from "@/constants/GetStartForm";
 import {
@@ -28,7 +28,7 @@ import Sidebar from "../../components/SideBar/SideBar";
 import { signOut } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 
-export default function MatchPage() {
+export default function PotentialMatchesPage() {
   const { user, isUserLoading } = useUser();
   const [matchUsers, setMatchUsers] = useState<MatchUser[]>([]);
   const [matches, setMatches] = useState<MatchData[]>([]);
@@ -59,7 +59,7 @@ export default function MatchPage() {
         matchDocResult = await fetchMatchDoc(user);
       }
 
-      // console.log("matchDocResult", matchDocResult);
+      console.log("matchDocResult", matchDocResult);
 
       // check matches data
       // const matchData: MatchData = matchDocResult;

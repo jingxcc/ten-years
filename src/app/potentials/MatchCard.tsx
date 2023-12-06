@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { HeartIcon } from "@heroicons/react/24/outline"; // Ensure you have these icons installed
-import { MatchUser } from "@/types/MatchPage";
+import { MatchUser } from "@/types/PotentialMatchesPage";
 
 interface MatchCardProps {
   matchUser: MatchUser;

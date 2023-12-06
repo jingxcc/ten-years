@@ -1,4 +1,4 @@
-import { MatchUser } from "@/types/MatchPage";
+import { MatchUser } from "@/types/PotentialMatchesPage";
 
 const shufflePotentialUsers = (allPotentialUsers: MatchUser[]) => {
   const shuffledList = allPotentialUsers.sort(() => 0.5 - Math.random());

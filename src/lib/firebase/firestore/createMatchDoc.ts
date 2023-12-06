@@ -1,5 +1,5 @@
 import { firestore } from "@/lib/firebase/initialize";
-import { MatchData } from "@/types/MatchPage";
+import { MatchData } from "@/types/PotentialMatchesPage";
 import { UserData } from "@/types/UserData";
 import { FirestoreError, doc, setDoc } from "firebase/firestore";
 
