@@ -16,11 +16,11 @@ interface MatchUser extends UpdateGetStartFormData {
   description: string;
 }
 
-interface MatchData {
+interface PotentialMatchData {
   users: string[];
-  matchOn: string;
+  lastUpdatedOn?: Date;
   liked?: Boolean;
-  likedUser?: string;
-
-  //   status: "pending" | "active" | "finished";
+  userLiked?: string;
 }
+
+export { PotentialMatchData, MatchUser };

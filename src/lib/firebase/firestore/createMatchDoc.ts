@@ -1,11 +1,11 @@
 import { firestore } from "@/lib/firebase/initialize";
-import { MatchData } from "@/types/PotentialMatchesPage";
+import { PotentialMatchData } from "@/types/PotentialMatchesPage";
 import { UserData } from "@/types/UserData";
 import { FirestoreError, doc, setDoc } from "firebase/firestore";
 
-const createMatchDoc = async (
+const createPotentialMatchDoc = async (
   user: UserData | null,
-  matchData: MatchData,
+  matchData: PotentialMatchData,
 ): Promise<boolean> => {
   if (!user) {
     console.error("Error: No user data provided");
@@ -13,15 +13,21 @@ const createMatchDoc = async (
   }
 
   try {
-    await setDoc(doc(firestore, "matches", user.uid), matchData);
-    console.log("Match document created");
+    await setDoc(doc(firestore, "potentialMatches", user.uid), matchData);
+    console.log("Potential matches document created");
 
     return true;
   } catch (error) {
     if (error instanceof FirestoreError) {
-      console.error("Error creating match document: ", error.message);
+      console.error(
+        "Error creating potential matches document: ",
+        error.message,
+      );
     } else if (error instanceof Error) {
-      console.error("Error creating match document: ", error.message);
+      console.error(
+        "Error creating potential matches document: ",
+        error.message,
+      );
     } else {
       console.error(error);
     }
@@ -30,4 +36,4 @@ const createMatchDoc = async (
   }
 };
 
-export default createMatchDoc;
+export default createPotentialMatchDoc;

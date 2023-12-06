@@ -25,15 +25,15 @@ import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import Sidebar from "../../components/SideBar/SideBar";
 import FriendList from "./FrendList";
 import { ChatUser, Friend, Message } from "@/types/ChatPage";
-import fetchMatchDoc from "@/lib/firebase/firestore/fetchMatchDoc";
 import { createFriendDoc } from "@/lib/firebase/firestore/createFriendDoc";
 import { UserData } from "@/types/UserData";
 import Chat from "./Chat";
+import fetchPotentialMatchDoc from "@/lib/firebase/firestore/fetchMatchDoc";
 
 // get matches doc
 const fetchLikedMatch = async (user: UserData) => {
   // get liked matches doc
-  const matchDocResult = await fetchMatchDoc(user);
+  const matchDocResult = await fetchPotentialMatchDoc(user);
   if (!matchDocResult) {
     return false;
   }

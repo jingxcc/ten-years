@@ -3,7 +3,7 @@ import { useUser } from "@/context/userContext";
 import MatchCard from "./MatchCard";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MatchData, MatchUser } from "@/types/PotentialMatchesPage";
+import { PotentialMatchData, MatchUser } from "@/types/PotentialMatchesPage";
 
 import { genderOptions, matchGenderOptions } from "@/constants/GetStartForm";
 import {
@@ -21,17 +21,17 @@ import { auth, firestore } from "@/lib/firebase/initialize";
 import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import { shufflePotentialUsers } from "@/lib/generateMatches";
 import { UpdateGetStartFormData } from "@/types/GetStartForm";
-import fetchMatchDoc from "@/lib/firebase/firestore/fetchMatchDoc";
-import createMatchDoc from "@/lib/firebase/firestore/createMatchDoc";
-import updateMatchDoc from "@/lib/firebase/firestore/updateMatchDoc";
 import Sidebar from "../../components/SideBar/SideBar";
 import { signOut } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
+import fetchPotentialMatchDoc from "@/lib/firebase/firestore/fetchMatchDoc";
+import createPotentialMatchDoc from "@/lib/firebase/firestore/createMatchDoc";
+import updatePotentialMatchDoc from "@/lib/firebase/firestore/updateMatchDoc";
 
 export default function PotentialMatchesPage() {
   const { user, isUserLoading } = useUser();
   const [matchUsers, setMatchUsers] = useState<MatchUser[]>([]);
-  const [matches, setMatches] = useState<MatchData[]>([]);
+  const [matches, setMatches] = useState<PotentialMatchData[]>([]);
   const [likedUser, setLikedUser] = useState<string>("");
   const route = useRouter();
 
@@ -50,26 +50,29 @@ export default function PotentialMatchesPage() {
       }
 
       // get matches doc
-      let matchDocResult = await fetchMatchDoc(user);
+      let matchDocResult = await fetchPotentialMatchDoc(user);
       if (!matchDocResult) {
-        await createMatchDoc(user, {
+        await createPotentialMatchDoc(user, {
           users: [],
-          matchOn: "",
-        } as MatchData);
-        matchDocResult = await fetchMatchDoc(user);
+        } as PotentialMatchData);
+        matchDocResult = await fetchPotentialMatchDoc(user);
       }
 
       console.log("matchDocResult", matchDocResult);
 
       // check matches data
-      // const matchData: MatchData = matchDocResult;
       selectedMatches = matchDocResult ? matchDocResult["users"] : [];
+      // console.log("selectedMatches from doc", selectedMatches);
 
-      console.log("selectedMatches from doc", selectedMatches);
-      const matchOn: string = matchDocResult ? matchDocResult["matchOn"] : "";
-      const today = new Date().toISOString().split("T")[0];
+      const lastUpdatedOn: string = matchDocResult
+        ? matchDocResult["lastUpdatedOn"].toDate().toLocaleDateString()
+        : "";
+      // const today = new Date().toISOString().split("T")[0];
+      const today = new Date().toLocaleDateString();
+
       // document just created, or not today matches
-      if (!matchOn.startsWith(today) || selectedMatches.length === 0) {
+      if (!(lastUpdatedOn === today) || selectedMatches.length === 0) {
+        // if (!lastUpdatedOn.startsWith(today) || selectedMatches.length === 0) {
         const currentUserDoc = await fetchUserDoc(user);
         if (!currentUserDoc) {
           return false;
@@ -92,14 +95,6 @@ export default function PotentialMatchesPage() {
           friends: currentUserData["friends"] ?? [],
           description: currentUserData["description"] ?? "",
         };
-
-        // console.log("current user Doc", currentUser);
-
-        // console.log("[...currentUser.friends, user.uid]", [
-        //   ...currentUser.friends,
-        //   user.uid,
-        // ]);
-        // console.log("currentUser.matchGender", currentUser.matchGender);
 
         const usersRef = collection(firestore, "users");
 
@@ -181,13 +176,13 @@ export default function PotentialMatchesPage() {
         selectedMatches = shufflePotentialUsers(allPotentialUsers);
         // console.log("selectedMatches", selectedMatches);
 
-        await updateMatchDoc(user, selectedMatches);
+        await updatePotentialMatchDoc(user, selectedMatches);
         likedMatchUser = "";
       } else {
         // console.log("selectedMatches", selectedMatches);
 
         // read
-        const fetchDocResult = await fetchMatchDoc(user);
+        const fetchDocResult = await fetchPotentialMatchDoc(user);
         const matchUIds = fetchDocResult ? fetchDocResult["users"] : [];
         likedMatchUser = fetchDocResult ? fetchDocResult["likedUser"] : "";
 
@@ -238,7 +233,6 @@ export default function PotentialMatchesPage() {
 
   return (
     <div className="absolute h-full w-full">
-      {/* <Sidebar onSignOut={handleSignOut}></Sidebar> */}
       <Sidebar></Sidebar>
       <main className="mw-[900px] container mx-auto ml-32 mt-16 px-2">
         <h2 className="mb-8 text-center text-lg font-bold ">
