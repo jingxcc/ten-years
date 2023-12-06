@@ -28,7 +28,7 @@ import { ChatUser, Friend, Message } from "@/types/ChatPage";
 import { createFriendDoc } from "@/lib/firebase/firestore/createFriendDoc";
 import { UserData } from "@/types/UserData";
 import Chat from "./Chat";
-import fetchPotentialMatchDoc from "@/lib/firebase/firestore/fetchMatchDoc";
+import fetchPotentialMatchDoc from "@/lib/firebase/firestore/fetchPotentialMatchDoc";
 
 // get matches doc
 const fetchLikedMatch = async (user: UserData) => {

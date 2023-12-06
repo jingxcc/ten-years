@@ -24,9 +24,9 @@ import { UpdateGetStartFormData } from "@/types/GetStartForm";
 import Sidebar from "../../components/SideBar/SideBar";
 import { signOut } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
-import fetchPotentialMatchDoc from "@/lib/firebase/firestore/fetchMatchDoc";
-import createPotentialMatchDoc from "@/lib/firebase/firestore/createMatchDoc";
-import updatePotentialMatchDoc from "@/lib/firebase/firestore/updateMatchDoc";
+import fetchPotentialMatchDoc from "@/lib/firebase/firestore/fetchPotentialMatchDoc";
+import createPotentialMatchDoc from "@/lib/firebase/firestore/createPotentialMatchDoc";
+import updatePotentialMatchDoc from "@/lib/firebase/firestore/updatePotentialMatchDoc";
 
 export default function PotentialMatchesPage() {
   const { user, isUserLoading } = useUser();
