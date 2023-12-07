@@ -18,21 +18,17 @@ const createPotentialMatchDoc = async (
 
     return true;
   } catch (error) {
-    if (error instanceof FirestoreError) {
-      console.error(
-        "Error creating potential matches document: ",
-        error.message,
-      );
-    } else if (error instanceof Error) {
-      console.error(
-        "Error creating potential matches document: ",
-        error.message,
-      );
-    } else {
-      console.error(error);
-    }
+    let errMsg: string;
 
-    return false;
+    if (error instanceof FirestoreError) {
+      errMsg = `Error creating potential matches document: ${error.message}`;
+    } else if (error instanceof Error) {
+      errMsg = `Error creating potential matches document: ${error.message}`;
+    } else {
+      errMsg = `Error creating potential matches document: ${error}`;
+    }
+    console.error(error);
+    throw error;
   }
 };
 

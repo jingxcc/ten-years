@@ -14,15 +14,17 @@ const createUserDocument = async (user: UserData | null): Promise<boolean> => {
 
     return true;
   } catch (error) {
-    if (error instanceof FirestoreError) {
-      console.error("Error creating user document: ", error.message);
-    } else if (error instanceof Error) {
-      console.error("Error creating user document: ", error.message);
-    } else {
-      console.error(error);
-    }
+    let errMsg: string;
 
-    return false;
+    if (error instanceof FirestoreError) {
+      errMsg = `Error creating user document: ${error.message}`;
+    } else if (error instanceof Error) {
+      errMsg = `Error creating user document: ${error.message}`;
+    } else {
+      errMsg = `Error creating user document: ${error}`;
+    }
+    console.error(error);
+    throw error;
   }
 };
 

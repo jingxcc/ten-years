@@ -17,15 +17,17 @@ const updatePotentialMatchDoc = async (
 
     return true;
   } catch (error) {
-    if (error instanceof FirestoreError) {
-      console.error("Error updating potential match document: ", error.message);
-    } else if (error instanceof Error) {
-      console.error("Error updating potential match document: ", error.message);
-    } else {
-      console.error("Error updating potential match document: ", error);
-    }
+    let errMsg: string;
 
-    return false;
+    if (error instanceof FirestoreError) {
+      errMsg = `Error updating potential match document: ${error.message}`;
+    } else if (error instanceof Error) {
+      errMsg = `Error updating potential match document: ${error.message}`;
+    } else {
+      errMsg = `Error updating potential match document: ${error}`;
+    }
+    console.error(error);
+    throw error;
   }
 };
 

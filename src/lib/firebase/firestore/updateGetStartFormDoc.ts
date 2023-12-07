@@ -17,15 +17,19 @@ const updateGetStartFormDoc = async (
 
     return true;
   } catch (error) {
-    if (error instanceof FirestoreError) {
-      console.error("Error updating user document: ", error.message);
-    } else if (error instanceof Error) {
-      console.error("Error updating user document: ", error.message);
-    } else {
-      console.error("Error updating user document: ", error);
-    }
+    let errMsg: string;
 
-    throw new Error("Error submitting the form");
+    if (error instanceof FirestoreError) {
+      errMsg = `Error updating user document: ${error.message}`;
+    } else if (error instanceof Error) {
+      errMsg = `Error updating user document: ${error.message}`;
+    } else {
+      errMsg = `Error updating user document: ${error}`;
+    }
+    console.error(error);
+    throw error;
+
+    // throw new Error("Error submitting the form");
   }
 };
 

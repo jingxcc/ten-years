@@ -1,4 +1,4 @@
-import { doc, getDoc } from "firebase/firestore";
+import { FirestoreError, doc, getDoc } from "firebase/firestore";
 import { firestore } from "../initialize";
 import { UserData } from "@/types/UserData";
 
@@ -11,8 +11,6 @@ const fetchPotentialMatchDoc = async (user: UserData) => {
   const docSnap = await getDoc(matchRef);
   try {
     if (docSnap.exists()) {
-      //   console.log("Document data:", docSnap.data());
-
       return docSnap.data();
     } else {
       // docSnap.data() will be undefined in this case
@@ -22,13 +20,17 @@ const fetchPotentialMatchDoc = async (user: UserData) => {
       return false;
     }
   } catch (error) {
-    if (error instanceof Error) {
-      console.error("Error getting potential match document: ", error.message);
+    let errMsg: string;
+
+    if (error instanceof FirestoreError) {
+      errMsg = `Error getting potential match document: ${error.message}`;
+    } else if (error instanceof Error) {
+      errMsg = `Error getting potential match document: ${error.message}`;
     } else {
-      console.error("Error getting potential match document: ", error);
+      errMsg = `Error getting potential match document: ${error}`;
     }
-    // console.log("Error getting cached document:", error);
-    return false;
+    console.error(error);
+    throw error;
   }
 };
 
