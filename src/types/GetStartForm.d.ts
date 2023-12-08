@@ -3,7 +3,7 @@ interface UpdateGetStartFormData extends GetStartFormData {
   isStartProfileCompleted: boolean;
   uid?: string;
   friends?: string[];
-  description?: string;
+  aboutMe?: string;
 }
 
 interface GetStartFormData {

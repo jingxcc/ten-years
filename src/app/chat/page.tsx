@@ -25,42 +25,47 @@ import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import Sidebar from "../../components/SideBar/SideBar";
 import FriendList from "./FrendList";
 import { ChatUser, Friend, Message } from "@/types/ChatPage";
-import fetchMatchDoc from "@/lib/firebase/firestore/fetchMatchDoc";
 import { createFriendDoc } from "@/lib/firebase/firestore/createFriendDoc";
 import { UserData } from "@/types/UserData";
 import Chat from "./Chat";
+import fetchPotentialMatchDoc from "@/lib/firebase/firestore/fetchPotentialMatchDoc";
+import fetchAllFriendDocIds from "@/lib/firebase/firestore/fetchFriendDoc";
 
 // get matches doc
 const fetchLikedMatch = async (user: UserData) => {
-  // get liked matches doc
-  const matchDocResult = await fetchMatchDoc(user);
-  if (!matchDocResult) {
-    return false;
-  }
-  // tmp: 跳過按確認
+  const matchDocResult: string[] = await fetchAllFriendDocIds(user);
   console.log("matchDocResult", matchDocResult);
-  const likedMatchUId =
-    matchDocResult && matchDocResult["likedUser"]
-      ? matchDocResult["likedUser"]
-      : "";
 
-  if (likedMatchUId) {
-    await createFriendDoc(user.uid, {
-      friendId: likedMatchUId,
-      addedOn: new Date(),
-    });
+  return matchDocResult;
 
-    await createFriendDoc(likedMatchUId, {
-      friendId: user.uid,
-      addedOn: new Date(),
-    });
+  // const friendsRef = collection(firestore, "users", user.uid, "friends");
+  //   const querySnapShot = await getDocs(friendsRef);
 
-    console.log("likedMatchUId", likedMatchUId);
-    return likedMatchUId;
-
-    // setlikedMatch(likedMatchUId);
-    // console.log("Like Match Doc Created");
-  }
+  // get liked matches doc
+  // const matchDocResult = await fetchPotentialMatchDoc(user);
+  // if (!matchDocResult) {
+  //   return false;
+  // }
+  // // tmp: 跳過按確認
+  // console.log("matchDocResult", matchDocResult);
+  // const likedMatchUId =
+  //   matchDocResult && matchDocResult["userLiked"]
+  //     ? matchDocResult["userLiked"]
+  //     : "";
+  // if (likedMatchUId) {
+  //   await createFriendDoc(user.uid, {
+  //     friendId: likedMatchUId,
+  //     addedOn: new Date(),
+  //   });
+  //   await createFriendDoc(likedMatchUId, {
+  //     friendId: user.uid,
+  //     addedOn: new Date(),
+  //   });
+  //   console.log("likedMatchUId", likedMatchUId);
+  //   return likedMatchUId;
+  //   // setlikedMatch(likedMatchUId);
+  //   // console.log("Like Match Doc Created");
+  // }
 };
 
 // const mergeMessages = (
@@ -114,7 +119,8 @@ export default function ChatPage() {
   const [friends, setFriends] = useState<ChatUser[]>([]);
   const [currentUser, setCurrentUser] = useState<ChatUser | null>(null);
   const [currentRecipientUId, setCurrentRecipientUId] = useState<string>("");
-  const [likedMatch, setlikedMatch] = useState<string>("");
+  // const [likedMatch, setlikedMatch] = useState<string>("");
+  const [likedMatches, setlikedMatches] = useState<string[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const latestMessagesRef = useRef<Message[]>([]);
 
@@ -148,10 +154,10 @@ export default function ChatPage() {
         return false;
       }
       // tmp 邏輯需加強
-      const addLikedMatchResult = await fetchLikedMatch(user);
+      const fetchLikedMatchResult = await fetchLikedMatch(user);
 
-      if (addLikedMatchResult) {
-        setlikedMatch(addLikedMatchResult);
+      if (fetchLikedMatchResult) {
+        setlikedMatches(fetchLikedMatchResult);
       }
     };
     const fetchUserData = checkFriendDocExist();
@@ -226,7 +232,7 @@ export default function ChatPage() {
     };
 
     fetchFriendData();
-  }, [user, likedMatch]);
+  }, [user, likedMatches]);
 
   useEffect(() => {
     if (user) {

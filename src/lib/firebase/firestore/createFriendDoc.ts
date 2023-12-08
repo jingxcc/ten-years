@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { FirestoreError, doc, getDoc, setDoc } from "firebase/firestore";
 import { firestore } from "../initialize";
 import { Friend } from "@/types/ChatPage";
 
@@ -11,17 +11,32 @@ const createFriendDoc = async (userId: string, friendData: Friend) => {
     friendData.friendId,
   );
 
-  // Check if the friend document exists
-  const docSnap = await getDoc(friendDocRef);
-
-  // If the document does not exist, create it
-  if (!docSnap.exists()) {
+  try {
     await setDoc(friendDocRef, friendData);
-    console.log("Friend document created!");
-  } else {
-    console.log("Friend document already exists.");
+    return true;
+  } catch (error) {
+    let errMsg: string;
+
+    if (error instanceof FirestoreError) {
+      errMsg = `Error creating matches document: ${error.message}`;
+    } else if (error instanceof Error) {
+      errMsg = `Error creating matches document: ${error.message}`;
+    } else {
+      errMsg = `Error creating matches document: ${error}`;
+    }
+    console.error(error);
+    throw error;
   }
-  // tmp: add error
+  // Check if the friend document exists
+  // const docSnap = await getDoc(friendDocRef);
+
+  // if (!docSnap.exists()) {
+  //   await setDoc(friendDocRef, friendData);
+  //   console.log("Friend document created!");
+  // } else {
+  //   console.log("Friend document already exists.");
+  // }
+  // // tmp: add error
 };
 
 export { createFriendDoc };
