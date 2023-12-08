@@ -27,4 +27,12 @@ interface PotentialMatchData {
   userLiked?: string;
 }
 
-export { PotentialMatchData, MatchUser, PotentialUser };
+interface MatchRequestData {
+  id?: string;
+  fromUserId: string;
+  toUserId: string;
+  status: "sent" | "accepted" | "rejected";
+  sendAt: firebase.firestore.Timestamp;
+}
+
+export { PotentialMatchData, MatchUser, PotentialUser, MatchRequestData };

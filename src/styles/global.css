@@ -15,6 +15,10 @@
     @apply mb-2 block text-sm;
   }
 
+  /* .img {
+    @apply h-full w-full object-cover object-center;
+  } */
+
   .btn {
     @apply rounded bg-sky-300 px-4 py-2 font-bold text-white focus:outline-none focus:ring-4 focus:ring-blue-100 enabled:hover:bg-sky-500 disabled:opacity-75;
   }

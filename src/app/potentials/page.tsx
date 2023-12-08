@@ -216,6 +216,13 @@ export default function PotentialMatchesPage() {
       userLiked: matchUserId,
     });
 
+    await createMatchRequests(user.uid, {
+      fromUserId: user.uid,
+      toUserId: matchUserId,
+      status: "sent",
+      sendAt: serverTimestamp(),
+    });
+
     // setLikedUser(matchUserId);
     console.log("Liked user", matchUserId);
   };

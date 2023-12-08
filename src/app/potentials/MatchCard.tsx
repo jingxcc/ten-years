@@ -23,7 +23,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
   // console.log("likedUser", likedUser);
 
   return (
-    <div className="relative max-w-sm overflow-hidden rounded pb-32 shadow-lg">
+    <div className="relative max-w-sm overflow-hidden rounded-2xl pb-16 shadow-lg">
       {/* {potentialUser.imageUrls.map((url) => (
         <Image
           className="w-full"
@@ -34,10 +34,10 @@ const MatchCard: React.FC<MatchCardProps> = ({
         />
       ))} */}
 
-      <div className="h-[220px] overflow-hidden">
+      <div className="h-[280px]  overflow-hidden">
         <img
-          className="block h-full w-full object-cover object-top"
-          src={potentialUser["imageUrls"][0]}
+          className="h-full w-full object-cover object-center"
+          src={potentialUser["imageUrls"][0] ?? "/defaultAvatar.jpg"}
           alt={potentialUser.nickname}
           //   width={384}
           //   height={220}
@@ -49,59 +49,42 @@ const MatchCard: React.FC<MatchCardProps> = ({
       <div className="px-6 py-4">
         <div className="mb-2 text-xl font-bold">{potentialUser.nickname}</div>
         <p className="text-base text-gray-700">{potentialUser.aboutMe}</p>
-
-        {/* {likedUser ? (
-          <button
-            className="mb-2 rounded bg-rose-500 px-4 py-2 font-bold text-white hover:bg-rose-500 focus:bg-rose-500 disabled:bg-gray-300"
-            onClick={() => onLike(potentialUser.uid)}
-            disabled={likedUser && likedUser !== potentialUser.uid ? true : false}
-          >
-            <HeartIcon className="h-5 w-5" />
-          </button>
-        ) : (
-          <button
-            className="mb-2 rounded bg-rose-300 px-4 py-2 font-bold text-white hover:bg-rose-500 focus:bg-rose-500 disabled:bg-gray-300"
-            onClick={() => onLike(potentialUser.uid)}
-            disabled={likedUser && likedUser !== potentialUser.uid ? true : false}
-          >
-            <HeartIcon className="h-5 w-5" />
-          </button>
-        )} */}
-
         <div>
-          {potentials.liked ? (
-            <button
-              className={`disabled: absolute bottom-4 right-4 mb-2 flex h-[60px] w-[60px] items-center rounded-[30px] bg-rose-300 px-4 py-2 text-white shadow-lg hover:fill-black ${
-                potentials.liked && potentials.userLiked !== potentialUser.uid
-                  ? "bg-gray-300"
-                  : "bg-rose-300"
-              } `}
-              onClick={() => onLike(potentialUser.uid)}
-              disabled
-              // disabled={
-              //   potentials.liked && potentials.userLiked !== potentialUser.uid
-              //     ? true
-              //     : false
-              // }
-            >
-              {potentials.liked ? (
-                <SolidHeartIcon className="h-8 w-8" />
-              ) : (
-                <HeartIcon className="h-8 w-8" />
-              )}
-            </button>
-          ) : (
-            <button
-              className="absolute bottom-4 right-4 mb-2 flex h-[60px] w-[60px] items-center rounded-[30px] bg-white px-4 py-2 text-red-300 shadow-lg hover:bg-red-50 disabled:bg-gray-300"
-              onClick={() => onLike(potentialUser.uid)}
-            >
-              {potentials.liked ? (
-                <SolidHeartIcon className="h-8 w-8" />
-              ) : (
-                <HeartIcon className="h-8 w-8" />
-              )}
-            </button>
-          )}
+          {/* reach like limit */}
+          <div className="absolute bottom-0 left-0 flex w-full justify-end">
+            {potentials.liked ? (
+              <button
+                className={`${
+                  potentials.userLiked !== potentialUser.uid
+                    ? "disabled:bg-gray-300"
+                    : "disabled:bg-black-300"
+                } mb-4 mr-4 flex h-[60px] w-[60px] items-center rounded-[30px] bg-rose-300 px-4 py-2 text-white shadow-lg`}
+                onClick={() => onLike(potentialUser.uid)}
+                disabled
+              >
+                {potentials.userLiked !== potentialUser.uid ? (
+                  <HeartIcon className="h-8 w-8" />
+                ) : (
+                  <SolidHeartIcon className="h-8 w-8" />
+                )}
+              </button>
+            ) : (
+              <button
+                className={`${
+                  potentials.userLiked !== potentialUser.uid
+                    ? "disabled:bg-gray-300"
+                    : "disabled:bg-black-300"
+                } mb-4 mr-4 flex h-[60px] w-[60px] items-center rounded-[30px] bg-white px-4 py-2 text-red-300 shadow-lg hover:bg-rose-100 `}
+                onClick={() => onLike(potentialUser.uid)}
+              >
+                {potentials.userLiked !== potentialUser.uid ? (
+                  <HeartIcon className="h-8 w-8" />
+                ) : (
+                  <SolidHeartIcon className="h-8 w-8" />
+                )}
+              </button>
+            )}
+          </div>
 
           <h3 className="mb-2 text-base font-bold">興趣</h3>
 
@@ -111,15 +94,6 @@ const MatchCard: React.FC<MatchCardProps> = ({
             </span>
           ))}
         </div>
-      </div>
-      <div className="flex justify-between px-6 pb-2 pt-4">
-        {/* <button
-          className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
-          onClick={() => onPass(potentialUser.id)}
-        >
-          <XIcon className="h-5 w-5" />
-        </button> */}
-        {/* Like */}
       </div>
     </div>
   );

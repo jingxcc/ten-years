@@ -1,8 +1,9 @@
+import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import { auth } from "@/lib/firebase/initialize";
 import { FirebaseError } from "firebase/app";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 
 interface SideBarProps {
   children?: ReactNode;
@@ -41,8 +42,14 @@ const Sidebar: React.FC<SideBarProps> = ({ children }) => {
       <button className="btn mb-4" onClick={() => route.push("/potentials")}>
         Matches
       </button>
+      <button className="btn mb-4" onClick={() => route.push("/likes")}>
+        Likes
+      </button>
       <button className="btn mb-4" onClick={() => route.push("/chat")}>
         Chat
+      </button>
+      <button className="btn mb-4" onClick={() => route.push("/profile")}>
+        Profile
       </button>
       {children}
     </div>
