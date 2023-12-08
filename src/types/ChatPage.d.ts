@@ -2,7 +2,7 @@ import { UpdateGetStartFormData } from "./GetStartForm";
 
 interface Friend {
   friendId: string;
-  addedOn: Date;
+  addedOn: Date | firebase.firestore.Timestamp;
 }
 
 interface Message {
@@ -16,7 +16,7 @@ interface Message {
 interface ChatUser extends UpdateGetStartFormData {
   uid: string;
   //   friends: string[];
-  //   description: string;
+  //   aboutMe: string;
 }
 
 export { Friend, Message, ChatUser };

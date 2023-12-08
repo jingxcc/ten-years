@@ -1,15 +1,15 @@
-import { doc, getDoc } from "firebase/firestore";
+import { FirestoreError, doc, getDoc } from "firebase/firestore";
 import { firestore } from "../initialize";
 import { UserData } from "@/types/UserData";
 
 const fetchUserDoc = async (user: UserData) => {
   if (!user) {
     console.error("Error: No user data provided");
-    return false;
+    throw new Error("Error: No user data provided");
   }
-  const userRef = doc(firestore, "users", user?.uid);
-  const docSnap = await getDoc(userRef);
   try {
+    const userRef = doc(firestore, "users", user?.uid);
+    const docSnap = await getDoc(userRef);
     if (docSnap.exists()) {
       //   console.log("Document data:", docSnap.data());
 
@@ -22,13 +22,17 @@ const fetchUserDoc = async (user: UserData) => {
       return false;
     }
   } catch (error) {
-    if (error instanceof Error) {
-      console.error("Error getting user document: ", error.message);
+    let errMsg: string;
+
+    if (error instanceof FirestoreError) {
+      errMsg = `Error getting user document: ${error.message}`;
+    } else if (error instanceof Error) {
+      errMsg = `Error getting user document: ${error.message}`;
     } else {
-      console.error("Error getting user document: ", error);
+      errMsg = `Error getting user document: ${error}`;
     }
-    // console.log("Error getting cached document:", error);
-    return false;
+    console.error(error);
+    throw error;
   }
 };
 
