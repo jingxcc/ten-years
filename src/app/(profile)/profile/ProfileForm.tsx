@@ -48,12 +48,15 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
   // const [storageUploadPercent, setStorageUploadPercent] = useState(0);
   const route = useRouter();
 
-  if (!user) {
-    return null;
-  }
+  // if (!user) {
+  //   return null;
+  // }
 
   useEffect(() => {
     const fetchUserDocData = async () => {
+      if (!user) {
+        return false;
+      }
       const fetchUserDocResult = await fetchUserDoc(user);
 
       if (!fetchUserDocResult) return false;
@@ -71,7 +74,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
       setImgUrls(dataToUpdate);
     };
     fetchUserDocData();
-  }, []);
+  }, [user]);
 
   const handleSelectChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -108,6 +111,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!user) {
+      return false;
+    }
     if (event.target.files && event.target.files[0]) {
       // setFormData({ ...formData, profilePictures: [...event.target.files] });
 
@@ -186,6 +192,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
 
     try {
       // update user data
+      if (!user) {
+        return false;
+      }
 
       const result = await updateProfileForm(formData, user);
 

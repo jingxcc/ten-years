@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import ProfileForm from "./ProfileForm";
 import Sidebar from "@/components/SideBar/SideBar";
 
-export default function profilePage() {
+export default function ProfilePage() {
   const { user, isUserLoading } = useUser();
   const route = useRouter();
 
