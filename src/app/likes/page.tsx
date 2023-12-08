@@ -31,7 +31,7 @@ interface MatchRequestCardData extends MatchRequestData {
   id: string;
 }
 
-export default function likesPage() {
+export default function LikesPage() {
   const { user, isUserLoading } = useUser();
   const [matchRequests, setMatchReqeusts] = useState<MatchRequestCardData[]>(
     [],
