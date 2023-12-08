@@ -1,6 +1,7 @@
 import { FirestoreError, doc, getDoc } from "firebase/firestore";
 import { firestore } from "../initialize";
 import { UserData } from "@/types/UserData";
+import { UpdateGetStartFormData } from "@/types/GetStartForm";
 
 const fetchUserDoc = async (user: UserData) => {
   if (!user) {
@@ -14,7 +15,7 @@ const fetchUserDoc = async (user: UserData) => {
       //   console.log("Document data:", docSnap.data());
 
       return {
-        data: docSnap.data(),
+        data: docSnap.data() as UpdateGetStartFormData,
       };
     } else {
       // docSnap.data() will be undefined in this case
