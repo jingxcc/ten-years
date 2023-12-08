@@ -9,7 +9,7 @@ const createPotentialMatchDoc = async (
 ): Promise<boolean> => {
   if (!user) {
     console.error("Error: No user data provided");
-    return false;
+    throw new Error("Error: No user data provided");
   }
 
   try {

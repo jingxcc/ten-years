@@ -1,17 +1,18 @@
 import { FirestoreError, doc, getDoc } from "firebase/firestore";
 import { firestore } from "../initialize";
 import { UserData } from "@/types/UserData";
+import { PotentialMatchData } from "@/types/PotentialMatchesPage";
 
 const fetchPotentialMatchDoc = async (user: UserData) => {
   if (!user) {
     console.error("Error: No user data provided");
-    return false;
+    throw new Error("Error: No user data provided");
   }
-  const matchRef = doc(firestore, "potentialMatches", user?.uid);
-  const docSnap = await getDoc(matchRef);
   try {
+    const matchRef = doc(firestore, "potentialMatches", user.uid);
+    const docSnap = await getDoc(matchRef);
     if (docSnap.exists()) {
-      return docSnap.data();
+      return docSnap.data() as PotentialMatchData;
     } else {
       // docSnap.data() will be undefined in this case
       console.error(

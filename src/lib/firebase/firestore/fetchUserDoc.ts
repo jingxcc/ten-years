@@ -5,11 +5,11 @@ import { UserData } from "@/types/UserData";
 const fetchUserDoc = async (user: UserData) => {
   if (!user) {
     console.error("Error: No user data provided");
-    return false;
+    throw new Error("Error: No user data provided");
   }
-  const userRef = doc(firestore, "users", user?.uid);
-  const docSnap = await getDoc(userRef);
   try {
+    const userRef = doc(firestore, "users", user?.uid);
+    const docSnap = await getDoc(userRef);
     if (docSnap.exists()) {
       //   console.log("Document data:", docSnap.data());
 
