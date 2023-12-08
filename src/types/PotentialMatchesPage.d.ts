@@ -1,11 +1,11 @@
 import { UpdateGetStartFormData } from "./GetStartForm";
 
 // interface UserCard extends UpdateGetStartFormData {
-//   description: string;
+//   aboutMe: string;
 // }
 
 // interface CurrentUser extends UpdateGetStartFormData {
-//   //   description: string;
+//   //   aboutMe: string;
 //   uid: string;
 //   friends: string[];
 // }
@@ -13,14 +13,18 @@ import { UpdateGetStartFormData } from "./GetStartForm";
 interface MatchUser extends UpdateGetStartFormData {
   uid: string;
   friends: string[];
-  description: string;
+}
+
+interface PotentialUser extends UpdateGetStartFormData {
+  uid: string;
+  aboutMe?: string;
 }
 
 interface PotentialMatchData {
   users: string[];
-  lastUpdatedOn?: Date;
+  lastUpdatedOn?: Date | firebase.firestore.Timestamp;
   liked?: Boolean;
   userLiked?: string;
 }
 
-export { PotentialMatchData, MatchUser };
+export { PotentialMatchData, MatchUser, PotentialUser };

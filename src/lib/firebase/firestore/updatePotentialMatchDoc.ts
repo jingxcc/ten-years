@@ -1,18 +1,18 @@
 import { FirestoreError, doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../initialize";
 import { UserData } from "@/types/UserData";
-import { PotentialMatchData, MatchUser } from "@/types/PotentialMatchesPage";
+import {
+  PotentialMatchData,
+  PotentialUser,
+} from "@/types/PotentialMatchesPage";
 
 const updatePotentialMatchDoc = async (
   user: UserData,
-  matchUser: MatchUser[],
+  dataToUpdate: PotentialMatchData,
 ) => {
   try {
     const userRef = doc(firestore, "potentialMatches", user.uid);
-    const dataToUpdate: PotentialMatchData = {
-      users: matchUser.map((u) => u.uid),
-      lastUpdatedOn: new Date(),
-    };
+
     await updateDoc(userRef, { ...dataToUpdate });
 
     return true;

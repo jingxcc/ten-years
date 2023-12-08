@@ -16,7 +16,7 @@ interface Message {
 interface ChatUser extends UpdateGetStartFormData {
   uid: string;
   //   friends: string[];
-  //   description: string;
+  //   aboutMe: string;
 }
 
 export { Friend, Message, ChatUser };
