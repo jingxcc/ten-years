@@ -51,6 +51,9 @@ export default function PotentialMatchesPage() {
 
   useEffect(() => {
     const fetchMatches = async () => {
+      if (!user) {
+        return false;
+      }
       let selectedPotentialUsers: PotentialUser[] = [];
       let selectedMatchData: PotentialMatchData | null = null;
 
@@ -115,7 +118,7 @@ export default function PotentialMatchesPage() {
         const currentMatchUser: MatchUser = {
           ...(currentUserDoc["data"] as UpdateGetStartFormData),
 
-          uid: currentUserData["uid"],
+          uid: user.uid,
           friends: currentFriendDocIds,
           aboutMe: currentUserData["aboutMe"] ?? "",
         };

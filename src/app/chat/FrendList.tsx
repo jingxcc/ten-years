@@ -13,10 +13,12 @@ const FriendList: React.FC<Props> = ({
   currentUser,
   onClickRecipient,
 }) => {
+  // console.log("currentUser", currentUser);
+
   return (
     <div className="bodrder-gray-700 container h-full max-w-xs border-r ">
       <h2 className="px-4 py-4 text-lg font-bold ">
-        {currentUser?.nickname ?? ""}
+        {currentUser?.nickname ?? currentUser?.email}
       </h2>
       <ul className="">
         {friends.map((friend) => (
@@ -38,7 +40,7 @@ const FriendList: React.FC<Props> = ({
             </div>
             <div className="ml-3">
               <p className="text-sm font-medium text-gray-700">
-                {friend.nickname}
+                {friend.nickname ?? friend.email ?? "Unknown User"}
               </p>
               {/* <p className="text-sm text-gray-500">Last seen 3 hours ago</p>{" "} */}
             </div>
