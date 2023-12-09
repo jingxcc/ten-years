@@ -11,6 +11,7 @@ import {
 
 import {
   StorageError,
+  deleteObject,
   getDownloadURL,
   ref,
   uploadBytesResumable,
@@ -22,7 +23,7 @@ import updateGetStartFormDoc from "@/lib/firebase/firestore/updateGetStartFormDo
 import { GetStartFormData, ProfileFormData } from "@/types/GetStartForm";
 import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import updateProfileForm from "@/lib/firebase/firestore/updateProfileForm";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 interface ProfileFormProps {
   user: UserData | null;
@@ -216,17 +217,27 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
     event.preventDefault();
 
     // console.log(event.target);
-    // let itemToRemove = imgUrls.find((item) => item.id === imgId);
-    let dataToUpdate: { id: number; url: string }[] = imgUrls.filter(
-      (item) => item.id !== imgId,
-    );
+    let itemToRemove = imgUrls.find((item) => item.id === imgId);
 
-    let arrayToUpdate = dataToUpdate.map((data) => data.url);
-    setImgUrls(dataToUpdate);
-    setFormData({
-      ...formData,
-      imageUrls: arrayToUpdate,
-    });
+    if (itemToRemove) {
+      let dataToUpdate: { id: number; url: string }[] = imgUrls.filter(
+        (item) => item.id !== imgId,
+      );
+
+      let arrayToUpdate = dataToUpdate.map((data) => data.url);
+      setImgUrls(dataToUpdate);
+      setFormData({
+        ...formData,
+        imageUrls: arrayToUpdate,
+      });
+
+      try {
+        let imgRef = ref(storage, itemToRemove.url);
+        await deleteObject(imgRef);
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
 
   console.log("formData.imageUrls", formData.imageUrls);
@@ -372,13 +383,22 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
 
           {/* <div className=" flex items-center justify-start space-x-4"> */}
           <div className="grid grid-cols-4 gap-2">
-            <label className="mb-2 flex h-32 w-32 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300">
+            <label className="mb-2 flex h-32 w-32 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-sky-300 hover:border-sky-300 hover:bg-sky-100 hover:text-sky-500">
               <input
                 type="file"
                 className="hidden"
                 onChange={handleFileChange}
               />
-              <span className="text-gray-500">+</span>
+
+              <PlusIcon className="h-6 w-6 " />
+
+              {/* <span
+                className={
+                  "absolute  flex h-8 w-8 items-center justify-center rounded-full bg-sky-100  text-sky-300 shadow-lg hover:bg-neutral-100  "
+                }
+              >
+                <XMarkIcon className="h-6 w-6 " />
+              </span> */}
             </label>
 
             {imgUrls.map((imgUrl) => (
@@ -390,15 +410,15 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
                   objectFit="cover"
                   className="rounded-md"
                 />
-                {/* 
+
                 <button
                   className={
-                    "absolute right-[-8px] top-[-8px] flex h-8 w-8 items-center justify-center rounded-full bg-sky-100  text-sky-300 shadow-lg hover:bg-neutral-100  "
+                    "absolute right-[-8px] top-[-8px] flex h-8 w-8 items-center justify-center rounded-full bg-sky-100  text-sky-300 shadow-lg hover:bg-neutral-100  hover:text-neutral-500"
                   }
                   onClick={(e) => handleImageDelete(e, imgUrl.id)}
                 >
                   <XMarkIcon className="h-6 w-6 " />
-                </button> */}
+                </button>
               </div>
             ))}
 
