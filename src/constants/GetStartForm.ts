@@ -1,5 +1,9 @@
 import { FormOption } from "@/types/GetStartForm";
 
+const formOptionLimits = {
+  imageUrls: 6,
+};
+
 const genderOptions: FormOption[] = [
   { id: "1", value: "男性" },
   { id: "2", value: "女性" },
@@ -45,4 +49,5 @@ export {
   matchGenderOptions,
   expectedRelationshipOptions,
   interestOptions,
+  formOptionLimits,
 };

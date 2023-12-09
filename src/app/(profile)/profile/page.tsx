@@ -11,7 +11,7 @@ export default function ProfilePage() {
   // console.log("Loading", isUserLoading);
   console.log("user", user);
 
-  if (isUserLoading) {
+  if (!user || isUserLoading) {
     return <div>Loading...</div>;
   }
 
