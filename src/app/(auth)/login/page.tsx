@@ -5,6 +5,7 @@ import { AuthErrorCodes, signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 // user-friendly message
 // const getAuthErrorMsg = (error: FirebaseError): string => {
@@ -36,7 +37,7 @@ export default function LoginPage() {
       const user = userCredential.user;
       console.log(user);
 
-      alert("Login success");
+      toast.success("Login success", { position: "top-center" });
       route.push("/chat");
     } catch (error) {
       if (error instanceof FirebaseError) {
