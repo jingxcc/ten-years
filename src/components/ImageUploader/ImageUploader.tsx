@@ -1,7 +1,9 @@
+import { formOptionLimits } from "@/constants/GetStartForm";
 import { storage } from "@/lib/firebase/initialize";
 import { ImageUrlsObj } from "@/types/GetStartForm";
 import { UserData } from "@/types/UserData";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
+
 import {
   StorageError,
   deleteObject,
@@ -11,6 +13,7 @@ import {
 } from "firebase/storage";
 import Image from "next/image";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface ImageUploaderProps {
   user: UserData;
@@ -25,7 +28,13 @@ export default function ImageUploader({
   onImageUpload,
   onImageDelete,
 }: ImageUploaderProps) {
-  useEffect(() => {}, []);
+  const [uploadingImgs, setUplodingImgs] = useState<{ [id: string]: Boolean }>(
+    {},
+  );
+  const remainingSlots =
+    formOptionLimits.imageUrls -
+    imgUrlsObj.length -
+    Object.keys(uploadingImgs).length;
 
   const handleImgUpload = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -47,6 +56,8 @@ export default function ImageUploader({
         imgFile,
         imageMetadata,
       );
+      const newImgId = crypto.randomUUID();
+      setUplodingImgs((prev) => ({ ...prev, [newImgId]: true }));
 
       uploadTask.on(
         "state_changed",
@@ -82,16 +93,25 @@ export default function ImageUploader({
 
             onImageUpload(downloadUrl);
 
+            setUplodingImgs((prev) => {
+              const updateData = { ...prev };
+              delete updateData[newImgId];
+              return updateData;
+            });
+
+            toast.success("Image Uploaded Successfully");
+
             // setStorageUploadPercent(0);
           } catch (error) {
             console.error("Image Upload Error", error);
+            toast.error("Image Uploaded Failed");
           }
         },
       );
     }
   };
 
-  const handleImgDelete = async (event: FormEvent, imgId: number) => {
+  const handleImgDelete = async (event: FormEvent, imgId: string) => {
     event.preventDefault();
 
     try {
@@ -108,19 +128,15 @@ export default function ImageUploader({
       );
 
       onImageDelete(dataToUpdate);
+      toast.success("Image Deleted Successfully");
     } catch (error) {
       console.error("Image Delete Error", error);
+      toast.error("Image Deleted Failed");
     }
   };
 
   return (
     <div className="grid grid-cols-4 gap-2">
-      <label className="mb-2 flex h-32 w-32 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-sky-300 hover:border-sky-300 hover:bg-sky-100 hover:text-sky-500">
-        <input type="file" className="hidden" onChange={handleImgUpload} />
-
-        <PlusIcon className="h-6 w-6 " />
-      </label>
-
       {imgUrlsObj.length > 0 &&
         imgUrlsObj.map((imgUrl) => (
           <div key={imgUrl.id} className="relative h-32 w-32">
@@ -142,6 +158,28 @@ export default function ImageUploader({
             </button>
           </div>
         ))}
+
+      {Object.keys(uploadingImgs).map((id) => (
+        <label
+          key={id}
+          className="mb-2 flex h-32 w-32 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-sky-300 bg-gray-100 text-sky-300 "
+        >
+          <input type="file" className="hidden" disabled />
+
+          <span>Uploading...</span>
+        </label>
+      ))}
+
+      {Array.from({ length: remainingSlots }).map((_, index) => (
+        <label
+          key={index}
+          className="mb-2 flex h-32 w-32 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-sky-300 hover:border-sky-300 hover:bg-sky-100 hover:text-sky-500"
+        >
+          <input type="file" className="hidden" onChange={handleImgUpload} />
+
+          <PlusIcon className="h-6 w-6 " />
+        </label>
+      ))}
     </div>
   );
 }

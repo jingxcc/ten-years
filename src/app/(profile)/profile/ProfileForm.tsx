@@ -29,15 +29,15 @@ import {
 import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import updateProfileForm from "@/lib/firebase/firestore/updateProfileForm";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import ImageUploader from "./ImageUploader";
+import ImageUploader from "@/components/ImageUploader/ImageUploader";
 import { doc } from "firebase/firestore";
+import toast from "react-hot-toast";
 
 interface ProfileFormProps {
   user: UserData;
 }
 
 const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
-  // const [imgFiles, setImgFiles] = useState<File[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [formData, setFormData] = useState<ProfileFormData>({
     // isStartProfileCompleted: false,
@@ -72,9 +72,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
 
       console.log("fetchFormData", fetchData);
 
-      let dataToUpdate: { id: number; url: string }[] = [];
-      fetchData.imageUrls.forEach((data, indx) => {
-        let obj = { id: indx, url: data };
+      let dataToUpdate: ImageUrlsObj[] = [];
+      fetchData.imageUrls.forEach((data) => {
+        let obj = { id: crypto.randomUUID(), url: data };
         dataToUpdate.push(obj);
       });
       setImgUrlsObj(dataToUpdate);
@@ -125,7 +125,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
 
       if (result) {
         setErrorMsg("");
-        alert("個人資料更新成功");
+        toast.success("Profile Updated Successesfully");
         // route.push("/chat");
       }
     } catch (error) {
@@ -147,15 +147,15 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
       imageUrls: arrayToUpdate,
     });
 
-    let dataToUpdate: { id: number; url: string }[] = imgUrlsObj;
+    let dataToUpdate: ImageUrlsObj[] = imgUrlsObj;
+
     dataToUpdate.push({
-      id:
-        dataToUpdate.length > 0
-          ? dataToUpdate[dataToUpdate.length - 1]["id"] + 1
-          : 0,
+      id: crypto.randomUUID(),
       url: urlAdded,
     });
     setImgUrlsObj(dataToUpdate);
+
+    console.log("dataToUpdate upload", dataToUpdate);
   };
 
   // ImageUploader
@@ -165,12 +165,11 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
     setFormData({ ...formData, imageUrls: arrayToUpdate });
 
     setImgUrlsObj(leftUrlsObj);
+    console.log("leftUrlsObj delete", leftUrlsObj);
   };
 
   // console.log("formData.imageUrls", formData.imageUrls);
   // console.log("imgUrlsObj", imgUrlsObj);
-
-  // console.log("imgFiles", imgFiles);
 
   return (
     <div className="mx-auto mb-4 mt-8 max-w-4xl">
