@@ -7,13 +7,6 @@ import GetStartForm from "./GetStartForm";
 
 export default function GetStartPage() {
   const { user, isUserLoading } = useUser();
-  const route = useRouter();
-
-  useEffect(() => {
-    if (!isUserLoading && !user) {
-      route.push("/");
-    }
-  }, [isUserLoading, user, route]);
 
   // console.log("Loading", isUserLoading);
   console.log("user", user);

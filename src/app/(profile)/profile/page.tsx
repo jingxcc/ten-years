@@ -1,21 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useUser } from "../../../context/userContext";
-import { useEffect } from "react";
 
 import ProfileForm from "./ProfileForm";
 import Sidebar from "@/components/SideBar/SideBar";
 
 export default function ProfilePage() {
   const { user, isUserLoading } = useUser();
-  const route = useRouter();
-
-  useEffect(() => {
-    if (!isUserLoading && !user) {
-      route.push("/");
-    }
-  }, [isUserLoading, user, route]);
 
   // console.log("Loading", isUserLoading);
   console.log("user", user);

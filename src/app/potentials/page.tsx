@@ -1,7 +1,6 @@
 "use client";
 import { useUser } from "@/context/userContext";
 import MatchCard from "./MatchCard";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   PotentialMatchData,
@@ -41,13 +40,6 @@ export default function PotentialMatchesPage() {
   const [potentialUsers, setPotentialUsers] = useState<PotentialUser[]>([]);
   const [potentials, setPotentials] = useState<PotentialMatchData | null>(null);
   // const [likedUser, setLikedUser] = useState<string>("");
-  const route = useRouter();
-
-  useEffect(() => {
-    if (!isUserLoading && !user) {
-      route.push("/");
-    }
-  }, [isUserLoading, user, route]);
 
   useEffect(() => {
     const fetchMatches = async () => {
