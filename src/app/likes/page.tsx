@@ -1,7 +1,6 @@
 "use client";
 import Sidebar from "@/components/SideBar/SideBar";
 import { useUser } from "@/context/userContext";
-import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
 import MatchCard from "./MatchReqCard";
@@ -37,13 +36,6 @@ export default function LikesPage() {
     [],
   );
   const [fromUserData, setFromUserData] = useState<UserDetails[]>([]);
-  const route = useRouter();
-
-  useEffect(() => {
-    if (!isUserLoading && !user) {
-      route.push("/");
-    }
-  }, [isUserLoading, user, route]);
 
   useEffect(() => {
     const fetchMatchRequestData = () => {

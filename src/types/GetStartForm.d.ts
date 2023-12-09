@@ -17,6 +17,11 @@ interface GetStartFormData {
   imageUrls: string[];
 }
 
+interface FormOption {
+  id: string;
+  value: string;
+}
+
 interface ProfileFormData {
   nickname: string;
   gender: string;
@@ -29,10 +34,9 @@ interface ProfileFormData {
   aboutMe?: string;
 }
 
-// Options
-interface FormOption {
-  id: string;
-  value: string;
+interface ImageUrlsObj {
+  id: number;
+  url: string;
 }
 
 export {
@@ -40,4 +44,5 @@ export {
   GetStartFormData,
   FormOption,
   ProfileFormData,
+  ImageUrlsObj,
 };

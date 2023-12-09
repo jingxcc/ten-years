@@ -1,9 +1,6 @@
 "use client";
 
-import { auth, firestore } from "@/lib/firebase/initialize";
-import { FirebaseError } from "firebase/app";
-import { signOut } from "firebase/auth";
-import { useRouter } from "next/navigation";
+import { firestore } from "@/lib/firebase/initialize";
 
 import { useUser } from "@/context/userContext";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -123,15 +120,6 @@ export default function ChatPage() {
   const [likedMatches, setlikedMatches] = useState<string[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const latestMessagesRef = useRef<Message[]>([]);
-
-  const route = useRouter();
-
-  const router = useRouter();
-  useEffect(() => {
-    if (!isUserLoading && !user) {
-      route.push("/");
-    }
-  }, [isUserLoading, user, route]);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {

@@ -1,4 +1,4 @@
-import { storage } from "@/lib/firebase/initialize";
+import { firestore, storage } from "@/lib/firebase/initialize";
 import { UserData } from "@/types/UserData";
 
 import {
@@ -17,16 +17,23 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import updateGetStartFormDoc from "@/lib/firebase/firestore/updateGetStartFormDoc";
-import { GetStartFormData, ProfileFormData } from "@/types/GetStartForm";
+import updateGetStartFormDoc, {
+  autoUpdateImageUrls,
+} from "@/lib/firebase/firestore/updateGetStartFormDoc";
+import {
+  GetStartFormData,
+  ImageUrlsObj,
+  ProfileFormData,
+} from "@/types/GetStartForm";
 import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import updateProfileForm from "@/lib/firebase/firestore/updateProfileForm";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import ImageUploader from "./ImageUploader";
+import { doc } from "firebase/firestore";
 
 interface ProfileFormProps {
-  user: UserData | null;
+  user: UserData;
 }
 
 const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
@@ -44,10 +51,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
     aboutMe: "",
     // imageUrls: ["/team04.jpeg", "/team03.jpg", "/team01.jpeg", "/team02.webbp"],
   });
-  const [imgUrls, setImgUrls] = useState<{ id: number; url: string }[]>([]);
+  const [imgUrlsObj, setImgUrlsObj] = useState<ImageUrlsObj[]>([]);
 
   // const [storageUploadPercent, setStorageUploadPercent] = useState(0);
-  const route = useRouter();
 
   // if (!user) {
   //   return null;
@@ -55,9 +61,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
 
   useEffect(() => {
     const fetchUserDocData = async () => {
-      if (!user) {
-        return false;
-      }
       const fetchUserDocResult = await fetchUserDoc(user);
 
       if (!fetchUserDocResult) return false;
@@ -67,12 +70,14 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
       };
       setFormData(fetchData);
 
+      console.log("fetchFormData", fetchData);
+
       let dataToUpdate: { id: number; url: string }[] = [];
       fetchData.imageUrls.forEach((data, indx) => {
         let obj = { id: indx, url: data };
         dataToUpdate.push(obj);
       });
-      setImgUrls(dataToUpdate);
+      setImgUrlsObj(dataToUpdate);
     };
     fetchUserDocData();
   }, [user]);
@@ -111,92 +116,11 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
     setFormData({ ...formData, [name]: newSelectedItems });
   };
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (!user) {
-      return false;
-    }
-    if (event.target.files && event.target.files[0]) {
-      // setFormData({ ...formData, profilePictures: [...event.target.files] });
-
-      const file = event.target.files[0];
-      // setImgFiles([...imgFiles, file]);
-      console.log("--> Upload imgFile start:", file);
-      uploadImage(file);
-      // console.log(...event.target.files);
-    }
-    function uploadImage(imgFile: File) {
-      const imageMetadata = {
-        contentType: "image/jpeg",
-      };
-      const timestamp = new Date().getTime();
-      const storageRef = ref(
-        storage,
-        `users/${user?.uid}/${timestamp}_${imgFile.name}`,
-      );
-      const uploadTask = uploadBytesResumable(
-        storageRef,
-        imgFile,
-        imageMetadata,
-      );
-
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
-          // setStorageUploadPercent(progress);
-          console.log(`Image upload is ${progress} % done`);
-
-          switch (snapshot.state) {
-            case "paused":
-              console.log("upload is paused");
-              break;
-            case "running":
-              console.log("upload is running");
-              break;
-          }
-        },
-        (error) => {
-          if (error instanceof StorageError) {
-            console.error("Image Upload Error: ", error.message);
-          } else {
-            console.error("Image Upload Error: ", error);
-          }
-        },
-        async () => {
-          const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
-
-          console.log("Image uploaded success", imgFile);
-          console.log("image url", downloadUrl);
-
-          // setImgFiles([...imgFiles, imgFile]);
-          setFormData({
-            ...formData,
-            imageUrls: [...formData.imageUrls, downloadUrl],
-          });
-          let dataToUpdate: { id: number; url: string }[] = imgUrls;
-          dataToUpdate.push({
-            id: dataToUpdate[dataToUpdate.length - 1]["id"] + 1,
-            url: downloadUrl,
-          });
-
-          setImgUrls(dataToUpdate);
-          // setStorageUploadPercent(0);
-        },
-      );
-    }
-  };
-
   const handleSave = async (event: FormEvent) => {
     event.preventDefault();
 
     try {
       // update user data
-      if (!user) {
-        return false;
-      }
-
       const result = await updateProfileForm(formData, user);
 
       if (result) {
@@ -212,36 +136,39 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
       }
     }
   };
-  // tmp
-  const handleImageDelete = async (event: FormEvent, imgId: number) => {
-    event.preventDefault();
 
-    // console.log(event.target);
-    let itemToRemove = imgUrls.find((item) => item.id === imgId);
+  // ImageUploader
+  const handleImageUpload = (urlAdded: string) => {
+    let arrayToUpdate = [...formData.imageUrls, urlAdded];
+    autoUpdateImageUrls(user, arrayToUpdate);
 
-    if (itemToRemove) {
-      let dataToUpdate: { id: number; url: string }[] = imgUrls.filter(
-        (item) => item.id !== imgId,
-      );
+    setFormData({
+      ...formData,
+      imageUrls: arrayToUpdate,
+    });
 
-      let arrayToUpdate = dataToUpdate.map((data) => data.url);
-      setImgUrls(dataToUpdate);
-      setFormData({
-        ...formData,
-        imageUrls: arrayToUpdate,
-      });
-
-      try {
-        let imgRef = ref(storage, itemToRemove.url);
-        await deleteObject(imgRef);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    let dataToUpdate: { id: number; url: string }[] = imgUrlsObj;
+    dataToUpdate.push({
+      id:
+        dataToUpdate.length > 0
+          ? dataToUpdate[dataToUpdate.length - 1]["id"] + 1
+          : 0,
+      url: urlAdded,
+    });
+    setImgUrlsObj(dataToUpdate);
   };
 
-  console.log("formData.imageUrls", formData.imageUrls);
-  console.log("imgUrls", imgUrls);
+  // ImageUploader
+  const handleImageDelete = (leftUrlsObj: ImageUrlsObj[]) => {
+    let arrayToUpdate = leftUrlsObj.map((data) => data.url);
+    autoUpdateImageUrls(user, arrayToUpdate);
+    setFormData({ ...formData, imageUrls: arrayToUpdate });
+
+    setImgUrlsObj(leftUrlsObj);
+  };
+
+  // console.log("formData.imageUrls", formData.imageUrls);
+  // console.log("imgUrlsObj", imgUrlsObj);
 
   // console.log("imgFiles", imgFiles);
 
@@ -380,80 +307,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
         {/* file */}
         <div>
           <label className="mb-2 font-medium text-gray-700">個人圖片</label>
-
-          {/* <div className=" flex items-center justify-start space-x-4"> */}
-          <div className="grid grid-cols-4 gap-2">
-            <label className="mb-2 flex h-32 w-32 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-sky-300 hover:border-sky-300 hover:bg-sky-100 hover:text-sky-500">
-              <input
-                type="file"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-
-              <PlusIcon className="h-6 w-6 " />
-
-              {/* <span
-                className={
-                  "absolute  flex h-8 w-8 items-center justify-center rounded-full bg-sky-100  text-sky-300 shadow-lg hover:bg-neutral-100  "
-                }
-              >
-                <XMarkIcon className="h-6 w-6 " />
-              </span> */}
-            </label>
-
-            {imgUrls.map((imgUrl) => (
-              <div key={imgUrl.id} className="relative h-32 w-32">
-                <Image
-                  src={imgUrl.url}
-                  alt="Uploaded picture"
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-md"
-                />
-
-                <button
-                  className={
-                    "absolute right-[-8px] top-[-8px] flex h-8 w-8 items-center justify-center rounded-full bg-sky-100  text-sky-300 shadow-lg hover:bg-neutral-100  hover:text-neutral-500"
-                  }
-                  onClick={(e) => handleImageDelete(e, imgUrl.id)}
-                >
-                  <XMarkIcon className="h-6 w-6 " />
-                </button>
-              </div>
-            ))}
-
-            {/* {formData.imageUrls.length > 0 && (
-              <div key={0} className="relative h-32 w-32">
-                <Image
-                  src={formData.imageUrls[0]}
-                  alt="Uploaded picture"
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-md"
-                />
-              </div>
-            )}
-
-            {formData.imageUrls.length > 1 && (
-              <div className="relative z-10 flex h-32 w-32 items-center justify-center rounded-md bg-sky-100">
-                {formData.imageUrls.length > 2 && (
-                  <div className="z-10 flex h-full w-full items-center justify-center">
-                    <div className="absolute h-full w-full bg-blue-100 opacity-80"></div>
-                    <span className="z-10 font-bold text-blue-500">
-                      +{formData.imageUrls.length - 2} more
-                    </span>
-                  </div>
-                )}
-                <Image
-                  src={formData.imageUrls[1]}
-                  alt="Uploaded picture"
-                  layout="fill"
-                  objectFit="cover"
-                  className="z-0 rounded-md"
-                />
-              </div>
-            )} */}
-          </div>
+          <ImageUploader
+            user={user}
+            imgUrlsObj={imgUrlsObj}
+            onImageUpload={handleImageUpload}
+            onImageDelete={handleImageDelete}
+          ></ImageUploader>
         </div>
         {errorMsg && <p className="mb-2 text-sm text-red-500">{errorMsg}</p>}
         <div className="mt-2 text-center">

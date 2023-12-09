@@ -33,4 +33,16 @@ const updateGetStartFormDoc = async (
   }
 };
 
+export const autoUpdateImageUrls = async (
+  user: UserData,
+  imageUrls: string[],
+) => {
+  try {
+    const userRef = doc(firestore, "users", user.uid);
+    await updateDoc(userRef, { imageUrls: imageUrls });
+  } catch (error) {
+    console.error("Error updating image data", error);
+  }
+};
+
 export default updateGetStartFormDoc;
