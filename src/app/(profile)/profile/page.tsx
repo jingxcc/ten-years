@@ -16,7 +16,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="absolute h-full w-full">
+    <div className="relative">
       <Sidebar></Sidebar>
       <main className="ml-32 flex h-full">
         <ProfileForm user={user}></ProfileForm>

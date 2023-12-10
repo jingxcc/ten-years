@@ -1,6 +1,6 @@
 import { storage } from "@/lib/firebase/initialize";
 import { UserData } from "@/types/UserData";
-import { GetStartFormData } from "@/types/GetStartForm";
+import { GetStartFormData, ImageUrlsObj } from "@/types/GetStartForm";
 import {
   genderOptions,
   relationshipStatusOptions,
@@ -18,14 +18,18 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import updateGetStartFormDoc from "@/lib/firebase/firestore/updateGetStartFormDoc";
+import updateGetStartFormDoc, {
+  autoUpdateImageUrls,
+} from "@/lib/firebase/firestore/updateGetStartFormDoc";
+import ImageUploader from "@/components/ImageUploader/ImageUploader";
+import toast from "react-hot-toast";
+import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 
 interface GetStartFormProps {
-  user: UserData | null;
+  user: UserData;
 }
 
 const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
-  const [imgFiles, setImgFiles] = useState<File[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [formData, setFormData] = useState<GetStartFormData>({
     // isStartProfileCompleted: false,
@@ -36,14 +40,42 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
     expectedRelationships: [],
     interests: [],
     imageUrls: [],
-    // imageUrls: ["/team04.jpeg", "/team03.jpg", "/team01.jpeg", "/team02.webbp"],
   });
   // const [storageUploadPercent, setStorageUploadPercent] = useState(0);
   const route = useRouter();
+  const [imgUrlsObj, setImgUrlsObj] = useState<ImageUrlsObj[]>([]);
 
-  if (!user) {
-    return null;
-  }
+  useEffect(() => {
+    const fetchUserDocData = async () => {
+      const fetchUserDocResult = await fetchUserDoc(user);
+
+      if (!fetchUserDocResult) return false;
+      const fetchUpdateFormData = fetchUserDocResult.data;
+      const fetchData = {
+        nickname: fetchUpdateFormData?.nickname ?? "",
+        gender: fetchUpdateFormData?.gender ?? genderOptions[0]["value"],
+        relationshipStatus:
+          fetchUpdateFormData?.relationshipStatus ??
+          relationshipStatusOptions[0]["value"],
+        matchGender:
+          fetchUpdateFormData?.gender ?? matchGenderOptions[0]["value"],
+        expectedRelationships: fetchUpdateFormData?.expectedRelationships ?? [],
+        interests: fetchUpdateFormData?.interests ?? [],
+        imageUrls: fetchUpdateFormData?.imageUrls ?? [],
+      };
+      setFormData(fetchData);
+
+      console.log("fetchFormData", fetchData);
+
+      let dataToUpdate: ImageUrlsObj[] = [];
+      fetchData.imageUrls.forEach((data) => {
+        let obj = { id: crypto.randomUUID(), url: data };
+        dataToUpdate.push(obj);
+      });
+      setImgUrlsObj(dataToUpdate);
+    };
+    fetchUserDocData();
+  }, [user]);
 
   const handleSelectChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -71,7 +103,6 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
       // setFormData({ ...formData, profilePictures: [...event.target.files] });
 
       const file = event.target.files[0];
-      // setImgFiles([...imgFiles, file]);
       console.log("--> Upload imgFile start:", file);
       uploadImage(file);
       // console.log(...event.target.files);
@@ -122,7 +153,6 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
           console.log("Image uploaded success", imgFile);
           console.log("image url", downloadUrl);
 
-          setImgFiles([...imgFiles, imgFile]);
           setFormData({
             ...formData,
             imageUrls: [...formData.imageUrls, downloadUrl],
@@ -141,10 +171,11 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
       if (result) {
         setErrorMsg("");
-        alert("個人資料設定成功");
+        toast.success("Profile Created Successesfully");
         route.push("/chat");
       }
     } catch (error) {
+      toast.error("Profile Created Failed");
       if (error instanceof Error) {
         setErrorMsg(error.message);
       } else {
@@ -153,8 +184,38 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
     }
   };
 
+  // ImageUploader
+  const handleImageUpload = (urlAdded: string) => {
+    let arrayToUpdate = [...formData.imageUrls, urlAdded];
+    autoUpdateImageUrls(user, arrayToUpdate);
+
+    setFormData({
+      ...formData,
+      imageUrls: arrayToUpdate,
+    });
+
+    let dataToUpdate: ImageUrlsObj[] = imgUrlsObj;
+
+    dataToUpdate.push({
+      id: crypto.randomUUID(),
+      url: urlAdded,
+    });
+    setImgUrlsObj(dataToUpdate);
+
+    console.log("dataToUpdate upload", dataToUpdate);
+  };
+
+  // ImageUploader
+  const handleImageDelete = (leftUrlsObj: ImageUrlsObj[]) => {
+    let arrayToUpdate = leftUrlsObj.map((data) => data.url);
+    autoUpdateImageUrls(user, arrayToUpdate);
+    setFormData({ ...formData, imageUrls: arrayToUpdate });
+
+    setImgUrlsObj(leftUrlsObj);
+    console.log("leftUrlsObj delete", leftUrlsObj);
+  };
+
   console.log("formData.imageUrls", formData.imageUrls);
-  console.log("imgFiles", imgFiles);
 
   return (
     <div className="mx-auto mb-4 mt-8 max-w-4xl">
@@ -293,61 +354,12 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
         <div>
           <label className="mb-2 font-medium text-gray-700">個人圖片</label>
 
-          {/* <div className=" flex items-center justify-start space-x-4"> */}
-          <div className="grid grid-cols-4 gap-2">
-            <label className="mb-2 flex h-32 w-32 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300">
-              <input
-                type="file"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-              <span className="text-gray-500">+</span>
-            </label>
-
-            {formData.imageUrls.map((url, index) => (
-              <div key={index} className="relative h-32 w-32">
-                <Image
-                  src={url}
-                  alt="Uploaded picture"
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-md"
-                />
-              </div>
-            ))}
-
-            {/* {formData.imageUrls.length > 0 && (
-              <div key={0} className="relative h-32 w-32">
-                <Image
-                  src={formData.imageUrls[0]}
-                  alt="Uploaded picture"
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-md"
-                />
-              </div>
-            )}
-
-            {formData.imageUrls.length > 1 && (
-              <div className="relative z-10 flex h-32 w-32 items-center justify-center rounded-md bg-sky-100">
-                {formData.imageUrls.length > 2 && (
-                  <div className="z-10 flex h-full w-full items-center justify-center">
-                    <div className="absolute h-full w-full bg-blue-100 opacity-80"></div>
-                    <span className="z-10 font-bold text-blue-500">
-                      +{formData.imageUrls.length - 2} more
-                    </span>
-                  </div>
-                )}
-                <Image
-                  src={formData.imageUrls[1]}
-                  alt="Uploaded picture"
-                  layout="fill"
-                  objectFit="cover"
-                  className="z-0 rounded-md"
-                />
-              </div>
-            )} */}
-          </div>
+          <ImageUploader
+            user={user}
+            imgUrlsObj={imgUrlsObj}
+            onImageUpload={handleImageUpload}
+            onImageDelete={handleImageDelete}
+          ></ImageUploader>
         </div>
         {errorMsg && <p className="mb-2 text-sm text-red-500">{errorMsg}</p>}
         <div className="mt-2 text-center">

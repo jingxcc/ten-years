@@ -6,6 +6,7 @@ import { FirebaseError } from "firebase/app";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import createUserDocument from "@/lib/firebase/firestore/createUserDocument";
+import toast from "react-hot-toast";
 
 // const getAuthErrorMsg = (error: FirebaseError): string => {
 //   console.log(error);
@@ -42,7 +43,7 @@ export default function SignUpPage() {
 
       createUserDocument(user);
 
-      alert("Signup success");
+      toast.success("Signup success", { position: "top-center" });
       router.push("/get-start");
     } catch (error) {
       if (error instanceof FirebaseError) {

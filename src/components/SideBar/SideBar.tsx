@@ -4,6 +4,7 @@ import { FirebaseError } from "firebase/app";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
+import toast from "react-hot-toast";
 
 interface SideBarProps {
   children?: ReactNode;
@@ -17,16 +18,18 @@ const Sidebar: React.FC<SideBarProps> = ({ children }) => {
     console.log("sign out");
     try {
       await signOut(auth);
-      alert("Logout success");
+      toast.success("Logout success", { position: "top-center" });
       route.push("/");
     } catch (error) {
       if (error instanceof FirebaseError) {
         // const errorCode = error.code;
         // const errorMessage = error.message;
         // const errorMessage = getAuthErrorMsg(error);
-        alert(`Logout Error: ${error.message}`);
+        toast.error(`Logout Error: ${error.message}`, {
+          position: "top-center",
+        });
       } else {
-        alert(`Logout Error: ${error}`);
+        toast.error(`Logout Error: ${error}`, { position: "top-center" });
       }
     }
   };

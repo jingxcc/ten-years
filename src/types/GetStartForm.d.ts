@@ -35,7 +35,7 @@ interface ProfileFormData {
 }
 
 interface ImageUrlsObj {
-  id: number;
+  id: string;
   url: string;
 }
 

@@ -1,4 +1,5 @@
 "use client";
+import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import { auth } from "@/lib/firebase/initialize";
 import { UserData } from "@/types/UserData";
 import { onAuthStateChanged } from "firebase/auth";
@@ -26,19 +27,33 @@ const UserContext = createContext<UserContextType>({
   isUserLoading: true,
 });
 
-const redirectToPage = (
+const redirectToPage = async (
   user: UserData | null,
   route: AppRouterInstance,
   pathname: string,
 ) => {
-  if (user && pathname === "/") {
-    route.push("/chat");
-  }
+  // check login
   if (!user && pathname !== "/") {
     route.push("/");
+    return false;
   }
 
-  console.log("context get route ", pathname);
+  if (user && pathname === "/") {
+    route.push("/chat");
+    return true;
+  }
+
+  // check isProfileCompleted
+  if (user) {
+    const userDocResult = await fetchUserDoc(user);
+    if (!userDocResult) return false;
+
+    // if (userDocResult.data.isStartProfileCompleted)
+
+    if (!userDocResult.data.isStartProfileCompleted) {
+      route.push("/get-start");
+    }
+  }
 };
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
@@ -61,10 +76,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             uid: authUser.uid,
           };
         }
+        redirectToPage(userData, route, pathname);
+
         setUser(userData);
         setIsUserLoading(false);
-
-        redirectToPage(userData, route, pathname);
       },
       (error) => {
         console.error(`userContext Auth Error: ${error}`);

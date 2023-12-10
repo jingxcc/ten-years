@@ -9,7 +9,7 @@ const fetchUserDoc = async (user: UserData) => {
     throw new Error("Error: No user data provided");
   }
   try {
-    const userRef = doc(firestore, "users", user?.uid);
+    const userRef = doc(firestore, "users", user.uid);
     const docSnap = await getDoc(userRef);
     if (docSnap.exists()) {
       //   console.log("Document data:", docSnap.data());
