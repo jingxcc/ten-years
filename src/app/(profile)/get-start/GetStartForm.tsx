@@ -171,7 +171,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
       if (result) {
         setErrorMsg("");
-        toast.success("Profile Created Successesfully");
+        toast.success(`Welcome ! ${formData.nickname}`, { icon: "🎉🎉" });
         route.push("/chat");
       }
     } catch (error) {
@@ -218,15 +218,15 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
   console.log("formData.imageUrls", formData.imageUrls);
 
   return (
-    <div className="mx-auto mb-4 mt-8 max-w-4xl">
-      <form onSubmit={handleSubmit} className="mx-auto max-w-xl space-y-4">
-        <h2 className="mb-4 text-center text-lg font-bold ">
-          Getting Start...
-        </h2>
+    <div className="mx-auto mt-8 max-w-4xl rounded-xl border bg-white bg-opacity-95 p-10">
+      <form onSubmit={handleSubmit} className="mx-auto max-w-xl space-y-4 ">
+        <div className="mb-4 flex items-center justify-center py-3">
+          <h2 className=" mr-4 text-2xl font-bold">{"Getting Start !"}</h2>
+        </div>
         {/* text */}
         <div>
           <label htmlFor="nickname" className="mb-2 font-medium">
-            暱稱
+            Nickname
           </label>
           <input
             type="text"
@@ -234,7 +234,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
             name="nickname"
             value={formData.nickname}
             onChange={handleSelectChange}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+            className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
             required
           />
         </div>
@@ -242,14 +242,14 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
         {/* single-select */}
         <div>
           <label htmlFor="gender" className="mb-2 font-medium">
-            性別
+            Gender
           </label>
           <select
             id="gender"
             name="gender"
             value={formData.gender}
             onChange={handleSelectChange}
-            className=" block w-full rounded-md border-gray-300 px-4 py-2 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+            className="block w-full rounded-lg border border-gray-300 p-3 px-4 py-2 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 disabled:bg-gray-50"
             required
           >
             {genderOptions.map((gender) => (
@@ -262,11 +262,11 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
         {/* select-radio */}
         <div>
-          <label className="mb-2 font-medium text-gray-700">配對性別</label>
-          <div className="flex flex-wrap items-center">
+          <label className="mb-2 font-medium text-gray-700">Match Gender</label>
+          <div className="grid grid-cols-2 ">
             {matchGenderOptions.map((item) => (
               <div key={item.id} className="mb-2 mr-4">
-                <label className="mb-2 flex items-center rounded border border-gray-300 p-2">
+                <label className="mb-2 flex items-center rounded-lg border border-gray-300 p-3">
                   <input
                     type="radio"
                     name="matchGender"
@@ -275,7 +275,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
                     onChange={handleSelectChange}
                     className="h-4 w-4 focus:ring-indigo-500"
                   />
-                  <span className="ml-2 text-sm">{item.value}</span>
+                  <span className="ml-4 text-sm">{item.value}</span>
                 </label>
               </div>
             ))}
@@ -284,11 +284,13 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
         {/* select-radio */}
         <div>
-          <label className=" font-medium text-gray-700">感情狀況</label>
-          <div className="mt-2 flex flex-wrap items-center">
+          <label className="mb-2 font-medium text-gray-700">
+            Relationship Status
+          </label>
+          <div className="mb-2 grid grid-cols-2 ">
             {relationshipStatusOptions.map((item) => (
               <div key={item.id} className="mb-2 mr-4">
-                <label className=" flex items-center rounded border border-gray-300 p-2">
+                <label className=" flex items-center rounded-lg border border-gray-300 p-3">
                   <input
                     type="radio"
                     name="relationshipStatus"
@@ -297,7 +299,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
                     onChange={handleSelectChange}
                     className="h-4 w-4 focus:ring-indigo-500"
                   />
-                  <span className="ml-2 text-sm">{item.value}</span>
+                  <span className="ml-4 text-sm">{item.value}</span>
                 </label>
               </div>
             ))}
@@ -306,11 +308,13 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
         {/* multi-checkbox */}
         <div>
-          <label className="mb-2 font-medium text-gray-700">期望關係</label>
+          <label className="mb-2 font-medium text-gray-700">
+            Expected Relationship
+          </label>
           <div className="mt-2 flex flex-wrap items-center">
             {expectedRelationshipOptions.map((item) => (
               <div key={item.id} className="mb-2 mr-4">
-                <label className="mb-2 flex items-center rounded border border-gray-300 p-2">
+                <label className="mb-2 flex items-center rounded-lg border border-gray-300 px-3 py-2">
                   <input
                     type="checkbox"
                     name="expectedRelationships"
@@ -321,7 +325,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
                     onChange={handleMultiSelectChange}
                     className="h-4 w-4 focus:ring-indigo-500"
                   />
-                  <span className="ml-2 text-sm">{item.value}</span>
+                  <span className="ml-4 text-sm">{item.value}</span>
                 </label>
               </div>
             ))}
@@ -330,11 +334,11 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
         {/* multi-checkbox */}
         <div>
-          <label className="mb-2 font-medium text-gray-700">興趣</label>
-          <div className="flex flex-wrap items-center justify-center">
+          <label className="mb-2 font-medium text-gray-700">Interests</label>
+          <div className="flex flex-wrap items-center ">
             {interestOptions.map((item) => (
               <div key={item.id} className="mb-2 mr-4">
-                <label className="mb-2 flex items-center rounded border border-gray-300 p-2">
+                <label className="mb-2 flex items-center rounded-lg border border-gray-300 px-3 py-2">
                   <input
                     type="checkbox"
                     name="interests"
@@ -343,7 +347,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
                     onChange={handleMultiSelectChange}
                     className="h-4 w-4 focus:ring-indigo-500"
                   />
-                  <span className="ml-2 text-sm">{item.value}</span>
+                  <span className="ml-4 text-sm">{item.value}</span>
                 </label>
               </div>
             ))}
@@ -352,7 +356,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
         {/* file */}
         <div>
-          <label className="mb-2 font-medium text-gray-700">個人圖片</label>
+          <label className="mb-2 font-medium text-gray-700">Your Images</label>
 
           <ImageUploader
             user={user}

@@ -34,6 +34,7 @@ import updatePotentialMatchDoc from "@/lib/firebase/firestore/updatePotentialMat
 import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
 import fetchAllFriendDocIds from "@/lib/firebase/firestore/fetchFriendDoc";
 import { createMatchRequests } from "@/lib/firebase/firestore/createMatchRequest";
+import toast from "react-hot-toast";
 
 export default function PotentialMatchesPage() {
   const { user, isUserLoading } = useUser();
@@ -218,6 +219,12 @@ export default function PotentialMatchesPage() {
       sendAt: serverTimestamp(),
     });
 
+    toast.success("Likes Success !", {
+      style: {
+        backgroundColor: "#fbcfe8",
+      },
+      icon: "✨",
+    });
     // setLikedUser(matchUserId);
     console.log("Liked user", matchUserId);
   };
@@ -225,14 +232,18 @@ export default function PotentialMatchesPage() {
   // console.log("Loading", isUserLoading);
   console.log("user", user);
 
-  if (isUserLoading) {
-    return <div>Loading...</div>;
+  if (!user || isUserLoading) {
+    return (
+      <div className="h-screen  w-screen text-center text-2xl font-bold text-sky-300 ">
+        <h3 className="block py-[20%]"> Loading ...</h3>
+      </div>
+    );
   }
 
   return (
     <div className="relative">
       <Sidebar></Sidebar>
-      <main className="ml-32">
+      <main className="ml-20">
         <div className="mw-[900px] container mx-auto px-2">
           <div className="mb-4 flex items-center py-8">
             <h2 className=" mr-4 text-2xl font-bold">

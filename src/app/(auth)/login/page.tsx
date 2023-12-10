@@ -6,6 +6,7 @@ import { FirebaseError } from "firebase/app";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import Header from "@/components/Header/Header";
 
 // user-friendly message
 // const getAuthErrorMsg = (error: FirebaseError): string => {
@@ -41,19 +42,26 @@ export default function LoginPage() {
       route.push("/chat");
     } catch (error) {
       if (error instanceof FirebaseError) {
-        // const errorCode = error.code;
-        // const errorMessage = error.message;
-        // const errorMessage = getAuthErrorMsg(error);
-        setErrorMsg(error.message);
+        let msg = "";
+        if (error.code === "auth/invalid-login-credentials") {
+          msg = "Incorrect email or password";
+        } else {
+          msg = error.message;
+        }
+
+        setErrorMsg(msg);
+      } else if (error instanceof Error) {
+        console.error(`Log in Error: ${error.message}`);
       } else {
-        alert(`Login Error: ${error}`);
+        console.log(`Log in Error: ${error}`);
       }
     }
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-sky-200">
+      <Header showNav={false}></Header>
       <LoginForm onLogin={handleLogin} errorMsg={errorMsg} />
-    </>
+    </div>
   );
 }

@@ -12,13 +12,17 @@ export default function ProfilePage() {
   console.log("user", user);
 
   if (!user || isUserLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-screen  w-screen text-center text-2xl font-bold text-sky-300 ">
+        <h3 className="block py-[20%]"> Loading ...</h3>
+      </div>
+    );
   }
 
   return (
     <div className="relative">
       <Sidebar></Sidebar>
-      <main className="ml-32 flex h-full">
+      <main className="ml-20 flex h-full">
         <ProfileForm user={user}></ProfileForm>
       </main>
     </div>

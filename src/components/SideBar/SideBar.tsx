@@ -1,7 +1,18 @@
 import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import { auth } from "@/lib/firebase/initialize";
+import {
+  ArrowLeftOnRectangleIcon,
+  ChatBubbleLeftEllipsisIcon,
+  EnvelopeIcon,
+  HeartIcon,
+  StarIcon,
+  UserCircleIcon,
+  UsersIcon,
+} from "@heroicons/react/24/outline";
 import { FirebaseError } from "firebase/app";
 import { signOut } from "firebase/auth";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -16,6 +27,7 @@ const Sidebar: React.FC<SideBarProps> = ({ children }) => {
 
   const handleSignOut = async () => {
     console.log("sign out");
+
     try {
       await signOut(auth);
       toast.success("Logout success", { position: "top-center" });
@@ -34,26 +46,41 @@ const Sidebar: React.FC<SideBarProps> = ({ children }) => {
     }
   };
   return (
-    <div className="fixed h-full w-32 border-r border-neutral-200 bg-sky-200 p-4">
-      <div className="py-4">
-        {/* <h1 className="text-xl font-bold">Ten Years</h1> */}
+    <div className="w-18 fixed flex h-full flex-col items-center  border-r border-neutral-200 bg-sky-200 p-4">
+      <Link href={"/"} className="mb-6">
+        <Image src={"logo.svg"} width={48} height={48} alt="logo"></Image>
+      </Link>
+      <div className="flex flex-1 flex-col items-center justify-between">
+        <div>
+          <button
+            className="btn-icon"
+            title="Chat"
+            onClick={() => route.push("/chat")}
+          >
+            <ChatBubbleLeftEllipsisIcon className="h-8 w-8"></ChatBubbleLeftEllipsisIcon>
+          </button>
+          <button
+            className="btn-icon"
+            title="Suggestions"
+            onClick={() => route.push("/potentials")}
+          >
+            <StarIcon className="h-8 w-8"></StarIcon>
+          </button>
+          <button className="btn-icon" onClick={() => route.push("/likes")}>
+            <EnvelopeIcon className="h-8 w-8" title="Likes You"></EnvelopeIcon>
+          </button>
+          <button
+            className="btn-icon"
+            title="Profile"
+            onClick={() => route.push("/profile")}
+          >
+            <UserCircleIcon className="h-8 w-8"></UserCircleIcon>
+          </button>
+        </div>
+        <button className="btn-icon" title="Log out" onClick={handleSignOut}>
+          <ArrowLeftOnRectangleIcon className="h-8 w-8"></ArrowLeftOnRectangleIcon>
+        </button>
       </div>
-      <button className="btn mb-4" onClick={handleSignOut}>
-        Log out
-      </button>
-
-      <button className="btn mb-4" onClick={() => route.push("/potentials")}>
-        Matches
-      </button>
-      <button className="btn mb-4" onClick={() => route.push("/likes")}>
-        Likes
-      </button>
-      <button className="btn mb-4" onClick={() => route.push("/chat")}>
-        Chat
-      </button>
-      <button className="btn mb-4" onClick={() => route.push("/profile")}>
-        Profile
-      </button>
       {children}
     </div>
   );

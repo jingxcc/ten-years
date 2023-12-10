@@ -8,6 +8,8 @@
   --color-sky-100: "#e0f2fe";
   --color-neutral-700: "#404040";
   --color-neutral-500: "#737373";
+  --color-rose-300: "#f9a8d4";
+  --color-rose-100: "#fbcfe8";
 }
 
 @layer components {
@@ -25,5 +27,39 @@
   .btn-secondary {
     /* @apply rounded bg-sky-300 px-4 py-2 font-bold text-white enabled:hover:bg-sky-50  enabled:hover:text-sky-300 disabled:hover:bg-sky-50  disabled:hover:text-sky-300 ; */
     @apply rounded bg-sky-50 px-4 py-2 font-bold text-sky-300 enabled:hover:bg-sky-300  enabled:hover:text-white disabled:hover:bg-sky-300  disabled:hover:text-white;
+  }
+
+  .btn-icon {
+    @apply flex max-h-[48px] max-w-[60px] items-center rounded bg-sky-200 p-2 font-bold text-white hover:bg-sky-300 focus:bg-sky-300 enabled:hover:bg-sky-300 disabled:opacity-75;
+  }
+}
+
+@layer utilities {
+  /* @keyframes slide-out {
+    from {
+      transform: translateX(0%);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  } */
+
+  @keyframes slide-in {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0%);
+    }
+  }
+
+  @keyframes bounce-once {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-25%);
+    }
   }
 }

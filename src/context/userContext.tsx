@@ -33,7 +33,7 @@ const redirectToPage = async (
   pathname: string,
 ) => {
   // check login
-  if (!user && pathname !== "/") {
+  if (!user && pathname !== "/" && !["/login", "/signup"].includes(pathname)) {
     route.push("/");
     return false;
   }
