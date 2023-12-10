@@ -74,7 +74,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
           fetchUpdateFormData?.relationshipStatus ??
           relationshipStatusOptions[0]["value"],
         matchGender:
-          fetchUpdateFormData?.gender ?? matchGenderOptions[0]["value"],
+          fetchUpdateFormData?.matchGender ?? matchGenderOptions[0]["value"],
         expectedRelationships: fetchUpdateFormData?.expectedRelationships ?? [],
         interests: fetchUpdateFormData?.interests ?? [],
         imageUrls: fetchUpdateFormData?.imageUrls ?? [],
@@ -181,7 +181,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
     console.log("leftUrlsObj delete", leftUrlsObj);
   };
 
-  console.log("formData", formData.imageUrls);
+  console.log("formData", formData);
   // console.log("imgUrlsObj", imgUrlsObj);
 
   return (
