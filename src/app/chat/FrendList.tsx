@@ -1,5 +1,6 @@
 import { ChatUser } from "@/types/ChatPage";
 import { UserData } from "@/types/UserData";
+import Image from "next/image";
 
 type Props = {
   friends: ChatUser[];
@@ -27,15 +28,17 @@ const FriendList: React.FC<Props> = ({
             className="flex cursor-pointer items-center px-4 py-4 hover:bg-sky-100 focus:bg-sky-100"
             onClick={() => onClickRecipient(friend.uid)}
           >
-            <div className="h-10 w-10 overflow-hidden rounded-full">
-              <img
-                className="h-full w-full object-cover object-center"
+            <div className="relative h-10 w-10 overflow-hidden rounded-full">
+              <Image
                 src={
                   friend["imageUrls"] && friend["imageUrls"].length !== 0
                     ? friend["imageUrls"][0]
                     : "/defaultAvatar.jpg"
                 }
                 alt={`${friend.nickname}'s avatar`}
+                layout="fill"
+                objectFit="cover"
+                className=" border-sky-300 bg-sky-100 text-sky-300"
               />
             </div>
             <div className="ml-3">

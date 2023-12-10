@@ -90,7 +90,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [pathname, route]);
 
   return (
     <UserContext.Provider value={{ user, isUserLoading }}>

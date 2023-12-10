@@ -37,15 +37,13 @@ const MatchReqCard: React.FC<MatchReqCardProps> = ({
         />
       ))} */}
 
-      <div className="h-[280px]  overflow-hidden">
-        <img
-          className="h-full w-full object-cover object-center"
+      <div className="relative h-[280px]  overflow-hidden">
+        <Image
           src={fromUser["imageUrls"][0] ?? "/defaultAvatar.jpg"}
           alt={fromUser.nickname}
-          //   width={384}
-          //   height={220}
-          //   objectFit="cover"
-          //   objectPosition="center"
+          layout="fill"
+          objectFit="cover"
+          className=" border-sky-300 bg-sky-100 text-sky-300"
         />
       </div>
 

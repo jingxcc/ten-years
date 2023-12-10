@@ -29,7 +29,7 @@ export default function SignUpPage() {
     if (pathname === "/signup") {
       setSlideIn(true);
     }
-  }, [router]);
+  }, [pathname]);
 
   const handleSignUp = async (
     email: string,

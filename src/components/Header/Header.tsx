@@ -1,6 +1,12 @@
+"use client";
+import { auth } from "@/lib/firebase/initialize";
 import { UserData } from "@/types/UserData";
+import { FirebaseError } from "firebase/app";
+import { signOut } from "firebase/auth";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 interface HeaderProps {
   user?: UserData | null;
@@ -8,6 +14,28 @@ interface HeaderProps {
 }
 
 export default function Header({ user, showNav = true }: HeaderProps) {
+  const route = useRouter();
+  // lib
+  const handleSignOut = async () => {
+    console.log("sign out");
+
+    try {
+      await signOut(auth);
+      toast.success("Logout success", { position: "top-center" });
+      route.push("/");
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        // const errorCode = error.code;
+        // const errorMessage = error.message;
+        // const errorMessage = getAuthErrorMsg(error);
+        toast.error(`Logout Error: ${error.message}`, {
+          position: "top-center",
+        });
+      } else {
+        toast.error(`Logout Error: ${error}`, { position: "top-center" });
+      }
+    }
+  };
   return (
     <header className=" flex items-center justify-between border-b border-neutral-100 bg-white bg-opacity-95 px-6">
       <Link href={"/"}>
@@ -20,9 +48,13 @@ export default function Header({ user, showNav = true }: HeaderProps) {
       {showNav && (
         <nav className=" font-semibold text-neutral-500 hover:text-sky-300">
           {user ? (
-            <Link href={"/"} className=" block p-2">
+            <button
+              className="block p-2"
+              title="Log out"
+              onClick={handleSignOut}
+            >
               Log out
-            </Link>
+            </button>
           ) : (
             <Link href={"/login"} className=" block p-2">
               Log in

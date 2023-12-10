@@ -24,7 +24,7 @@ interface SideBarProps {
 
 const Sidebar: React.FC<SideBarProps> = ({ children }) => {
   const route = useRouter();
-
+  // lib
   const handleSignOut = async () => {
     console.log("sign out");
 
