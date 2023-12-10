@@ -31,7 +31,6 @@ import fetchAllFriendDocIds from "@/lib/firebase/firestore/fetchFriendDoc";
 // get matches doc
 const fetchLikedMatch = async (user: UserData) => {
   const matchDocResult: string[] = await fetchAllFriendDocIds(user);
-  console.log("matchDocResult", matchDocResult);
 
   return matchDocResult;
 
@@ -129,7 +128,6 @@ export default function ChatPage() {
       const fetchUserDocResult = await fetchUserDoc(user);
 
       if (fetchUserDocResult) {
-        console.log("fetchUserDocResult", fetchUserDocResult["data"]);
         setCurrentUser({ ...(fetchUserDocResult["data"] as ChatUser) });
       }
     };
@@ -163,6 +161,9 @@ export default function ChatPage() {
       const unsubscribe = onSnapshot(friendsQuery, async (snapshot) => {
         const friendsDocs = snapshot.docs.map((doc) => doc.data() as ChatUser);
         // setFriendUIds(friendsData.map((data) => data.uid));
+        console.log("friendsDocs", friendsDocs);
+
+        if (friendsDocs.length === 0) return false;
 
         const friendUIds = friendsDocs.map((data) => data.uid);
 
@@ -291,7 +292,6 @@ export default function ChatPage() {
 
         //   return dateA.getTime() - dateB.getTime();
         // });
-        console.log("newMessages", newMessages);
 
         setMessages(newMessages);
       });
@@ -337,12 +337,6 @@ export default function ChatPage() {
   //   console.log("是你 render?");
   // };
 
-  console.log("crrentRecipientUId", currentRecipientUId);
-
-  console.log("friend", friends);
-  console.log("messages", messages);
-
-  console.log("user", user);
   if (!user || isUserLoading) {
     return (
       <div className="h-screen  w-screen text-center text-2xl font-bold text-sky-300 ">
