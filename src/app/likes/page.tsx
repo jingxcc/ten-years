@@ -48,8 +48,10 @@ export default function LikesPage() {
 
       const q = query(
         collectionRef,
-        where("toUserId", "==", user.uid),
-        where("status", "==", "sent"),
+        and(
+          where("toUserId", "==", user.uid),
+          or(where("status", "==", "sent"), where("status", "==", "accepted")),
+        ),
         orderBy("sendAt", "desc"),
       );
 
