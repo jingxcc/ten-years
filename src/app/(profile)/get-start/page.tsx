@@ -1,5 +1,6 @@
 "use client";
 
+import Header from "@/components/Header/Header";
 import { useUser } from "../../../context/userContext";
 import GetStartForm from "./GetStartForm";
 
@@ -10,11 +11,16 @@ export default function GetStartPage() {
   console.log("user", user);
 
   if (!user || isUserLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-screen  w-screen text-center text-2xl font-bold text-sky-300 ">
+        <h3 className="block py-[20%]"> Loading ...</h3>
+      </div>
+    );
   }
 
   return (
-    <div>
+    <div className="bg-sky-200 pb-8">
+      <Header user={user}></Header>
       <GetStartForm user={user}></GetStartForm>
     </div>
   );

@@ -145,7 +145,7 @@ export default function ImageUploader({
               alt="Uploaded picture"
               layout="fill"
               objectFit="cover"
-              className="rounded-md"
+              className="rounded-md border-sky-300 bg-sky-100 text-sky-300"
             />
 
             <button

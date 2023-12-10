@@ -33,7 +33,7 @@ const SignUpForm: React.FC<SignUpProps> = ({ onSignUp, errorMsg }) => {
     }
   };
   return (
-    <div className="mx-auto mt-8 max-w-sm">
+    <div className="mx-auto mt-10 max-w-md rounded-xl border bg-white bg-opacity-95 p-10">
       <form onSubmit={handleSubmit} className="flex flex-col">
         <h2 className="mb-4 text-center text-lg font-bold ">Sign Up</h2>
         <div className="mb-4">
@@ -63,8 +63,11 @@ const SignUpForm: React.FC<SignUpProps> = ({ onSignUp, errorMsg }) => {
         </button>
       </form>
       <div className="flex justify-center">
-        <Link href="/login" className="p-3 text-sm">
-          Already have an count
+        <Link
+          href="/login"
+          className="p-3 text-sm hover:underline hover:underline-offset-2"
+        >
+          Already have an account
         </Link>
       </div>
     </div>

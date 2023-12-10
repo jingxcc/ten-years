@@ -151,18 +151,22 @@ export default function LikesPage() {
   };
 
   if (!user || isUserLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-screen  w-screen text-center text-2xl font-bold text-sky-300 ">
+        <h3 className="block py-[20%]"> Loading ...</h3>
+      </div>
+    );
   }
 
   return (
     <div className="relative">
       <Sidebar></Sidebar>
-      <main className="ml-32">
+      <main className="ml-20">
         <div className="mw-[900px] container mx-auto px-2">
           <div className="mb-4 flex items-center py-8">
             <h2 className=" mr-4 text-2xl font-bold">{"People Likes You"}</h2>
           </div>
-          {fromUserData.length > 0 && (
+          {fromUserData.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {matchRequests.map((request) => (
                 <MatchReqCard
@@ -178,6 +182,13 @@ export default function LikesPage() {
                   onReject={handleReject}
                 ></MatchReqCard>
               ))}
+            </div>
+          ) : (
+            <div className="r h-full w-full text-lg font-semibold text-gray-400 ">
+              <h3 className="mb-2 block pt-6">{"No Data "}</h3>
+              <h3 className="block">
+                {"Let's start from Today's Suggestions !"}
+              </h3>
             </div>
           )}
         </div>

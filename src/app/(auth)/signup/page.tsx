@@ -3,10 +3,11 @@ import SignUpForm from "./SignUpForm";
 import { auth } from "@/lib/firebase/initialize";
 import { AuthErrorCodes, createUserWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import createUserDocument from "@/lib/firebase/firestore/createUserDocument";
 import toast from "react-hot-toast";
+import Header from "@/components/Header/Header";
 
 // const getAuthErrorMsg = (error: FirebaseError): string => {
 //   console.log(error);
@@ -20,7 +21,15 @@ import toast from "react-hot-toast";
 
 export default function SignUpPage() {
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [slideIn, setSlideIn] = useState<Boolean>(false);
   const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (pathname === "/signup") {
+      setSlideIn(true);
+    }
+  }, [pathname]);
 
   const handleSignUp = async (
     email: string,
@@ -47,11 +56,16 @@ export default function SignUpPage() {
       router.push("/get-start");
     } catch (error) {
       if (error instanceof FirebaseError) {
-        // const errorCode = error.code;
-        // console.log(error.code);
-        // const errorMessage = error.message;
-        // const errorMessage = getAuthErrorMsg(error);
-        setErrorMsg(error.message);
+        let msg = "";
+        if (error.code === "auth/email-already-in-use") {
+          msg = "Account already exists";
+        } else if (error.code === "auth/weak-password") {
+          msg = "Password should be at least 6 characters";
+        } else {
+          msg = error.message;
+        }
+
+        setErrorMsg(msg);
       } else if (error instanceof Error) {
         console.error(`Sign-up Error: ${error.message}`);
       } else {
@@ -61,8 +75,10 @@ export default function SignUpPage() {
   };
 
   return (
-    <>
+    <div
+      className={`${slideIn ? "animate-slide-in" : ""} min-h-screen bg-sky-200`}
+    >
       <SignUpForm onSignUp={handleSignUp} errorMsg={errorMsg} />
-    </>
+    </div>
   );
 }

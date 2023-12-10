@@ -7,8 +7,8 @@ interface LoginProps {
 }
 
 const LoginForm: React.FC<LoginProps> = ({ onLogin, errorMsg }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("test01@test.com");
+  const [password, setPassword] = useState("000000");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +33,7 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin, errorMsg }) => {
     }
   };
   return (
-    <div className="mx-auto mt-8 max-w-sm">
+    <div className="mx-auto mt-10 max-w-md rounded-xl border bg-white bg-opacity-95 p-10">
       <form onSubmit={handleSubmit} className="flex flex-col">
         <h2 className="mb-4 text-center text-lg font-bold ">Log In</h2>
         <div className="mb-4">
@@ -64,9 +64,9 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin, errorMsg }) => {
         <div className="flex justify-center">
           <Link
             href="/signup"
-            className="block p-3 text-center text-sm text-sky-500"
+            className="block px-12  py-3 text-center text-sm text-sky-500 hover:font-bold"
           >
-            Create New Account
+            {"I'm new here"}
           </Link>
         </div>
       </form>
