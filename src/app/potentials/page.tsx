@@ -6,6 +6,7 @@ import {
   PotentialMatchData,
   MatchUser,
   PotentialUser,
+  MatchRequestData,
 } from "@/types/PotentialMatchesPage";
 
 import { genderOptions, matchGenderOptions } from "@/constants/GetStartForm";
@@ -35,6 +36,27 @@ import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
 import fetchAllFriendDocIds from "@/lib/firebase/firestore/fetchFriendDoc";
 import { createMatchRequests } from "@/lib/firebase/firestore/createMatchRequest";
 import toast from "react-hot-toast";
+import { UserData } from "@/types/UserData";
+
+// lib
+const fetchMatchRequestData = async (user: UserData) => {
+  const collectionRef = collection(firestore, "matchRequests");
+  // tmp: consider if the get the same suggestion today!
+  const q = query(
+    collectionRef,
+    and(
+      or(where("toUserId", "==", user.uid), where("from", "==", user.uid)),
+      where("status", "!=", "accepted"),
+    ),
+  );
+
+  try {
+    const queryResult = await getDocs(q);
+    return queryResult;
+  } catch (error) {
+    console.error("Error fetch match request docs", error);
+  }
+};
 
 export default function PotentialMatchesPage() {
   const { user, isUserLoading } = useUser();
@@ -108,6 +130,22 @@ export default function PotentialMatchesPage() {
         const currentFriendDocIds = await fetchAllFriendDocIds(user);
         console.log("currentFriendDocIds", currentFriendDocIds);
 
+        const matchReqDocResult = await fetchMatchRequestData(user);
+        console.log("matchReqDocResult", matchReqDocResult);
+
+        // not match request
+        let matchReqData: string[] = [];
+        if (matchReqDocResult && matchReqDocResult.docs.length > 0) {
+          matchReqDocResult.docs.forEach((doc) => {
+            const docData = doc.data() as MatchRequestData;
+            matchReqData.push(
+              docData.fromUserId === user.uid
+                ? docData.toUserId
+                : docData.fromUserId,
+            );
+          });
+        }
+
         const currentMatchUser: MatchUser = {
           ...(currentUserDoc["data"] as UpdateGetStartFormData),
 
@@ -121,8 +159,14 @@ export default function PotentialMatchesPage() {
         const usersRef = collection(firestore, "users");
         // tmp: all genders
         const AllGenderOptionIdx = 2;
-        const genderOptionValues = Object.values(genderOptions);
+        // const genderOptionValues = Object.values(genderOptions);
         let q;
+
+        console.log("condtion", [
+          ...currentMatchUser.friends,
+          ...matchReqData,
+          user.uid,
+        ]);
 
         if (
           currentMatchUser.matchGender ===
@@ -131,17 +175,36 @@ export default function PotentialMatchesPage() {
           q = query(
             usersRef,
             where("isStartProfileCompleted", "==", true),
-            where("uid", "not-in", [...currentMatchUser.friends, user.uid]),
+            where("uid", "not-in", [
+              ...currentMatchUser.friends,
+              ...matchReqData,
+              user.uid,
+            ]),
+          );
+          console.log(
+            "gender pref",
+            matchGenderOptions[AllGenderOptionIdx]["value"],
           );
           // tmp: remove some condtions
         } else {
           q = query(
             usersRef,
             where("isStartProfileCompleted", "==", true),
-            where("uid", "not-in", [...currentMatchUser.friends, user.uid]),
-            // where("gender", "==", genderOptionValues),
+            where("uid", "not-in", [
+              ...currentMatchUser.friends,
+              // ...matchReqData,
+              user.uid,
+            ]),
+            where("gender", "==", currentMatchUser.matchGender),
           );
+          console.log("gender pref", currentMatchUser.matchGender);
         }
+
+        // console.log(
+        //   "gender test",
+        //   matchGenderOptions[AllGenderOptionIdx]["value"],
+        //   genderOptionValues,
+        // );
 
         const querySnapShot = await getDocs(q);
         const querySnapShotData = querySnapShot.docs.map((doc) => ({
