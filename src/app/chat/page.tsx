@@ -21,7 +21,7 @@ import {
 import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import Sidebar from "../../components/SideBar/SideBar";
 import FriendList from "./FrendList";
-import { ChatUser, Friend, Message } from "@/types/ChatPage";
+import { ChatUser, Friend, MessageType } from "@/types/ChatPage";
 import { createFriendDoc } from "@/lib/firebase/firestore/createFriendDoc";
 import { UserData } from "@/types/UserData";
 import Chat from "./Chat";
@@ -118,8 +118,8 @@ export default function ChatPage() {
   const [currentRecipientUId, setCurrentRecipientUId] = useState<string>("");
   // const [likedMatch, setlikedMatch] = useState<string>("");
   const [likedMatches, setlikedMatches] = useState<string[]>([]);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const latestMessagesRef = useRef<Message[]>([]);
+  const [messages, setMessages] = useState<MessageType[]>([]);
+  const latestMessagesRef = useRef<MessageType[]>([]);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -253,7 +253,7 @@ export default function ChatPage() {
             where("toUserId", "==", user.uid),
           ),
         ),
-        orderBy("timestamp", "desc"),
+        orderBy("timestamp", "asc"),
       );
 
       // const handleSnapshot = (
@@ -280,18 +280,17 @@ export default function ChatPage() {
       // );
 
       const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
-        const newMessages = snapshot.docs
-          .map((doc) => ({
-            id: doc.id,
-            ...(doc.data() as Message),
-          }))
-          .sort((a, b) => {
-            // Convert Firestore Timestamps to JavaScript Date objects, handling null cases
-            const dateA = a.timestamp?.toDate() ?? new Date(0); // Use toDate() for Firestore Timestamp
-            const dateB = b.timestamp?.toDate() ?? new Date(0);
+        const newMessages = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as MessageType),
+        }));
+        // .sort((a, b) => {
+        //   // Convert Firestore Timestamps to JavaScript Date objects, handling null cases
+        //   const dateA = a.timestamp?.toDate() ?? new Date(0); // Use toDate() for Firestore Timestamp
+        //   const dateB = b.timestamp?.toDate() ?? new Date(0);
 
-            return dateA.getTime() - dateB.getTime();
-          });
+        //   return dateA.getTime() - dateB.getTime();
+        // });
         console.log("newMessages", newMessages);
 
         setMessages(newMessages);
@@ -323,8 +322,6 @@ export default function ChatPage() {
       // );
 
       return () => {
-        // unsubscribeSent();
-        // unsubscribeReceived();
         unsubscribe();
       };
     }
@@ -334,44 +331,16 @@ export default function ChatPage() {
     setCurrentRecipientUId(recipientUId);
   };
 
-  // tmp: useCallback? useMemo?
-  const handleNewMessage = (newMessage: Message) => {
-    setMessages((prev) => [newMessage, ...prev]);
-    console.log("是你 render?");
-  };
-
-  // useEffect(() => {
-  //   console.log("friendUIds", friendUIds);
-  // }, [friendUIds]);
+  // // tmp: useCallback? useMemo?
+  // const handleNewMessage = (newMessage: MessageType) => {
+  //   setMessages((prev) => [newMessage, ...prev]);
+  //   console.log("是你 render?");
+  // };
 
   console.log("crrentRecipientUId", currentRecipientUId);
 
   console.log("friend", friends);
   console.log("messages", messages);
-
-  // const fetchUserData = async () => {
-  //   if (!user) {
-  //     alert("No user data provided");
-  //     return false;
-  //   }
-  //   const userRef = doc(firestore, "users", user?.uid);
-  //   const docSnap = await getDoc(userRef);
-  //   try {
-  //     if (docSnap.exists()) {
-  //       console.log("Document data:", docSnap.data());
-  //       // setUserData({
-  //       //   ...userData,
-  //       //   nickname: userData.nickname,
-  //       //   imgUrl: userData["imageUrls"][0],
-  //       // });
-  //     } else {
-  //       // docSnap.data() will be undefined in this case
-  //       console.log("No such document!");
-  //     }
-  //   } catch (e) {
-  //     console.log("Error getting cached document:", e);
-  //   }
-  // };
 
   console.log("user", user);
   if (!user || isUserLoading) {

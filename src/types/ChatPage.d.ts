@@ -5,7 +5,7 @@ interface Friend {
   addedOn: Date | firebase.firestore.Timestamp;
 }
 
-interface Message {
+interface MessageType {
   id?: string;
   text: string;
   fromUserId: string;
@@ -19,4 +19,4 @@ interface ChatUser extends UpdateGetStartFormData {
   //   aboutMe: string;
 }
 
-export { Friend, Message, ChatUser };
+export { Friend, MessageType, ChatUser };
