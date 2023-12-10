@@ -150,11 +150,12 @@ export default function LikesPage() {
     });
   };
 
-  if (isUserLoading) {
+  if (!user || isUserLoading) {
     return <div>Loading...</div>;
   }
+
   return (
-    <div className="h-full w-full">
+    <div className="relative">
       <Sidebar></Sidebar>
       <main className="ml-32">
         <div className="mw-[900px] container mx-auto px-2">

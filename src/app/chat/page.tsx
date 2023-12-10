@@ -374,12 +374,12 @@ export default function ChatPage() {
   // };
 
   console.log("user", user);
-  if (isUserLoading) {
+  if (!user || isUserLoading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="absolute h-full w-full">
+    <div className="relative h-screen">
       <Sidebar></Sidebar>
       <main className="ml-32 flex h-full">
         <FriendList
