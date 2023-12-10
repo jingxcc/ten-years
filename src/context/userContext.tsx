@@ -62,7 +62,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const route = useRouter();
   const pathname = usePathname();
 
-  console.log("UserProvider");
+  // console.log("UserProvider");
 
   // firebase
   useEffect(() => {

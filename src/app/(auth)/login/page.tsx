@@ -27,8 +27,6 @@ export default function LoginPage() {
     email: string,
     password: string,
   ): Promise<void> => {
-    console.log("handleLogin: ", email, password);
-
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -36,7 +34,6 @@ export default function LoginPage() {
         password,
       );
       const user = userCredential.user;
-      console.log(user);
 
       toast.success("Login success", { position: "top-center" });
       route.push("/chat");
@@ -53,7 +50,7 @@ export default function LoginPage() {
       } else if (error instanceof Error) {
         console.error(`Log in Error: ${error.message}`);
       } else {
-        console.log(`Log in Error: ${error}`);
+        console.error(`Log in Error: ${error}`);
       }
     }
   };

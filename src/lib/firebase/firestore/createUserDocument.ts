@@ -10,7 +10,6 @@ const createUserDocument = async (user: UserData | null): Promise<boolean> => {
 
   try {
     await setDoc(doc(firestore, "users", user.uid), user);
-    console.log("User document created");
 
     return true;
   } catch (error) {

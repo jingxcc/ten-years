@@ -39,7 +39,7 @@ export default function ImageUploader({
   const handleImgUpload = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      console.log("--> Upload imgFile start:", file);
+      // console.log("--> Upload imgFile start:", file);
       uploadImage(file);
     }
     function uploadImage(imgFile: File) {
@@ -66,16 +66,16 @@ export default function ImageUploader({
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
           // setStorageUploadPercent(progress);
-          console.log(`Image upload is ${progress} % done`);
+          // console.log(`Image upload is ${progress} % done`);
 
-          switch (snapshot.state) {
-            case "paused":
-              console.log("upload is paused");
-              break;
-            case "running":
-              console.log("upload is running");
-              break;
-          }
+          // switch (snapshot.state) {
+          //   case "paused":
+          //     console.log("upload is paused");
+          //     break;
+          //   case "running":
+          //     console.log("upload is running");
+          //     break;
+          // }
         },
         (error) => {
           if (error instanceof StorageError) {
@@ -87,9 +87,6 @@ export default function ImageUploader({
         async () => {
           try {
             const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
-
-            console.log("Image uploaded success", imgFile);
-            console.log("image url", downloadUrl);
 
             onImageUpload(downloadUrl);
 

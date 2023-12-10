@@ -83,8 +83,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
       };
       setFormData(fetchData);
 
-      console.log("fetchFormData", fetchData);
-
       let dataToUpdate: ImageUrlsObj[] = [];
       fetchData.imageUrls.forEach((data) => {
         let obj = { id: crypto.randomUUID(), url: data };
@@ -120,7 +118,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
       ...(formData[name as keyof ProfileFormData] || []),
     ] as string[];
 
-    console.log("newSelectedItems", newSelectedItems);
     if (newSelectedItems.includes(value)) {
       newSelectedItems = newSelectedItems.filter((item) => item !== value);
     } else {
@@ -167,8 +164,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
       url: urlAdded,
     });
     setImgUrlsObj(dataToUpdate);
-
-    console.log("dataToUpdate upload", dataToUpdate);
   };
 
   // ImageUploader
@@ -178,10 +173,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
     setFormData({ ...formData, imageUrls: arrayToUpdate });
 
     setImgUrlsObj(leftUrlsObj);
-    console.log("leftUrlsObj delete", leftUrlsObj);
   };
 
-  console.log("formData", formData);
   // console.log("imgUrlsObj", imgUrlsObj);
 
   return (

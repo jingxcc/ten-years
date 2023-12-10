@@ -14,7 +14,6 @@ const createPotentialMatchDoc = async (
 
   try {
     await setDoc(doc(firestore, "potentialMatches", user.uid), matchData);
-    console.log("Potential matches document created");
 
     return true;
   } catch (error) {

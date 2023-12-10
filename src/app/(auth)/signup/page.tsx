@@ -35,8 +35,6 @@ export default function SignUpPage() {
     email: string,
     password: string,
   ): Promise<void> => {
-    console.log("handleSignUp: ", email, password);
-
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -44,7 +42,6 @@ export default function SignUpPage() {
         password,
       );
 
-      console.log("Sign up user", userCredential.user);
       const user = {
         uid: userCredential.user.uid,
         email: userCredential.user.email,
@@ -69,7 +66,7 @@ export default function SignUpPage() {
       } else if (error instanceof Error) {
         console.error(`Sign-up Error: ${error.message}`);
       } else {
-        console.log(`Sign-up Error: ${error}`);
+        console.error(`Sign-up Error: ${error}`);
       }
     }
   };

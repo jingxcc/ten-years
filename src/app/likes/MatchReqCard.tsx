@@ -27,7 +27,6 @@ const MatchReqCard: React.FC<MatchReqCardProps> = ({
   onReject,
 }) => {
   const [ImgIndx, setImgIndx] = useState<number>(0);
-  console.log("fromUser", fromUser);
 
   const handlePrevImg = () => {
     if (fromUser["imageUrls"].length > 1 && ImgIndx > 0)

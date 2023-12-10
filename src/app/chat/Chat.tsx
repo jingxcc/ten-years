@@ -55,7 +55,6 @@ const Chat: React.FC<Props> = ({
         toUserId: currentRecipientUId,
         timestamp: null,
       };
-      console.log();
 
       //   onNewMessage(newMessageObj);
       setNewMessage("");

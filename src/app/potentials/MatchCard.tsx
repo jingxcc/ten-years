@@ -23,7 +23,6 @@ const MatchCard: React.FC<MatchCardProps> = ({
   // likedUser,
   onLike,
 }) => {
-  console.log("potentialUser", potentialUser);
   const [ImgIndx, setImgIndx] = useState<number>(0);
   // console.log("likedUser", likedUser);
 

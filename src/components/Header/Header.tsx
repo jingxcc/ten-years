@@ -17,8 +17,6 @@ export default function Header({ user, showNav = true }: HeaderProps) {
   const route = useRouter();
   // lib
   const handleSignOut = async () => {
-    console.log("sign out");
-
     try {
       await signOut(auth);
       toast.success("Logout success", { position: "top-center" });
