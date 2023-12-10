@@ -64,8 +64,20 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
       const fetchUserDocResult = await fetchUserDoc(user);
 
       if (!fetchUserDocResult) return false;
+      const fetchUpdateFormData = fetchUserDocResult.data;
+      if (!fetchUserDocResult) return false;
       const fetchData = {
-        ...fetchUserDocResult.data,
+        nickname: fetchUpdateFormData?.nickname ?? "",
+        gender: fetchUpdateFormData?.gender ?? genderOptions[0]["value"],
+        relationshipStatus:
+          fetchUpdateFormData?.relationshipStatus ??
+          relationshipStatusOptions[0]["value"],
+        matchGender:
+          fetchUpdateFormData?.gender ?? matchGenderOptions[0]["value"],
+        expectedRelationships: fetchUpdateFormData?.expectedRelationships ?? [],
+        interests: fetchUpdateFormData?.interests ?? [],
+        imageUrls: fetchUpdateFormData?.imageUrls ?? [],
+
         aboutMe: fetchUserDocResult.data?.aboutMe ?? "",
       };
       setFormData(fetchData);
@@ -168,7 +180,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
     console.log("leftUrlsObj delete", leftUrlsObj);
   };
 
-  // console.log("formData.imageUrls", formData.imageUrls);
+  console.log("formData", formData.imageUrls);
   // console.log("imgUrlsObj", imgUrlsObj);
 
   return (

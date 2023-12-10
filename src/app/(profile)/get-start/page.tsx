@@ -1,8 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useUser } from "../../../context/userContext";
-import { useEffect } from "react";
 import GetStartForm from "./GetStartForm";
 
 export default function GetStartPage() {
@@ -11,7 +9,7 @@ export default function GetStartPage() {
   // console.log("Loading", isUserLoading);
   console.log("user", user);
 
-  if (isUserLoading) {
+  if (!user || isUserLoading) {
     return <div>Loading...</div>;
   }
 
