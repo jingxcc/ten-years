@@ -58,7 +58,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
           fetchUpdateFormData?.relationshipStatus ??
           relationshipStatusOptions[0]["value"],
         matchGender:
-          fetchUpdateFormData?.gender ?? matchGenderOptions[0]["value"],
+          fetchUpdateFormData?.matchGender ?? matchGenderOptions[0]["value"],
         expectedRelationships: fetchUpdateFormData?.expectedRelationships ?? [],
         interests: fetchUpdateFormData?.interests ?? [],
         imageUrls: fetchUpdateFormData?.imageUrls ?? [],
