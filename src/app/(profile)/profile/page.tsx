@@ -9,7 +9,6 @@ export default function ProfilePage() {
   const { user, isUserLoading } = useUser();
 
   // console.log("Loading", isUserLoading);
-  console.log("user", user);
 
   if (!user || isUserLoading) {
     return (

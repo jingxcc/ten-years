@@ -108,8 +108,6 @@ export default function PotentialMatchesPage() {
         }));
       }
 
-      console.log("matchDocResult", matchDocResult);
-
       const lastUpdatedOn: string = matchDocResult["lastUpdatedOn"]
         ? matchDocResult["lastUpdatedOn"].toDate().toLocaleDateString()
         : "";
@@ -125,13 +123,10 @@ export default function PotentialMatchesPage() {
           return false;
         }
         const currentUserData = currentUserDoc["data"];
-        console.log("currentUserData", currentUserData);
 
         const currentFriendDocIds = await fetchAllFriendDocIds(user);
-        console.log("currentFriendDocIds", currentFriendDocIds);
 
         const matchReqDocResult = await fetchMatchRequestData(user);
-        console.log("matchReqDocResult", matchReqDocResult);
 
         // not match request
         let matchReqData: string[] = [];
@@ -154,19 +149,11 @@ export default function PotentialMatchesPage() {
           aboutMe: currentUserData["aboutMe"] ?? "",
         };
 
-        console.log("currentMatchUser", currentMatchUser);
-
         const usersRef = collection(firestore, "users");
         // tmp: all genders
         const AllGenderOptionIdx = 2;
         // const genderOptionValues = Object.values(genderOptions);
         let q;
-
-        console.log("condtion", [
-          ...currentMatchUser.friends,
-          ...matchReqData,
-          user.uid,
-        ]);
 
         if (
           currentMatchUser.matchGender ===
@@ -181,10 +168,7 @@ export default function PotentialMatchesPage() {
               user.uid,
             ]),
           );
-          console.log(
-            "gender pref",
-            matchGenderOptions[AllGenderOptionIdx]["value"],
-          );
+
           // tmp: remove some condtions
         } else {
           q = query(
@@ -197,7 +181,6 @@ export default function PotentialMatchesPage() {
             ]),
             where("gender", "==", currentMatchUser.matchGender),
           );
-          console.log("gender pref", currentMatchUser.matchGender);
         }
 
         // console.log(
@@ -210,7 +193,6 @@ export default function PotentialMatchesPage() {
         const querySnapShotData = querySnapShot.docs.map((doc) => ({
           ...(doc.data() as UpdateGetStartFormData),
         }));
-        console.log("querySnapShotData", querySnapShotData);
 
         // const allPotentialUsers: MatchUser[] = querySnapShotData
         //   .map((data) => ({
@@ -220,7 +202,6 @@ export default function PotentialMatchesPage() {
         //   .filter((user) => user.uid != currentMatchUser.uid);
 
         const selectedUsers = shufflePotentialUsers(querySnapShotData);
-        console.log("selectedUsers", selectedUsers);
 
         selectedPotentialUsers = selectedUsers.map((data, index) => ({
           // nickname: data["nickname"],
@@ -260,7 +241,6 @@ export default function PotentialMatchesPage() {
   }, [user]);
 
   const handleLike = async (matchUserId: string) => {
-    console.log(matchUserId);
     if (!user) return false;
     const matchRef = doc(firestore, "potentialMatches", user.uid);
     // Update the user's 'liked' status in Firebase
@@ -289,11 +269,9 @@ export default function PotentialMatchesPage() {
       icon: "✨",
     });
     // setLikedUser(matchUserId);
-    console.log("Liked user", matchUserId);
   };
 
   // console.log("Loading", isUserLoading);
-  console.log("user", user);
 
   if (!user || isUserLoading) {
     return (

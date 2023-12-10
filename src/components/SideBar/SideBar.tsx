@@ -26,8 +26,6 @@ const Sidebar: React.FC<SideBarProps> = ({ children }) => {
   const route = useRouter();
   // lib
   const handleSignOut = async () => {
-    console.log("sign out");
-
     try {
       await signOut(auth);
       toast.success("Logout success", { position: "top-center" });
@@ -69,6 +67,8 @@ const Sidebar: React.FC<SideBarProps> = ({ children }) => {
           <button className="btn-icon" onClick={() => route.push("/likes")}>
             <EnvelopeIcon className="h-8 w-8" title="Likes You"></EnvelopeIcon>
           </button>
+        </div>
+        <div>
           <button
             className="btn-icon"
             title="Profile"
@@ -76,10 +76,10 @@ const Sidebar: React.FC<SideBarProps> = ({ children }) => {
           >
             <UserCircleIcon className="h-8 w-8"></UserCircleIcon>
           </button>
+          <button className="btn-icon" title="Log out" onClick={handleSignOut}>
+            <ArrowLeftOnRectangleIcon className="h-8 w-8"></ArrowLeftOnRectangleIcon>
+          </button>
         </div>
-        <button className="btn-icon" title="Log out" onClick={handleSignOut}>
-          <ArrowLeftOnRectangleIcon className="h-8 w-8"></ArrowLeftOnRectangleIcon>
-        </button>
       </div>
       {children}
     </div>

@@ -8,7 +8,6 @@ export default function GetStartPage() {
   const { user, isUserLoading } = useUser();
 
   // console.log("Loading", isUserLoading);
-  console.log("user", user);
 
   if (!user || isUserLoading) {
     return (

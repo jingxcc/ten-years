@@ -25,6 +25,7 @@ import { ChatUser } from "@/types/ChatPage";
 import { UpdateGetStartFormData } from "@/types/GetStartForm";
 import MatchReqCard from "./MatchReqCard";
 import { createFriendDoc } from "@/lib/firebase/firestore/createFriendDoc";
+import toast from "react-hot-toast";
 
 interface MatchRequestCardData extends MatchRequestData {
   id: string;
@@ -62,8 +63,6 @@ export default function LikesPage() {
             ...(doc.data() as MatchRequestData),
           }),
         );
-
-        console.log("newRequests", newRequests);
 
         setMatchReqeusts(newRequests);
 
@@ -127,6 +126,13 @@ export default function LikesPage() {
       status: "accepted",
     });
 
+    toast.success("Likes Success !", {
+      style: {
+        backgroundColor: "#fbcfe8",
+      },
+      icon: "✨",
+    });
+
     // create matches doc
     // tmp: 修正資料結構
     await createFriendDoc(user.uid, {
@@ -142,8 +148,6 @@ export default function LikesPage() {
 
   const handleReject = async (requestId: string, fromUId: string) => {
     if (!user) return false;
-
-    console.log("requestId", requestId);
 
     const reqRef = doc(firestore, "matchRequests", requestId);
 

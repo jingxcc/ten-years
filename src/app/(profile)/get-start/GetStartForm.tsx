@@ -65,8 +65,6 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
       };
       setFormData(fetchData);
 
-      console.log("fetchFormData", fetchData);
-
       let dataToUpdate: ImageUrlsObj[] = [];
       fetchData.imageUrls.forEach((data) => {
         let obj = { id: crypto.randomUUID(), url: data };
@@ -103,7 +101,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
       // setFormData({ ...formData, profilePictures: [...event.target.files] });
 
       const file = event.target.files[0];
-      console.log("--> Upload imgFile start:", file);
+      // console.log("--> Upload imgFile start:", file);
       uploadImage(file);
       // console.log(...event.target.files);
     }
@@ -129,16 +127,16 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
           // setStorageUploadPercent(progress);
-          console.log(`Image upload is ${progress} % done`);
+          // console.log(`Image upload is ${progress} % done`);
 
-          switch (snapshot.state) {
-            case "paused":
-              console.log("upload is paused");
-              break;
-            case "running":
-              console.log("upload is running");
-              break;
-          }
+          // switch (snapshot.state) {
+          //   case "paused":
+          //     console.log("upload is paused");
+          //     break;
+          //   case "running":
+          //     console.log("upload is running");
+          //     break;
+          // }
         },
         (error) => {
           if (error instanceof StorageError) {
@@ -149,9 +147,6 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
         },
         async () => {
           const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
-
-          console.log("Image uploaded success", imgFile);
-          console.log("image url", downloadUrl);
 
           setFormData({
             ...formData,
@@ -201,8 +196,6 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
       url: urlAdded,
     });
     setImgUrlsObj(dataToUpdate);
-
-    console.log("dataToUpdate upload", dataToUpdate);
   };
 
   // ImageUploader
@@ -212,10 +205,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
     setFormData({ ...formData, imageUrls: arrayToUpdate });
 
     setImgUrlsObj(leftUrlsObj);
-    console.log("leftUrlsObj delete", leftUrlsObj);
   };
-
-  console.log("formData.imageUrls", formData.imageUrls);
 
   return (
     <div className="mx-auto mt-8 max-w-4xl rounded-xl border bg-white bg-opacity-95 p-10">
