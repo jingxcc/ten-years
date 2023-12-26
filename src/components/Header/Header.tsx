@@ -39,7 +39,7 @@ export default function Header({ user, showNav = true }: HeaderProps) {
       <Link href={"/"}>
         <div className="flex items-center gap-1 py-1 pr-2">
           <Image src="/logo_blue.svg" width={48} height={48} alt="logo" />
-          <h1 className="text-3xl font-semibold text-sky-300">Ten Years</h1>
+          <h1 className="text-sky-250 text-3xl font-semibold">Ten Years</h1>
         </div>
       </Link>
 

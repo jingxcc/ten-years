@@ -45,9 +45,7 @@ const Sidebar: React.FC<SideBarProps> = ({ children }) => {
   };
   return (
     <div className="w-18 fixed flex h-full flex-col items-center  border-r border-neutral-200 bg-sky-200 p-4">
-      <Link href={"/"} className="mb-6">
-        <Image src={"logo.svg"} width={48} height={48} alt="logo"></Image>
-      </Link>
+      <Image src={"logo.svg"} width={48} height={48} alt="logo"></Image>
       <div className="flex flex-1 flex-col items-center justify-between">
         <div>
           <button

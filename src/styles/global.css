@@ -5,6 +5,7 @@
 :root {
   @apply text-neutral-700;
   --color-sky-300: "#7dd3fc";
+  --color-sky-250: "#A9E5FF";
   --color-sky-100: "#e0f2fe";
   --color-neutral-700: "#404040";
   --color-neutral-500: "#737373";
