@@ -32,7 +32,7 @@ const AuthBaseForm: React.FC<AuthFormProps> = ({
     setIsLoading(false);
   };
   return (
-    <div className="mx-auto mt-10 max-w-md rounded-xl border bg-white bg-opacity-95 p-10">
+    <div className="mx-auto mt-10 max-w-md rounded-xl border bg-white bg-opacity-95 px-5 py-10 md:p-10">
       <form onSubmit={handleSubmit} className="flex flex-col">
         <h2 className="mb-4 text-center text-lg font-bold ">{formTitle}</h2>
         <div className="mb-4">

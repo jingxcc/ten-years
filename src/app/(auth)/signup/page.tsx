@@ -65,13 +65,15 @@ export default function SignUpPage() {
 
   return (
     <div className={`${slideIn ? "animate-slide-in" : ""} `}>
-      <AuthBaseForm
-        formType="SignUp"
-        formTitle="Sign Up"
-        btnContent="Sign Up"
-        errorMsg={errorMsg}
-        onFormSubmit={handleSignUp}
-      ></AuthBaseForm>
+      <main className="px-3">
+        <AuthBaseForm
+          formType="SignUp"
+          formTitle="Sign Up"
+          btnContent="Sign Up"
+          errorMsg={errorMsg}
+          onFormSubmit={handleSignUp}
+        ></AuthBaseForm>
+      </main>
     </div>
   );
 }

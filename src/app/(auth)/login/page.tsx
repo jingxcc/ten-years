@@ -49,14 +49,16 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-sky-200">
       <Header showNav={false}></Header>
-      <AuthBaseForm
-        formType="Login"
-        defaultValues={{ email: "test01@test.com", password: "000000" }}
-        formTitle="Log In"
-        btnContent="Log In"
-        errorMsg={errorMsg}
-        onFormSubmit={handleLogin}
-      ></AuthBaseForm>
+      <main className="px-3">
+        <AuthBaseForm
+          formType="Login"
+          defaultValues={{ email: "test01@test.com", password: "000000" }}
+          formTitle="Log In"
+          btnContent="Log In"
+          errorMsg={errorMsg}
+          onFormSubmit={handleLogin}
+        ></AuthBaseForm>
+      </main>
     </div>
   );
 }
