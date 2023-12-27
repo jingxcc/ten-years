@@ -43,24 +43,26 @@ const MatchReqCard: React.FC<MatchReqCardProps> = ({
 
   return (
     <div className="relative max-w-sm overflow-hidden rounded-2xl pb-16 shadow-lg">
-      {/* {fromUser.imageUrls.map((url) => (
-        <Image
-          className="w-full"
-          src={url}
-          alt={fromUser.nickname}
-          width={384}
-          height={384}
-        />
-      ))} */}
-
       <div className="relative h-[280px]  overflow-hidden">
-        <Image
-          src={fromUser["imageUrls"][ImgIndx] ?? "/defaultAvatar.jpg"}
-          alt={fromUser.nickname}
-          layout="fill"
-          objectFit="cover"
-          className=" border-sky-300 bg-sky-100 text-sky-300"
-        />
+        {fromUser["imageUrls"][ImgIndx] ? (
+          <Image
+            src={fromUser["imageUrls"][ImgIndx]}
+            alt={fromUser.nickname}
+            sizes="33vw"
+            fill
+            className=" border-sky-300 bg-sky-100 object-cover text-sky-300"
+          />
+        ) : (
+          <Image
+            src={"/defaultAvatar.jpg"}
+            alt={fromUser.nickname}
+            priority
+            sizes="33vw"
+            fill
+            className=" border-sky-300 bg-sky-100 object-cover text-sky-300"
+          />
+        )}
+
         <div className="absolute grid h-full w-full grid-cols-2">
           <div className="absolute grid h-full w-full grid-cols-2">
             <div

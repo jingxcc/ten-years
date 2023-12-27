@@ -41,24 +41,25 @@ const MatchCard: React.FC<MatchCardProps> = ({
 
   return (
     <div className="relative max-w-sm overflow-hidden rounded-2xl pb-16 shadow-lg">
-      {/* {potentialUser.imageUrls.map((url) => (
-        <Image
-          className="w-full"
-          src={url}
-          alt={potentialUser.nickname}
-          width={384}
-          height={384}
-        />
-      ))} */}
-
       <div className="relative h-[280px]  overflow-hidden">
-        <Image
-          src={potentialUser["imageUrls"][ImgIndx] ?? "/defaultAvatar.jpg"}
-          alt={potentialUser.nickname}
-          layout="fill"
-          objectFit="cover"
-          className=" border-sky-300 bg-sky-100 text-sky-300"
-        />
+        {potentialUser["imageUrls"][ImgIndx] ? (
+          <Image
+            src={potentialUser["imageUrls"][ImgIndx]}
+            alt={potentialUser.nickname}
+            sizes="33vw"
+            fill
+            className=" border-sky-300 bg-sky-100 object-cover text-sky-300"
+          />
+        ) : (
+          <Image
+            src={"/defaultAvatar.jpg"}
+            alt={potentialUser.nickname}
+            priority
+            sizes="33vw"
+            fill
+            className=" border-sky-300 bg-sky-100 object-cover text-sky-300"
+          />
+        )}
         <div className="absolute grid h-full w-full grid-cols-2">
           <div
             className={`${ImgIndx !== 0 && "cursor-pointer"}`}

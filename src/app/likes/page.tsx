@@ -79,7 +79,7 @@ export default function LikesPage() {
               return { ...userDoc.data() } as UserDetails;
             });
             setFromUserData(fromUserDocs);
-            console.log("fromUserDocs", fromUserDocs);
+            // console.log("fromUserDocs", fromUserDocs);
           })
           .catch((error) => {
             console.error("Error fetching match request data:", error);
@@ -168,7 +168,7 @@ export default function LikesPage() {
     <div className="relative">
       <Sidebar></Sidebar>
       <main className="ml-20">
-        <div className="mw-[900px] container mx-auto px-2">
+        <div className="container mx-auto px-2">
           <div className="mb-4 flex items-center py-8">
             <h2 className=" mr-4 text-2xl font-bold">{"People Likes You"}</h2>
           </div>

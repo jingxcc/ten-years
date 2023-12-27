@@ -24,6 +24,7 @@ export default function Home() {
             width={360}
             height={360}
             alt="match"
+            priority
             className="animate-bounce-once md:hidden"
           ></Image>
           <Link href="/signup">
@@ -37,6 +38,7 @@ export default function Home() {
           width={360}
           height={360}
           alt="match"
+          priority
           className="hidden animate-bounce-once md:block"
         ></Image>
       </main>

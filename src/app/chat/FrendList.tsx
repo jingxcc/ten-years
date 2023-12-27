@@ -17,7 +17,7 @@ const FriendList: React.FC<Props> = ({
   // console.log("currentUser", currentUser);
 
   return (
-    <div className="bodrder-gray-700 container h-full max-w-xs border-r ">
+    <div className="bodrder-gray-700 h-full max-w-xs border-r ">
       <h2 className="px-4 py-4 text-lg font-bold ">
         {currentUser?.nickname ?? currentUser?.email}
       </h2>
@@ -36,9 +36,10 @@ const FriendList: React.FC<Props> = ({
                     : "/defaultAvatar.jpg"
                 }
                 alt={`${friend.nickname}'s avatar`}
-                layout="fill"
-                objectFit="cover"
-                className=" border-sky-300 bg-sky-100 text-sky-300"
+                priority
+                width={40}
+                height={40}
+                className=" h-full w-full border-sky-300 bg-sky-100 object-cover object-center text-sky-300"
               />
             </div>
             <div className="ml-3">
