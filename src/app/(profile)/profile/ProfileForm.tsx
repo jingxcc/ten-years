@@ -291,10 +291,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
           <label className="mb-2 font-medium text-gray-700">
             Expected Relationship
           </label>
-          <div className="mt-2 flex flex-wrap items-center">
+          <div className="grid grid-cols-2">
             {expectedRelationshipOptions.map((item) => (
               <div key={item.id} className="mb-2 mr-4">
-                <label className="mb-2 flex items-center rounded-lg border border-gray-300 px-3 py-2">
+                <label className="mb-2 flex items-center rounded-lg border border-gray-300 p-3">
                   <input
                     type="checkbox"
                     name="expectedRelationships"
@@ -315,7 +315,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
         {/* multi-checkbox */}
         <div>
           <label className="mb-2 font-medium text-gray-700">Interests</label>
-          <div className="flex flex-wrap items-center ">
+          <div className="flex flex-wrap items-center justify-center">
             {interestOptions.map((item) => (
               <div key={item.id} className="mb-2 mr-4">
                 <label className="mb-2 flex items-center rounded-lg border border-gray-300 px-3 py-2">

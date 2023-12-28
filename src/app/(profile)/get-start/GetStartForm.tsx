@@ -208,7 +208,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
   };
 
   return (
-    <div className="mx-auto mt-8 max-w-4xl rounded-xl border bg-white bg-opacity-95 p-10">
+    <div className="mx-auto mt-8 max-w-4xl rounded-xl border bg-white bg-opacity-95 p-5 md:p-10">
       <form onSubmit={handleSubmit} className="mx-auto max-w-xl space-y-4 ">
         <div className="mb-4 flex items-center justify-center py-3">
           <h2 className=" mr-4 text-2xl font-bold">{"Getting Start !"}</h2>
@@ -277,7 +277,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
           <label className="mb-2 font-medium text-gray-700">
             Relationship Status
           </label>
-          <div className="mb-2 grid grid-cols-2 ">
+          <div className=" grid grid-cols-2 ">
             {relationshipStatusOptions.map((item) => (
               <div key={item.id} className="mb-2 mr-4">
                 <label className=" flex items-center rounded-lg border border-gray-300 p-3">
@@ -301,10 +301,10 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
           <label className="mb-2 font-medium text-gray-700">
             Expected Relationship
           </label>
-          <div className="mt-2 flex flex-wrap items-center">
+          <div className="grid grid-cols-2">
             {expectedRelationshipOptions.map((item) => (
               <div key={item.id} className="mb-2 mr-4">
-                <label className="mb-2 flex items-center rounded-lg border border-gray-300 px-3 py-2">
+                <label className="mb-2 flex items-center rounded-lg border border-gray-300 p-3">
                   <input
                     type="checkbox"
                     name="expectedRelationships"
@@ -325,7 +325,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
         {/* multi-checkbox */}
         <div>
           <label className="mb-2 font-medium text-gray-700">Interests</label>
-          <div className="flex flex-wrap items-center ">
+          <div className="flex flex-wrap items-center justify-center">
             {interestOptions.map((item) => (
               <div key={item.id} className="mb-2 mr-4">
                 <label className="mb-2 flex items-center rounded-lg border border-gray-300 px-3 py-2">

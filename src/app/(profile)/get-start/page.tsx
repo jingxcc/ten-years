@@ -20,7 +20,9 @@ export default function GetStartPage() {
   return (
     <div className="bg-sky-200 pb-8">
       <Header user={user}></Header>
-      <GetStartForm user={user}></GetStartForm>
+      <main className="px-3 md:px-6">
+        <GetStartForm user={user}></GetStartForm>
+      </main>
     </div>
   );
 }

@@ -133,50 +133,47 @@ export default function ImageUploader({
   };
 
   return (
-    <div className="grid grid-cols-4 gap-2">
-      {imgUrlsObj.length > 0 &&
-        imgUrlsObj.map((imgUrl) => (
-          <div key={imgUrl.id} className="relative h-32 w-32">
-            <Image
-              src={imgUrl.url}
-              alt="Uploaded picture"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-md border-sky-300 bg-sky-100 text-sky-300"
-            />
-
-            <button
-              className={
-                "absolute right-[-8px] top-[-8px] flex h-8 w-8 items-center justify-center rounded-full bg-sky-100  text-sky-300 shadow-lg hover:bg-neutral-100  hover:text-neutral-500"
-              }
-              onClick={(e) => handleImgDelete(e, imgUrl.id)}
-            >
-              <XMarkIcon className="h-6 w-6 " />
-            </button>
-          </div>
+    <div className="flex justify-center">
+      <div className="xs:grid-cols-3 xs:gap-x-4 xs:gap-y-2 grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-4">
+        {imgUrlsObj.length > 0 &&
+          imgUrlsObj.map((imgUrl) => (
+            <div key={imgUrl.id} className="relative mb-2 h-32 w-32">
+              <Image
+                src={imgUrl.url}
+                alt="Uploaded picture"
+                width={128}
+                height={128}
+                className="h-full w-full rounded-md border-sky-300 bg-sky-100 object-cover text-sky-300"
+              />
+              <button
+                className={
+                  "absolute right-[-8px] top-[-8px] flex h-8 w-8 items-center justify-center rounded-full bg-sky-100  text-sky-300 shadow-lg hover:bg-neutral-100  hover:text-neutral-500"
+                }
+                onClick={(e) => handleImgDelete(e, imgUrl.id)}
+              >
+                <XMarkIcon className="h-6 w-6 " />
+              </button>
+            </div>
+          ))}
+        {Object.keys(uploadingImgs).map((id) => (
+          <label
+            key={id}
+            className="flex h-32 w-32 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-sky-300 bg-gray-100 text-sky-300 "
+          >
+            <input type="file" className="hidden" disabled />
+            <span>Uploading...</span>
+          </label>
         ))}
-
-      {Object.keys(uploadingImgs).map((id) => (
-        <label
-          key={id}
-          className="mb-2 flex h-32 w-32 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-sky-300 bg-gray-100 text-sky-300 "
-        >
-          <input type="file" className="hidden" disabled />
-
-          <span>Uploading...</span>
-        </label>
-      ))}
-
-      {Array.from({ length: remainingSlots }).map((_, index) => (
-        <label
-          key={index}
-          className="mb-2 flex h-32 w-32 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-sky-300 hover:border-sky-300 hover:bg-sky-100 hover:text-sky-500"
-        >
-          <input type="file" className="hidden" onChange={handleImgUpload} />
-
-          <PlusIcon className="h-6 w-6 " />
-        </label>
-      ))}
+        {Array.from({ length: remainingSlots }).map((_, index) => (
+          <label
+            key={index}
+            className="flex h-32 w-32 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-sky-300 hover:border-sky-300 hover:bg-sky-100 hover:text-sky-500"
+          >
+            <input type="file" className="hidden" onChange={handleImgUpload} />
+            <PlusIcon className="h-6 w-6 " />
+          </label>
+        ))}
+      </div>
     </div>
   );
 }
