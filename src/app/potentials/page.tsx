@@ -38,7 +38,7 @@ import { createMatchRequests } from "@/lib/firebase/firestore/createMatchRequest
 import toast from "react-hot-toast";
 import { UserData } from "@/types/UserData";
 
-// lib
+// extract/lib
 const fetchMatchRequestData = async (user: UserData) => {
   const collectionRef = collection(firestore, "matchRequests");
   // tmp: consider if the get the same suggestion today!
@@ -283,9 +283,9 @@ export default function PotentialMatchesPage() {
 
   return (
     <div className="relative">
-      <Sidebar></Sidebar>
-      <main className="ml-20">
-        <div className="container mx-auto px-2">
+      <Sidebar user={user}></Sidebar>
+      <main className="pb-20 xs:ml-20 xs:pb-0">
+        <div className="container mx-auto px-4">
           <div className="mb-4 flex items-center py-8">
             <h2 className=" mr-4 text-2xl font-bold">
               {"Today's Suggestions"}

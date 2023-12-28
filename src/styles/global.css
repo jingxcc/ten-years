@@ -13,7 +13,7 @@
   --color-rose-100: "#fbcfe8";
 }
 
-@layer components {
+@layer base {
   input {
     @apply w-full rounded border border-neutral-300 px-3 py-2 placeholder-neutral-400 shadow-sm  focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500;
   }
@@ -21,7 +21,9 @@
   label {
     @apply mb-2 block text-sm;
   }
+}
 
+@layer components {
   .btn {
     @apply rounded bg-sky-300 px-4 py-2 font-bold text-white focus:outline-none focus:ring-4 focus:ring-blue-100 enabled:hover:bg-sky-500 disabled:opacity-75;
   }
@@ -31,7 +33,7 @@
   }
 
   .btn-icon {
-    @apply flex max-h-[48px] max-w-[60px] items-center rounded bg-sky-200 p-2 font-bold text-white hover:bg-sky-300 focus:bg-sky-300 enabled:hover:bg-sky-300 disabled:opacity-75;
+    @apply flex max-h-[60px] max-w-[60px] items-center rounded bg-sky-200 p-2 font-bold text-white hover:bg-sky-300 focus:bg-sky-300 enabled:hover:bg-sky-300 disabled:opacity-75;
   }
 }
 

@@ -166,9 +166,9 @@ export default function LikesPage() {
 
   return (
     <div className="relative">
-      <Sidebar></Sidebar>
-      <main className="ml-20">
-        <div className="container mx-auto px-2">
+      <Sidebar user={user}></Sidebar>
+      <main className="pb-20 xs:ml-20 xs:pb-0">
+        <div className="container mx-auto px-4">
           <div className="mb-4 flex items-center py-8">
             <h2 className=" mr-4 text-2xl font-bold">{"People Likes You"}</h2>
           </div>
