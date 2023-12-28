@@ -14,7 +14,7 @@ export default function Tooltip({ text, children }: TooltipProps) {
     setIsHover(true);
     timeoutIdRef.current = setTimeout(() => {
       setIsShow(true);
-    }, 1000);
+    }, 500);
   };
 
   const handleMouseLeave = () => {

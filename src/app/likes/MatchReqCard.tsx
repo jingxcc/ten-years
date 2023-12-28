@@ -48,7 +48,7 @@ const MatchReqCard: React.FC<MatchReqCardProps> = ({
           <Image
             src={fromUser["imageUrls"][ImgIndx]}
             alt={fromUser.nickname}
-            sizes="33vw"
+            sizes="50vw"
             fill
             className=" border-sky-300 bg-sky-100 object-cover text-sky-300"
           />
@@ -57,7 +57,7 @@ const MatchReqCard: React.FC<MatchReqCardProps> = ({
             src={"/defaultAvatar.jpg"}
             alt={fromUser.nickname}
             priority
-            sizes="33vw"
+            sizes="50vw"
             fill
             className=" border-sky-300 bg-sky-100 object-cover text-sky-300"
           />

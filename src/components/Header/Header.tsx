@@ -15,8 +15,8 @@ interface HeaderProps {
 
 export default function Header({ user, showNav = true }: HeaderProps) {
   const route = useRouter();
-  // lib
-  const handleSignOut = async () => {
+  // extract/custom hook
+  const handleLogOut = async () => {
     try {
       await signOut(auth);
       toast.success("Logout success", { position: "top-center" });
@@ -49,7 +49,7 @@ export default function Header({ user, showNav = true }: HeaderProps) {
             <button
               className="block p-2"
               title="Log out"
-              onClick={handleSignOut}
+              onClick={handleLogOut}
             >
               Log out
             </button>
