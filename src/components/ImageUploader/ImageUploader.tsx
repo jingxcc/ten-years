@@ -134,15 +134,15 @@ export default function ImageUploader({
 
   return (
     <div className="flex justify-center">
-      <div className="xs:grid-cols-3 xs:gap-x-4 xs:gap-y-2 grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-x-6 gap-y-2 xs:grid-cols-3 xs:gap-x-4 xs:gap-y-2 sm:grid-cols-4">
         {imgUrlsObj.length > 0 &&
           imgUrlsObj.map((imgUrl) => (
             <div key={imgUrl.id} className="relative mb-2 h-32 w-32">
               <Image
                 src={imgUrl.url}
                 alt="Uploaded picture"
-                width={128}
-                height={128}
+                width={280}
+                height={280}
                 className="h-full w-full rounded-md border-sky-300 bg-sky-100 object-cover text-sky-300"
               />
               <button
