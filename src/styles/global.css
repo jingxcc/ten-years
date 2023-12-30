@@ -35,6 +35,13 @@
   .btn-icon {
     @apply flex max-h-[60px] max-w-[60px] items-center rounded bg-sky-200 p-2 font-bold text-white hover:bg-sky-300 focus:bg-sky-300 enabled:hover:bg-sky-300 disabled:opacity-75;
   }
+
+  .friend-list {
+    @apply h-full w-full border-r border-neutral-200 md:min-w-[240px] md:max-w-[320px];
+  }
+  .chat {
+    @apply relative flex h-full w-full flex-grow flex-col bg-white md:min-w-[420px];
+  }
 }
 
 @layer utilities {

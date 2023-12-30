@@ -70,7 +70,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
   return (
     <>
       {/* except mobile */}
-      <div className="fixed z-[50] hidden h-screen w-[80px] flex-col items-center border-r  border-neutral-200 bg-sky-200 px-2 py-4 xs:flex">
+      <div className="fixed z-30 hidden h-screen w-[80px] flex-col items-center border-r  border-neutral-200 bg-sky-200 px-2 py-4 xs:flex">
         <Image
           src={"logo.svg"}
           width={48}
@@ -134,7 +134,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
         {children}
       </div>
       {/* mobile */}
-      <div className="fixed bottom-0 z-[50] flex h-16 w-screen items-center border-t  border-neutral-200 bg-sky-200 p-2 xs:hidden">
+      <div className="fixed bottom-0 z-30 flex h-16 w-screen items-center border-t  border-neutral-200 bg-sky-200 p-2 xs:hidden">
         <div className="flex flex-grow items-center">
           <div className="flex flex-grow items-center justify-center gap-x-8">
             <button className="btn-icon" onClick={() => route.push("/chat")}>
@@ -165,16 +165,18 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
             </button>
 
             <button
-              className="hover:cursor h-9 w-9 overflow-hidden rounded-full bg-gray-50"
+              className="hover:cursor h-9 w-9 overflow-hidden rounded-full bg-gray-50 "
               onClick={() => route.push("/profile")}
             >
-              <Image
-                src={avatarUrl}
-                alt={`avatar`}
-                width={40}
-                height={40}
-                className=" h-full w-full border-sky-300  bg-sky-100 object-cover text-sky-300"
-              />
+              {avatarUrl && (
+                <Image
+                  src={avatarUrl}
+                  alt={`avatar`}
+                  width={80}
+                  height={80}
+                  className=" h-full w-full border-sky-300  bg-sky-100 object-cover text-sky-300"
+                />
+              )}
             </button>
           </div>
         </div>

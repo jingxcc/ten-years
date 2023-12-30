@@ -1,21 +1,27 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { MessageType } from "@/types/ChatPage";
+import { ChatUser, MessageType } from "@/types/ChatPage";
 import { firestore } from "@/lib/firebase/initialize";
 import { UserData } from "@/types/UserData";
 import Message from "./Message";
+import Image from "next/image";
+import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 
 interface Props {
   user: UserData;
   messages: MessageType[];
-  currentRecipientUId: string;
+  // currentRecipientUId: string;
+  currentRecipient: ChatUser | undefined;
+  onBackToList: () => void;
   //   onNewMessage: (message: Message) => void;
 }
 
 const Chat: React.FC<Props> = ({
   user,
   messages,
-  currentRecipientUId,
+  // currentRecipientUId,
+  currentRecipient,
+  onBackToList,
   //   onNewMessage,
 }) => {
   const [newMessage, setNewMessage] = useState("");
@@ -29,6 +35,8 @@ const Chat: React.FC<Props> = ({
     }
   };
 
+  // console.log("currentRecipient", currentRecipient);
+
   // useEffect(() => {
   //   if (lastMessageRef.current) {
   //     lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
@@ -40,11 +48,11 @@ const Chat: React.FC<Props> = ({
   };
 
   const sendMessage = async () => {
-    if (newMessage.trim() !== "") {
+    if (currentRecipient && newMessage.trim() !== "") {
       const docRef = await addDoc(collection(firestore, "messages"), {
         text: newMessage,
         fromUserId: user.uid,
-        toUserId: currentRecipientUId,
+        toUserId: currentRecipient.uid,
         timestamp: serverTimestamp(),
       });
 
@@ -52,7 +60,7 @@ const Chat: React.FC<Props> = ({
         id: docRef.id,
         text: newMessage,
         fromUserId: user.uid,
-        toUserId: currentRecipientUId,
+        toUserId: currentRecipient.uid,
         timestamp: null,
       };
 
@@ -61,9 +69,42 @@ const Chat: React.FC<Props> = ({
     }
   };
 
+  const handleClickBackToList = () => {
+    onBackToList();
+  };
+
+  if (!currentRecipient) return null;
+
   return (
-    <div className="flex h-full flex-1 flex-col">
-      <ul className="flex-1 overflow-y-auto">
+    <>
+      <div className=" flex max-h-[72px] items-center border-b border-neutral-200 px-4 py-4">
+        <button
+          className="mr-3 items-center p-2 md:hidden"
+          onClick={handleClickBackToList}
+        >
+          <ChevronLeftIcon className="h-5 w-5"></ChevronLeftIcon>
+        </button>
+        <div className="relative mr-3 h-10 w-10 overflow-hidden  rounded-full">
+          <Image
+            src={
+              currentRecipient["imageUrls"] &&
+              currentRecipient["imageUrls"].length !== 0
+                ? currentRecipient["imageUrls"][0]
+                : "/defaultAvatar.jpg"
+            }
+            alt={`${
+              currentRecipient?.nickname ?? currentRecipient?.email
+            }'s avatar`}
+            width={80}
+            height={80}
+            className=" h-full w-full border-sky-300 bg-sky-100 object-cover object-center text-sky-300"
+          />
+        </div>
+        <h2 className=" font-bold">
+          {currentRecipient?.nickname ?? currentRecipient?.email}
+        </h2>
+      </div>
+      <ul className=" overflow-y-auto pb-14">
         {messages.map((message, index) => (
           <Message key={message.id} user={user} message={message}></Message>
           // <li
@@ -78,20 +119,20 @@ const Chat: React.FC<Props> = ({
           // </li>
         ))}
       </ul>
-      <div className="flex p-2">
+      <div className="absolute bottom-0 left-0 flex w-full bg-white p-2">
         <input
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={handleEnterKey}
           placeholder="Type a message"
-          className="flex-1 rounded border border-gray-300 p-2"
+          className=" rounded border border-gray-300 p-2"
         />
         <button onClick={handleSendMessage} className="btn ml-2">
           Send
         </button>
       </div>
-    </div>
+    </>
   );
 };
 

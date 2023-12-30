@@ -18,8 +18,8 @@ const config: Config = {
       },
       animation: {
         "bounce-once": "bounce-once 1s ease-out",
-        // "slide-out": "slide-out 0.5s ease-out forwards",
-        "slide-in": "slide-in 0.5s ease-out forwards;",
+        // "slide-out": "slide-out 0.5s ease-out",
+        "slide-in": "slide-in 0.5s ease-out;",
       },
       colors: {
         "sky-250": "#A9E5FF",

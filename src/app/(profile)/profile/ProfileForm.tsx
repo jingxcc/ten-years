@@ -179,12 +179,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, children }) => {
   // console.log("imgUrlsObj", imgUrlsObj);
 
   return (
-    <div className="mx-auto mb-4 mt-8 max-w-4xl">
+    <div className="mx-auto mb-4 max-w-4xl">
       <form
         onSubmit={handleSave}
         className="mx-auto max-w-xl space-y-4 px-4 pb-8"
       >
-        <div className="mb-4 flex items-center py-3">
+        <div className="mb-4 flex items-center py-8">
           <h2 className=" mr-4 text-2xl font-bold">{"Profile"}</h2>
         </div>
         {/* text */}
