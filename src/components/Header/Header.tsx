@@ -15,8 +15,8 @@ interface HeaderProps {
 
 export default function Header({ user, showNav = true }: HeaderProps) {
   const route = useRouter();
-  // lib
-  const handleSignOut = async () => {
+  // extract/custom hook
+  const handleLogOut = async () => {
     try {
       await signOut(auth);
       toast.success("Logout success", { position: "top-center" });
@@ -35,11 +35,11 @@ export default function Header({ user, showNav = true }: HeaderProps) {
     }
   };
   return (
-    <header className=" flex items-center justify-between border-b border-neutral-100 bg-white bg-opacity-95 px-6">
+    <header className=" flex items-center justify-between border-b border-neutral-100 bg-white bg-opacity-95 px-3 md:px-6">
       <Link href={"/"}>
         <div className="flex items-center gap-1 py-1 pr-2">
           <Image src="/logo_blue.svg" width={48} height={48} alt="logo" />
-          <h1 className="text-3xl font-semibold text-sky-300">Ten Years</h1>
+          <h1 className="text-3xl font-semibold text-sky-250">Ten Years</h1>
         </div>
       </Link>
 
@@ -49,7 +49,7 @@ export default function Header({ user, showNav = true }: HeaderProps) {
             <button
               className="block p-2"
               title="Log out"
-              onClick={handleSignOut}
+              onClick={handleLogOut}
             >
               Log out
             </button>

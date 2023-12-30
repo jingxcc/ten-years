@@ -118,6 +118,7 @@ export default function ChatPage() {
   // const [likedMatch, setlikedMatch] = useState<string>("");
   const [likedMatches, setlikedMatches] = useState<string[]>([]);
   const [messages, setMessages] = useState<MessageType[]>([]);
+  const [showChat, setShowChat] = useState<boolean>(false);
   const latestMessagesRef = useRef<MessageType[]>([]);
 
   useEffect(() => {
@@ -329,6 +330,11 @@ export default function ChatPage() {
 
   const handleClickRecipient = (recipientUId: string) => {
     setCurrentRecipientUId(recipientUId);
+    setShowChat(true);
+  };
+
+  const handleBackToList = () => {
+    setShowChat(false);
   };
 
   // // tmp: useCallback? useMemo?
@@ -344,24 +350,40 @@ export default function ChatPage() {
       </div>
     );
   }
+  console.log("showChat", showChat);
 
   return (
-    <div className="relative h-screen">
-      <Sidebar></Sidebar>
-      <main className="ml-20 flex h-full">
-        <FriendList
-          friends={friends}
-          currentUser={currentUser}
-          onClickRecipient={handleClickRecipient}
-        />
-        <Chat
-          key={currentRecipientUId}
-          user={user}
-          messages={messages}
-          currentRecipientUId={currentRecipientUId}
-          // onNewMessage={handleNewMessage}
-        />
-      </main>
+    <div className="relative h-screen ">
+      <div className={`${showChat && "hidden xs:block"}`}>
+        <Sidebar user={user}></Sidebar>
+      </div>
+      {currentUser && (
+        <main className="relative h-full pb-16 xs:ml-20 xs:pb-0 md:flex">
+          <div className={`friend-list md:block md:animate-none`}>
+            <FriendList
+              friends={friends}
+              currentUser={currentUser}
+              onClickRecipient={handleClickRecipient}
+            />
+          </div>
+          <div
+            className={`${
+              showChat ? "absolute left-0 top-0 animate-slide-in" : "hidden "
+            } chat z-40 md:relative md:z-0 md:animate-none`}
+          >
+            <Chat
+              key={currentRecipientUId}
+              user={user}
+              messages={messages}
+              currentRecipient={friends.find(
+                (friend) => friend.uid === currentRecipientUId,
+              )}
+              onBackToList={handleBackToList}
+              // onNewMessage={handleNewMessage}
+            />
+          </div>
+        </main>
+      )}
     </div>
   );
 }

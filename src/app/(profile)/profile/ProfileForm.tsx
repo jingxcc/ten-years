@@ -17,7 +17,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import Image from "next/image";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from "react";
 import updateGetStartFormDoc, {
   autoUpdateImageUrls,
 } from "@/lib/firebase/firestore/updateGetStartFormDoc";
@@ -35,9 +35,10 @@ import toast from "react-hot-toast";
 
 interface ProfileFormProps {
   user: UserData;
+  children?: ReactNode;
 }
 
-const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
+const ProfileForm: React.FC<ProfileFormProps> = ({ user, children }) => {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [formData, setFormData] = useState<ProfileFormData>({
     // isStartProfileCompleted: false,
@@ -61,12 +62,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
   // }
 
   useEffect(() => {
+    // extract/context
     const fetchUserDocData = async () => {
       const fetchUserDocResult = await fetchUserDoc(user);
 
       if (!fetchUserDocResult) return false;
       const fetchUpdateFormData = fetchUserDocResult.data;
-      if (!fetchUserDocResult) return false;
       const fetchData = {
         nickname: fetchUpdateFormData?.nickname ?? "",
         gender: fetchUpdateFormData?.gender ?? genderOptions[0]["value"],
@@ -178,12 +179,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
   // console.log("imgUrlsObj", imgUrlsObj);
 
   return (
-    <div className="mx-auto mb-4 mt-8 max-w-4xl">
+    <div className="mx-auto mb-4 max-w-4xl">
       <form
         onSubmit={handleSave}
-        className="mx-auto max-w-xl space-y-4 px-5 pb-8"
+        className="mx-auto max-w-xl space-y-4 px-4 pb-8"
       >
-        <div className="mb-4 flex items-center py-3">
+        <div className="mb-4 flex items-center py-8">
           <h2 className=" mr-4 text-2xl font-bold">{"Profile"}</h2>
         </div>
         {/* text */}
@@ -291,10 +292,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
           <label className="mb-2 font-medium text-gray-700">
             Expected Relationship
           </label>
-          <div className="mt-2 flex flex-wrap items-center">
+          <div className="grid grid-cols-2">
             {expectedRelationshipOptions.map((item) => (
               <div key={item.id} className="mb-2 mr-4">
-                <label className="mb-2 flex items-center rounded-lg border border-gray-300 px-3 py-2">
+                <label className="mb-2 flex items-center rounded-lg border border-gray-300 p-3">
                   <input
                     type="checkbox"
                     name="expectedRelationships"
@@ -315,7 +316,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
         {/* multi-checkbox */}
         <div>
           <label className="mb-2 font-medium text-gray-700">Interests</label>
-          <div className="flex flex-wrap items-center ">
+          <div className="flex flex-wrap items-center justify-center">
             {interestOptions.map((item) => (
               <div key={item.id} className="mb-2 mr-4">
                 <label className="mb-2 flex items-center rounded-lg border border-gray-300 px-3 py-2">
@@ -350,6 +351,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
             Save
           </button>
         </div>
+        {children}
       </form>
     </div>
   );

@@ -1,23 +1,12 @@
 "use client";
-import LoginForm from "./LoginForm";
 import { auth } from "@/lib/firebase/initialize";
-import { AuthErrorCodes, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Header from "@/components/Header/Header";
-
-// user-friendly message
-// const getAuthErrorMsg = (error: FirebaseError): string => {
-//   console.log(error);
-
-//   if (error.code == AuthErrorCodes.INVALID_APP_CREDENTIAL) {
-//     return "Incorrect Password";
-//   } else {
-//     return error.message;
-//   }
-// };
+import AuthBaseForm from "@/components/AuthBaseForm/AuthBaseForm";
 
 export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState<string>("");
@@ -28,37 +17,48 @@ export default function LoginPage() {
     password: string,
   ): Promise<void> => {
     try {
+      setErrorMsg("");
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
         password,
       );
-      const user = userCredential.user;
+      // const user = userCredential.user;
 
       toast.success("Login success", { position: "top-center" });
       route.push("/chat");
     } catch (error) {
+      let msg = "";
       if (error instanceof FirebaseError) {
-        let msg = "";
         if (error.code === "auth/invalid-login-credentials") {
           msg = "Incorrect email or password";
         } else {
           msg = error.message;
         }
-
-        setErrorMsg(msg);
       } else if (error instanceof Error) {
-        console.error(`Log in Error: ${error.message}`);
+        msg = error.message;
+        console.error(`Login Error: ${msg}`);
       } else {
-        console.error(`Log in Error: ${error}`);
+        msg = "Unknown Error";
+        console.error(`Login Error: ${error}`);
       }
+      setErrorMsg(msg);
     }
   };
 
   return (
     <div className="min-h-screen bg-sky-200">
       <Header showNav={false}></Header>
-      <LoginForm onLogin={handleLogin} errorMsg={errorMsg} />
+      <main className="px-3">
+        <AuthBaseForm
+          formType="Login"
+          defaultValues={{ email: "test01@test.com", password: "000000" }}
+          formTitle="Log In"
+          btnContent="Log In"
+          errorMsg={errorMsg}
+          onFormSubmit={handleLogin}
+        ></AuthBaseForm>
+      </main>
     </div>
   );
 }

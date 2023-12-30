@@ -1,10 +1,9 @@
 import { ChatUser } from "@/types/ChatPage";
-import { UserData } from "@/types/UserData";
 import Image from "next/image";
 
 type Props = {
   friends: ChatUser[];
-  currentUser: ChatUser | null;
+  currentUser: ChatUser;
   onClickRecipient: (recipientUId: string) => void;
   //   user: UserData;
 };
@@ -14,21 +13,21 @@ const FriendList: React.FC<Props> = ({
   currentUser,
   onClickRecipient,
 }) => {
-  // console.log("currentUser", currentUser);
+  // console.log("friends", friends);
 
   return (
-    <div className="bodrder-gray-700 container h-full max-w-xs border-r ">
-      <h2 className="px-4 py-4 text-lg font-bold ">
+    <>
+      <h2 className=" px-4 py-4 text-lg font-bold">
         {currentUser?.nickname ?? currentUser?.email}
       </h2>
       <ul className="">
         {friends.map((friend) => (
           <li
             key={friend.uid}
-            className="flex cursor-pointer items-center px-4 py-4 hover:bg-sky-100 focus:bg-sky-100"
+            className="flex cursor-pointer items-center py-4 pl-4 pr-8 hover:bg-sky-100 focus:bg-sky-100"
             onClick={() => onClickRecipient(friend.uid)}
           >
-            <div className="relative h-10 w-10 overflow-hidden rounded-full">
+            <div className="relative mr-3 h-10 w-10 overflow-hidden rounded-full">
               <Image
                 src={
                   friend["imageUrls"] && friend["imageUrls"].length !== 0
@@ -36,12 +35,13 @@ const FriendList: React.FC<Props> = ({
                     : "/defaultAvatar.jpg"
                 }
                 alt={`${friend.nickname}'s avatar`}
-                layout="fill"
-                objectFit="cover"
-                className=" border-sky-300 bg-sky-100 text-sky-300"
+                priority
+                width={80}
+                height={80}
+                className=" h-full w-full border-sky-300 bg-sky-100 object-cover object-center text-sky-300"
               />
             </div>
-            <div className="ml-3">
+            <div>
               <p className="text-sm font-medium text-gray-700">
                 {friend.nickname ?? friend.email ?? "Unknown User"}
               </p>
@@ -50,7 +50,7 @@ const FriendList: React.FC<Props> = ({
           </li>
         ))}
       </ul>
-    </div>
+    </>
   );
 };
 

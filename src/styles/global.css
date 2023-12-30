@@ -5,6 +5,7 @@
 :root {
   @apply text-neutral-700;
   --color-sky-300: "#7dd3fc";
+  --color-sky-250: "#A9E5FF";
   --color-sky-100: "#e0f2fe";
   --color-neutral-700: "#404040";
   --color-neutral-500: "#737373";
@@ -12,7 +13,7 @@
   --color-rose-100: "#fbcfe8";
 }
 
-@layer components {
+@layer base {
   input {
     @apply w-full rounded border border-neutral-300 px-3 py-2 placeholder-neutral-400 shadow-sm  focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500;
   }
@@ -20,7 +21,9 @@
   label {
     @apply mb-2 block text-sm;
   }
+}
 
+@layer components {
   .btn {
     @apply rounded bg-sky-300 px-4 py-2 font-bold text-white focus:outline-none focus:ring-4 focus:ring-blue-100 enabled:hover:bg-sky-500 disabled:opacity-75;
   }
@@ -30,7 +33,14 @@
   }
 
   .btn-icon {
-    @apply flex max-h-[48px] max-w-[60px] items-center rounded bg-sky-200 p-2 font-bold text-white hover:bg-sky-300 focus:bg-sky-300 enabled:hover:bg-sky-300 disabled:opacity-75;
+    @apply flex max-h-[60px] max-w-[60px] items-center rounded bg-sky-200 p-2 font-bold text-white hover:bg-sky-300 focus:bg-sky-300 enabled:hover:bg-sky-300 disabled:opacity-75;
+  }
+
+  .friend-list {
+    @apply h-full w-full border-r border-neutral-200 md:min-w-[240px] md:max-w-[320px];
+  }
+  .chat {
+    @apply relative flex h-full w-full flex-grow flex-col bg-white md:min-w-[420px];
   }
 }
 

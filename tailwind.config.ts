@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        xs: "475px",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -15,8 +18,11 @@ const config: Config = {
       },
       animation: {
         "bounce-once": "bounce-once 1s ease-out",
-        // "slide-out": "slide-out 0.5s ease-out forwards",
-        "slide-in": "slide-in 0.5s ease-out forwards;",
+        // "slide-out": "slide-out 0.5s ease-out",
+        "slide-in": "slide-in 0.5s ease-out;",
+      },
+      colors: {
+        "sky-250": "#A9E5FF",
       },
     },
   },
