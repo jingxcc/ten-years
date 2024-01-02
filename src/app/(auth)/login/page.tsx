@@ -26,7 +26,7 @@ export default function LoginPage() {
       // const user = userCredential.user;
 
       toast.success("Login success", { position: "top-center" });
-      route.push("/chat");
+      route.push("/potentials");
     } catch (error) {
       let msg = "";
       if (error instanceof FirebaseError) {

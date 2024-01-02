@@ -39,7 +39,7 @@ const redirectToPage = async (
   }
 
   if (user && pathname === "/") {
-    route.push("/chat");
+    route.push("/potentials");
     return true;
   }
 

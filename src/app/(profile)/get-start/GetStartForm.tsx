@@ -167,7 +167,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
       if (result) {
         setErrorMsg("");
         toast.success(`Welcome ! ${formData.nickname}`, { icon: "🎉🎉" });
-        route.push("/chat");
+        route.push("/potentials");
       }
     } catch (error) {
       toast.error("Profile Created Failed");
