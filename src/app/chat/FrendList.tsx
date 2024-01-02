@@ -17,10 +17,12 @@ const FriendList: React.FC<Props> = ({
 
   return (
     <>
-      <h2 className=" px-4 py-4 text-lg font-bold">
-        {currentUser?.nickname ?? currentUser?.email}
-      </h2>
-      <ul className="">
+      <div className="max-h-[60px] bg-white xs:left-20 ">
+        <h2 className=" px-4 py-4 text-lg font-bold ">
+          {currentUser?.nickname ?? currentUser?.email}
+        </h2>
+      </div>
+      <ul className="flex-grow overflow-y-auto pb-16 xs:pb-0">
         {friends.map((friend) => (
           <li
             key={friend.uid}

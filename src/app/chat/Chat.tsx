@@ -104,7 +104,7 @@ const Chat: React.FC<Props> = ({
           {currentRecipient?.nickname ?? currentRecipient?.email}
         </h2>
       </div>
-      <ul className=" overflow-y-auto pb-14">
+      <ul className="flex-grow overflow-y-auto">
         {messages.map((message, index) => (
           <Message key={message.id} user={user} message={message}></Message>
           // <li
@@ -119,7 +119,7 @@ const Chat: React.FC<Props> = ({
           // </li>
         ))}
       </ul>
-      <div className="absolute bottom-0 left-0 flex w-full bg-white p-2">
+      <div className="flex w-full bg-white p-2">
         <input
           type="text"
           value={newMessage}

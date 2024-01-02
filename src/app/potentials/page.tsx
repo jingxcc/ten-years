@@ -37,6 +37,7 @@ import fetchAllFriendDocIds from "@/lib/firebase/firestore/fetchFriendDoc";
 import { createMatchRequests } from "@/lib/firebase/firestore/createMatchRequest";
 import toast from "react-hot-toast";
 import { UserData } from "@/types/UserData";
+import PageHeader from "@/components/PageHeader/PageHeader";
 
 // extract/lib
 const fetchMatchRequestData = async (user: UserData) => {
@@ -284,34 +285,33 @@ export default function PotentialMatchesPage() {
   return (
     <div className="relative">
       <Sidebar user={user}></Sidebar>
-      <main className="pb-20 xs:ml-20 xs:pb-0">
-        <div className="container mx-auto px-4">
-          <div className="mb-4 flex items-center py-8">
-            <h2 className=" mr-4 text-2xl font-bold">
-              {"Today's Suggestions"}
-            </h2>
-            <div className="flex min-w-[75px] items-center justify-between rounded-xl border-2 border-sky-300 px-3 py-1">
-              <SolidHeartIcon className="mr-1 h-5 w-5 text-rose-400" />
-              <span className=" font-bold">
-                {potentials && potentials.userLiked ? "00" : "01"}
-              </span>
-            </div>
+      <div className="relative flex flex-col pb-20 xs:ml-20 xs:pb-0">
+        <PageHeader title="Today's Suggestions">
+          <div className="flex min-w-[75px] items-center justify-between rounded-xl border-2 border-sky-300 px-3 py-1">
+            <SolidHeartIcon className="mr-1 h-5 w-5 text-rose-400" />
+            <span className=" font-bold">
+              {potentials && potentials.userLiked ? "00" : "01"}
+            </span>
           </div>
-          {potentials && (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {potentialUsers.map((potentialUser) => (
-                <MatchCard
-                  key={potentialUser.uid}
-                  potentialUser={potentialUser}
-                  potentials={potentials}
-                  // likedUser={likedUser}
-                  onLike={handleLike}
-                ></MatchCard>
-              ))}
-            </div>
-          )}
-        </div>
-      </main>
+        </PageHeader>
+        <main className="mt-28 ">
+          <div className="container relative mx-auto px-4">
+            {potentials && (
+              <div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2  md:gap-8 xl:grid-cols-3">
+                {potentialUsers.map((potentialUser) => (
+                  <MatchCard
+                    key={potentialUser.uid}
+                    potentialUser={potentialUser}
+                    potentials={potentials}
+                    // likedUser={likedUser}
+                    onLike={handleLike}
+                  ></MatchCard>
+                ))}
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

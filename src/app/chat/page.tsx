@@ -358,8 +358,8 @@ export default function ChatPage() {
         <Sidebar user={user}></Sidebar>
       </div>
       {currentUser && (
-        <main className="relative h-full pb-16 xs:ml-20 xs:pb-0 md:flex">
-          <div className={`friend-list md:block md:animate-none`}>
+        <main className="relative h-full xs:ml-20  md:flex">
+          <div className={`friend-list md:animate-none`}>
             <FriendList
               friends={friends}
               currentUser={currentUser}

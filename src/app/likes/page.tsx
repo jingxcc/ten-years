@@ -26,6 +26,7 @@ import { UpdateGetStartFormData } from "@/types/GetStartForm";
 import MatchReqCard from "./MatchReqCard";
 import { createFriendDoc } from "@/lib/firebase/firestore/createFriendDoc";
 import toast from "react-hot-toast";
+import PageHeader from "@/components/PageHeader/PageHeader";
 
 interface MatchRequestCardData extends MatchRequestData {
   id: string;
@@ -167,38 +168,38 @@ export default function LikesPage() {
   return (
     <div className="relative">
       <Sidebar user={user}></Sidebar>
-      <main className="pb-20 xs:ml-20 xs:pb-0">
-        <div className="container mx-auto px-4">
-          <div className="mb-4 flex items-center py-8">
-            <h2 className=" mr-4 text-2xl font-bold">{"People Likes You"}</h2>
+      <div className="relative flex flex-col pb-20 xs:ml-20 xs:pb-0">
+        <PageHeader title="People Like You"></PageHeader>
+        <main className="mt-28 ">
+          <div className="container mx-auto px-4">
+            {fromUserData.length > 0 ? (
+              <div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {matchRequests.map((request) => (
+                  <MatchReqCard
+                    key={request.id}
+                    matchRequest={request}
+                    requestId={request.id}
+                    fromUser={
+                      fromUserData.filter(
+                        (data) => data.uid === request.fromUserId,
+                      )[0]
+                    }
+                    onLike={handleLike}
+                    onReject={handleReject}
+                  ></MatchReqCard>
+                ))}
+              </div>
+            ) : (
+              <div className="r h-full w-full text-lg font-semibold text-gray-400 ">
+                <h3 className="mb-2 block pt-6">{"No Data "}</h3>
+                <h3 className="block">
+                  {"Let's start from Today's Suggestions !"}
+                </h3>
+              </div>
+            )}
           </div>
-          {fromUserData.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {matchRequests.map((request) => (
-                <MatchReqCard
-                  key={request.id}
-                  matchRequest={request}
-                  requestId={request.id}
-                  fromUser={
-                    fromUserData.filter(
-                      (data) => data.uid === request.fromUserId,
-                    )[0]
-                  }
-                  onLike={handleLike}
-                  onReject={handleReject}
-                ></MatchReqCard>
-              ))}
-            </div>
-          ) : (
-            <div className="r h-full w-full text-lg font-semibold text-gray-400 ">
-              <h3 className="mb-2 block pt-6">{"No Data "}</h3>
-              <h3 className="block">
-                {"Let's start from Today's Suggestions !"}
-              </h3>
-            </div>
-          )}
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

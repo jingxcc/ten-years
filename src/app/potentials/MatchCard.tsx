@@ -40,7 +40,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
   };
 
   return (
-    <div className="relative max-w-sm overflow-hidden rounded-2xl pb-16 shadow-lg">
+    <div className="relative w-full max-w-sm overflow-hidden rounded-2xl pb-16 shadow-lg">
       <div className="relative h-[280px]  overflow-hidden">
         {potentialUser["imageUrls"][ImgIndx] ? (
           <Image

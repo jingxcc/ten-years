@@ -28,7 +28,6 @@
     @apply rounded bg-sky-300 px-4 py-2 font-bold text-white focus:outline-none focus:ring-4 focus:ring-blue-100 enabled:hover:bg-sky-500 disabled:opacity-75;
   }
   .btn-secondary {
-    /* @apply rounded bg-sky-300 px-4 py-2 font-bold text-white enabled:hover:bg-sky-50  enabled:hover:text-sky-300 disabled:hover:bg-sky-50  disabled:hover:text-sky-300 ; */
     @apply rounded bg-sky-50 px-4 py-2 font-bold text-sky-300 enabled:hover:bg-sky-300  enabled:hover:text-white disabled:hover:bg-sky-300  disabled:hover:text-white;
   }
 
@@ -37,7 +36,7 @@
   }
 
   .friend-list {
-    @apply h-full w-full border-r border-neutral-200 md:min-w-[240px] md:max-w-[320px];
+    @apply flex h-full w-full flex-col border-r border-neutral-200 md:min-w-[240px] md:max-w-[320px];
   }
   .chat {
     @apply relative flex h-full w-full flex-grow flex-col bg-white md:min-w-[420px];

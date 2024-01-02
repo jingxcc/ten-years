@@ -101,7 +101,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
                 )}
               </button>
             </Tooltip>
-            <Tooltip text="Likes You">
+            <Tooltip text="Like You">
               <button className="btn-icon" onClick={() => route.push("/likes")}>
                 {pathname === "/likes" ? (
                   <SolidEnvelopeIcon className="h-8 w-8"></SolidEnvelopeIcon>
