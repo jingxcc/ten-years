@@ -10,7 +10,7 @@ interface MessageProps {
 const Message: React.FC<MessageProps> = ({ message, user }) => {
   return (
     <li
-      className={`my-2 max-w-[40%] rounded-2xl border-none p-2 ${
+      className={`my-2 max-w-[40%] break-words rounded-2xl border-none p-2 ${
         message.fromUserId === user.uid
           ? "ml-auto mr-2 bg-blue-300 text-white"
           : "ml-2 bg-gray-200"

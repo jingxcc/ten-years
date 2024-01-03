@@ -8,6 +8,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      height: {
+        "100dvh": "100dvh",
+      },
+      minHeight: {
+        "100dvh": "100dvh",
+      },
       screens: {
         xs: "475px",
       },

@@ -345,7 +345,7 @@ export default function ChatPage() {
 
   if (!user || isUserLoading) {
     return (
-      <div className="h-screen  w-screen text-center text-2xl font-bold text-sky-300 ">
+      <div className="h-100dvh  w-screen text-center text-2xl font-bold text-sky-300 ">
         <h3 className="block py-[20%]"> Loading ...</h3>
       </div>
     );
@@ -353,7 +353,7 @@ export default function ChatPage() {
   console.log("showChat", showChat);
 
   return (
-    <div className="relative h-screen ">
+    <div className="h-100dvh relative ">
       <div className={`${showChat && "hidden xs:block"}`}>
         <Sidebar user={user}></Sidebar>
       </div>

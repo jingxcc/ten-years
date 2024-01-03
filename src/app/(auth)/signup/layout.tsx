@@ -12,7 +12,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-sky-200">
+    <div className="min-h-100dvh bg-sky-200">
       <Header showNav={false}></Header>
       {children}
     </div>

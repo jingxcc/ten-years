@@ -53,6 +53,10 @@
     }
   } */
 
+  .h-100dvh {
+    height: 100dvh;
+  }
+
   @keyframes slide-in {
     from {
       transform: translateX(100%);

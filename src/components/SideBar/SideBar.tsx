@@ -70,7 +70,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
   return (
     <>
       {/* except mobile */}
-      <div className="fixed z-30 hidden h-screen w-[80px] flex-col items-center border-r  border-neutral-200 bg-sky-200 px-2 py-4 xs:flex">
+      <div className="h-100dvh fixed z-30 hidden w-[80px] flex-col items-center border-r  border-neutral-200 bg-sky-200 px-2 py-4 xs:flex">
         <Image
           src={"logo.svg"}
           width={48}
