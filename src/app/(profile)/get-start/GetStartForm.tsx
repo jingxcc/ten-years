@@ -1,4 +1,3 @@
-import { storage } from "@/lib/firebase/initialize";
 import { UserData } from "@/types/UserData";
 import { GetStartFormData, ImageUrlsObj } from "@/types/GetStartForm";
 import {
@@ -9,13 +8,6 @@ import {
   interestOptions,
 } from "@/constants/GetStartForm";
 
-import {
-  StorageError,
-  getDownloadURL,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import updateGetStartFormDoc, {
@@ -41,7 +33,6 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
     interests: [],
     imageUrls: [],
   });
-  // const [storageUploadPercent, setStorageUploadPercent] = useState(0);
   const route = useRouter();
   const [imgUrlsObj, setImgUrlsObj] = useState<ImageUrlsObj[]>([]);
 
@@ -94,68 +85,6 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
       newSelectedItems.push(value);
     }
     setFormData({ ...formData, [name]: newSelectedItems });
-  };
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      // setFormData({ ...formData, profilePictures: [...event.target.files] });
-
-      const file = event.target.files[0];
-      // console.log("--> Upload imgFile start:", file);
-      uploadImage(file);
-      // console.log(...event.target.files);
-    }
-    function uploadImage(imgFile: File) {
-      const imageMetadata = {
-        contentType: "image/jpeg",
-      };
-      const timestamp = new Date().getTime();
-      const storageRef = ref(
-        storage,
-        `users/${user?.uid}/${timestamp}_${imgFile.name}`,
-      );
-      const uploadTask = uploadBytesResumable(
-        storageRef,
-        imgFile,
-        imageMetadata,
-      );
-
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
-          // setStorageUploadPercent(progress);
-          // console.log(`Image upload is ${progress} % done`);
-
-          // switch (snapshot.state) {
-          //   case "paused":
-          //     console.log("upload is paused");
-          //     break;
-          //   case "running":
-          //     console.log("upload is running");
-          //     break;
-          // }
-        },
-        (error) => {
-          if (error instanceof StorageError) {
-            console.error("Image Upload Error: ", error.message);
-          } else {
-            console.error("Image Upload Error: ", error);
-          }
-        },
-        async () => {
-          const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
-
-          setFormData({
-            ...formData,
-            imageUrls: [...formData.imageUrls, downloadUrl],
-          });
-          // setStorageUploadPercent(0);
-        },
-      );
-    }
   };
 
   const handleSubmit = async (event: FormEvent) => {

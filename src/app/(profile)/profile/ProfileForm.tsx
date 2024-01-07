@@ -49,20 +49,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, children }) => {
     expectedRelationships: [],
     interests: [],
     imageUrls: [],
-    aboutMe: "",
-    // imageUrls: ["/team04.jpeg", "/team03.jpg", "/team01.jpeg", "/team02.webbp"],
+    // aboutMe: "",
   });
   const [imgUrlsObj, setImgUrlsObj] = useState<ImageUrlsObj[]>([]);
-  const [infoMsg, setInfoMsg] = useState<{ string: number }[]>([]);
-
-  // const [storageUploadPercent, setStorageUploadPercent] = useState(0);
-
-  // if (!user) {
-  //   return null;
-  // }
 
   useEffect(() => {
-    // extract/context
+    // todo: extract/context
     const fetchUserDocData = async () => {
       const fetchUserDocResult = await fetchUserDoc(user);
 
@@ -108,13 +100,11 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, children }) => {
       "interests",
       "imageUrls",
     ];
-    // tmp: type
 
     if (!mutiSelectKeys.includes(name as keyof ProfileFormData)) {
       return false;
     }
 
-    // tmp: add a fallback if formData[name] not exists
     let newSelectedItems = [
       ...(formData[name as keyof ProfileFormData] || []),
     ] as string[];
@@ -137,7 +127,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, children }) => {
       if (result) {
         setErrorMsg("");
         toast.success("Profile Updated Successesfully", { icon: "🎉" });
-        // route.push("/chat");
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -175,8 +164,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, children }) => {
 
     setImgUrlsObj(leftUrlsObj);
   };
-
-  // console.log("imgUrlsObj", imgUrlsObj);
 
   return (
     <div className="mx-auto mb-4 max-w-4xl">

@@ -3,8 +3,6 @@ import Sidebar from "@/components/SideBar/SideBar";
 import { useUser } from "@/context/userContext";
 
 import { useEffect, useState } from "react";
-import MatchCard from "./MatchReqCard";
-import fetchPotentialMatchDoc from "@/lib/firebase/firestore/fetchPotentialMatchDoc";
 import {
   and,
   collection,
@@ -19,10 +17,8 @@ import {
   where,
 } from "firebase/firestore";
 import { firestore } from "@/lib/firebase/initialize";
-import { UserData, UserDetails } from "@/types/UserData";
-import { MatchRequestData, MatchUser } from "@/types/PotentialMatchesPage";
-import { ChatUser } from "@/types/ChatPage";
-import { UpdateGetStartFormData } from "@/types/GetStartForm";
+import { UserDetails } from "@/types/UserData";
+import { MatchRequestData } from "@/types/PotentialMatchesPage";
 import MatchReqCard from "./MatchReqCard";
 import { createFriendDoc } from "@/lib/firebase/firestore/createFriendDoc";
 import toast from "react-hot-toast";
@@ -44,7 +40,6 @@ export default function LikesPage() {
       if (!user) {
         return false;
       }
-      //   await fetchMatchRequestDocs(user);
 
       const collectionRef = collection(firestore, "matchRequests");
 
@@ -69,18 +64,15 @@ export default function LikesPage() {
 
         Promise.all(
           newRequests.map((request) => {
-            // Assume each friend document has a field 'friendId' that is the user's ID
             const fromUId = request.fromUserId;
             return getDoc(doc(firestore, "users", fromUId));
           }),
         )
           .then((userDocs) => {
-            // Map over each document to create User objects
             const fromUserDocs = userDocs.map((userDoc) => {
               return { ...userDoc.data() } as UserDetails;
             });
             setFromUserData(fromUserDocs);
-            // console.log("fromUserDocs", fromUserDocs);
           })
           .catch((error) => {
             console.error("Error fetching match request data:", error);
@@ -95,29 +87,6 @@ export default function LikesPage() {
     const reusult = fetchMatchRequestData();
     // return () => (reusult ? reusult() : null);
   }, [user]);
-
-  //   useEffect(() => {
-  //     console.log("before promise matchRequests", matchRequests);
-
-  //     Promise.all(
-  //       matchRequests.map((request) => {
-  //         // Assume each friend document has a field 'friendId' that is the user's ID
-  //         const fromUId = request.fromUserId;
-  //         return getDoc(doc(firestore, "users", fromUId));
-  //       }),
-  //     )
-  //       .then((userDocs) => {
-  //         // Map over each document to create User objects
-  //         const fromUserDocs = userDocs.map((userDoc) => {
-  //           return { ...userDoc.data() } as UserDetails;
-  //         });
-  //         setFromUserData(fromUserDocs);
-  //         console.log("fromUserDocs", fromUserDocs);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching match request data:", error);
-  //       });
-  //   }, [matchRequests]);
 
   const handleLike = async (requestId: string, fromUId: string) => {
     if (!user) return false;
@@ -135,7 +104,6 @@ export default function LikesPage() {
     });
 
     // create matches doc
-    // tmp: 修正資料結構
     await createFriendDoc(user.uid, {
       friendId: fromUId,
       addedOn: serverTimestamp(),

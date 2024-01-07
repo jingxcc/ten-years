@@ -13,18 +13,15 @@ import { useState } from "react";
 interface MatchCardProps {
   potentialUser: PotentialUser;
   potentials: PotentialMatchData;
-  // likedUser: string;
   onLike: (userId: string) => void;
 }
 
 const MatchCard: React.FC<MatchCardProps> = ({
   potentialUser,
   potentials,
-  // likedUser,
   onLike,
 }) => {
   const [ImgIndx, setImgIndx] = useState<number>(0);
-  // console.log("likedUser", likedUser);
 
   const handlePrevImg = () => {
     if (potentialUser["imageUrls"].length > 1 && ImgIndx > 0)

@@ -33,7 +33,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
   const [avatarUrl, setAvatarUrl] = useState<string>("");
 
   useEffect(() => {
-    // extract/context
+    // todo: extract/context
     const fetchUserDocData = async () => {
       const fetchUserDocResult = await fetchUserDoc(user);
 
@@ -50,7 +50,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
     fetchUserDocData();
   }, [user]);
 
-  // extract/custom hook
+  // todo: extract/custom hook
   const handleLogOut = async () => {
     try {
       await signOut(auth);
@@ -70,7 +70,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
   return (
     <>
       {/* except mobile */}
-      <div className="h-100dvh fixed z-30 hidden w-[80px] flex-col items-center border-r  border-neutral-200 bg-sky-200 px-2 py-4 xs:flex">
+      <div className="fixed z-30 hidden h-100dvh w-[80px] flex-col items-center border-r  border-neutral-200 bg-sky-200 px-2 py-4 xs:flex">
         <Image
           src={"logo.svg"}
           width={48}

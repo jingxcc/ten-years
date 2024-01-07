@@ -23,7 +23,6 @@ export default function LoginPage() {
         email,
         password,
       );
-      // const user = userCredential.user;
 
       toast.success("Login success", { position: "top-center" });
       route.push("/potentials");

@@ -39,7 +39,6 @@ export default function ImageUploader({
   const handleImgUpload = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      // console.log("--> Upload imgFile start:", file);
       uploadImage(file);
     }
     function uploadImage(imgFile: File) {
@@ -62,12 +61,6 @@ export default function ImageUploader({
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
-          // setStorageUploadPercent(progress);
-          // console.log(`Image upload is ${progress} % done`);
-
           // switch (snapshot.state) {
           //   case "paused":
           //     console.log("upload is paused");
@@ -97,8 +90,6 @@ export default function ImageUploader({
             });
 
             toast.success("Image Uploaded Successfully");
-
-            // setStorageUploadPercent(0);
           } catch (error) {
             console.error("Image Upload Error", error);
             toast.error("Image Uploaded Failed");

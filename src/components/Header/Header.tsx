@@ -15,7 +15,7 @@ interface HeaderProps {
 
 export default function Header({ user, showNav = true }: HeaderProps) {
   const route = useRouter();
-  // extract/custom hook
+  // todo: extract/custom hook
   const handleLogOut = async () => {
     try {
       await signOut(auth);
@@ -23,9 +23,6 @@ export default function Header({ user, showNav = true }: HeaderProps) {
       route.push("/");
     } catch (error) {
       if (error instanceof FirebaseError) {
-        // const errorCode = error.code;
-        // const errorMessage = error.message;
-        // const errorMessage = getAuthErrorMsg(error);
         toast.error(`Logout Error: ${error.message}`, {
           position: "top-center",
         });

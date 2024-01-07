@@ -36,7 +36,6 @@ const createFriendDoc = async (userId: string, friendData: Friend) => {
   // } else {
   //   console.log("Friend document already exists.");
   // }
-  // // tmp: add error
 };
 
 export { createFriendDoc };

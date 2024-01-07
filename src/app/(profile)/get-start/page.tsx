@@ -7,8 +7,6 @@ import GetStartForm from "./GetStartForm";
 export default function GetStartPage() {
   const { user, isUserLoading } = useUser();
 
-  // console.log("Loading", isUserLoading);
-
   if (!user || isUserLoading) {
     return (
       <div className="h-100dvh  w-screen text-center text-2xl font-bold text-sky-300 ">
