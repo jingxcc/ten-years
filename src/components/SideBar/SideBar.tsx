@@ -33,7 +33,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
   const [avatarUrl, setAvatarUrl] = useState<string>("");
 
   useEffect(() => {
-    // extract/context
+    // todo: extract/context
     const fetchUserDocData = async () => {
       const fetchUserDocResult = await fetchUserDoc(user);
 
@@ -50,7 +50,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
     fetchUserDocData();
   }, [user]);
 
-  // extract/custom hook
+  // todo: extract/custom hook
   const handleLogOut = async () => {
     try {
       await signOut(auth);
@@ -70,7 +70,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
   return (
     <>
       {/* except mobile */}
-      <div className="fixed z-30 hidden h-screen w-[80px] flex-col items-center border-r  border-neutral-200 bg-sky-200 px-2 py-4 xs:flex">
+      <div className="fixed z-30 hidden h-100dvh w-[80px] flex-col items-center border-r  border-neutral-200 bg-sky-200 px-2 py-4 xs:flex">
         <Image
           src={"logo.svg"}
           width={48}
@@ -101,7 +101,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
                 )}
               </button>
             </Tooltip>
-            <Tooltip text="Likes You">
+            <Tooltip text="Like You">
               <button className="btn-icon" onClick={() => route.push("/likes")}>
                 {pathname === "/likes" ? (
                   <SolidEnvelopeIcon className="h-8 w-8"></SolidEnvelopeIcon>

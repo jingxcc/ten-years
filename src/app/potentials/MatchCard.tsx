@@ -13,18 +13,15 @@ import { useState } from "react";
 interface MatchCardProps {
   potentialUser: PotentialUser;
   potentials: PotentialMatchData;
-  // likedUser: string;
   onLike: (userId: string) => void;
 }
 
 const MatchCard: React.FC<MatchCardProps> = ({
   potentialUser,
   potentials,
-  // likedUser,
   onLike,
 }) => {
   const [ImgIndx, setImgIndx] = useState<number>(0);
-  // console.log("likedUser", likedUser);
 
   const handlePrevImg = () => {
     if (potentialUser["imageUrls"].length > 1 && ImgIndx > 0)
@@ -40,7 +37,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
   };
 
   return (
-    <div className="relative max-w-sm overflow-hidden rounded-2xl pb-16 shadow-lg">
+    <div className="relative w-full max-w-sm overflow-hidden rounded-2xl pb-16 shadow-lg">
       <div className="relative h-[280px]  overflow-hidden">
         {potentialUser["imageUrls"][ImgIndx] ? (
           <Image

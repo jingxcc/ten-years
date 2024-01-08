@@ -12,8 +12,6 @@ const fetchUserDoc = async (user: UserData) => {
     const userRef = doc(firestore, "users", user.uid);
     const docSnap = await getDoc(userRef);
     if (docSnap.exists()) {
-      //   console.log("Document data:", docSnap.data());
-
       return {
         data: docSnap.data() as UpdateGetStartFormData,
       };

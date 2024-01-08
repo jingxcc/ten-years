@@ -3,8 +3,6 @@ import Sidebar from "@/components/SideBar/SideBar";
 import { useUser } from "@/context/userContext";
 
 import { useEffect, useState } from "react";
-import MatchCard from "./MatchReqCard";
-import fetchPotentialMatchDoc from "@/lib/firebase/firestore/fetchPotentialMatchDoc";
 import {
   and,
   collection,
@@ -19,13 +17,12 @@ import {
   where,
 } from "firebase/firestore";
 import { firestore } from "@/lib/firebase/initialize";
-import { UserData, UserDetails } from "@/types/UserData";
-import { MatchRequestData, MatchUser } from "@/types/PotentialMatchesPage";
-import { ChatUser } from "@/types/ChatPage";
-import { UpdateGetStartFormData } from "@/types/GetStartForm";
+import { UserDetails } from "@/types/UserData";
+import { MatchRequestData } from "@/types/PotentialMatchesPage";
 import MatchReqCard from "./MatchReqCard";
 import { createFriendDoc } from "@/lib/firebase/firestore/createFriendDoc";
 import toast from "react-hot-toast";
+import PageHeader from "@/components/PageHeader/PageHeader";
 
 interface MatchRequestCardData extends MatchRequestData {
   id: string;
@@ -43,7 +40,6 @@ export default function LikesPage() {
       if (!user) {
         return false;
       }
-      //   await fetchMatchRequestDocs(user);
 
       const collectionRef = collection(firestore, "matchRequests");
 
@@ -68,18 +64,15 @@ export default function LikesPage() {
 
         Promise.all(
           newRequests.map((request) => {
-            // Assume each friend document has a field 'friendId' that is the user's ID
             const fromUId = request.fromUserId;
             return getDoc(doc(firestore, "users", fromUId));
           }),
         )
           .then((userDocs) => {
-            // Map over each document to create User objects
             const fromUserDocs = userDocs.map((userDoc) => {
               return { ...userDoc.data() } as UserDetails;
             });
             setFromUserData(fromUserDocs);
-            // console.log("fromUserDocs", fromUserDocs);
           })
           .catch((error) => {
             console.error("Error fetching match request data:", error);
@@ -94,29 +87,6 @@ export default function LikesPage() {
     const reusult = fetchMatchRequestData();
     // return () => (reusult ? reusult() : null);
   }, [user]);
-
-  //   useEffect(() => {
-  //     console.log("before promise matchRequests", matchRequests);
-
-  //     Promise.all(
-  //       matchRequests.map((request) => {
-  //         // Assume each friend document has a field 'friendId' that is the user's ID
-  //         const fromUId = request.fromUserId;
-  //         return getDoc(doc(firestore, "users", fromUId));
-  //       }),
-  //     )
-  //       .then((userDocs) => {
-  //         // Map over each document to create User objects
-  //         const fromUserDocs = userDocs.map((userDoc) => {
-  //           return { ...userDoc.data() } as UserDetails;
-  //         });
-  //         setFromUserData(fromUserDocs);
-  //         console.log("fromUserDocs", fromUserDocs);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching match request data:", error);
-  //       });
-  //   }, [matchRequests]);
 
   const handleLike = async (requestId: string, fromUId: string) => {
     if (!user) return false;
@@ -134,7 +104,6 @@ export default function LikesPage() {
     });
 
     // create matches doc
-    // tmp: 修正資料結構
     await createFriendDoc(user.uid, {
       friendId: fromUId,
       addedOn: serverTimestamp(),
@@ -158,7 +127,7 @@ export default function LikesPage() {
 
   if (!user || isUserLoading) {
     return (
-      <div className="h-screen  w-screen text-center text-2xl font-bold text-sky-300 ">
+      <div className="h-100dvh  w-screen text-center text-2xl font-bold text-sky-300 ">
         <h3 className="block py-[20%]"> Loading ...</h3>
       </div>
     );
@@ -167,38 +136,38 @@ export default function LikesPage() {
   return (
     <div className="relative">
       <Sidebar user={user}></Sidebar>
-      <main className="pb-20 xs:ml-20 xs:pb-0">
-        <div className="container mx-auto px-4">
-          <div className="mb-4 flex items-center py-8">
-            <h2 className=" mr-4 text-2xl font-bold">{"People Likes You"}</h2>
+      <div className="relative flex flex-col pb-20 xs:ml-20 xs:pb-0">
+        <PageHeader title="People Like You"></PageHeader>
+        <main className="mt-28 ">
+          <div className="container mx-auto px-4">
+            {fromUserData.length > 0 ? (
+              <div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {matchRequests.map((request) => (
+                  <MatchReqCard
+                    key={request.id}
+                    matchRequest={request}
+                    requestId={request.id}
+                    fromUser={
+                      fromUserData.filter(
+                        (data) => data.uid === request.fromUserId,
+                      )[0]
+                    }
+                    onLike={handleLike}
+                    onReject={handleReject}
+                  ></MatchReqCard>
+                ))}
+              </div>
+            ) : (
+              <div className="r h-full w-full text-lg font-semibold text-gray-400 ">
+                <h3 className="mb-2 block pt-6">{"No Data "}</h3>
+                <h3 className="block">
+                  {"Let's start from Today's Suggestions !"}
+                </h3>
+              </div>
+            )}
           </div>
-          {fromUserData.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {matchRequests.map((request) => (
-                <MatchReqCard
-                  key={request.id}
-                  matchRequest={request}
-                  requestId={request.id}
-                  fromUser={
-                    fromUserData.filter(
-                      (data) => data.uid === request.fromUserId,
-                    )[0]
-                  }
-                  onLike={handleLike}
-                  onReject={handleReject}
-                ></MatchReqCard>
-              ))}
-            </div>
-          ) : (
-            <div className="r h-full w-full text-lg font-semibold text-gray-400 ">
-              <h3 className="mb-2 block pt-6">{"No Data "}</h3>
-              <h3 className="block">
-                {"Let's start from Today's Suggestions !"}
-              </h3>
-            </div>
-          )}
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

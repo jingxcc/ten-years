@@ -39,7 +39,7 @@ const redirectToPage = async (
   }
 
   if (user && pathname === "/") {
-    route.push("/chat");
+    route.push("/potentials");
     return true;
   }
 
@@ -47,8 +47,6 @@ const redirectToPage = async (
   if (user) {
     const userDocResult = await fetchUserDoc(user);
     if (!userDocResult) return false;
-
-    // if (userDocResult.data.isStartProfileCompleted)
 
     if (!userDocResult.data.isStartProfileCompleted) {
       route.push("/get-start");
@@ -61,8 +59,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [isUserLoading, setIsUserLoading] = useState(true);
   const route = useRouter();
   const pathname = usePathname();
-
-  // console.log("UserProvider");
 
   // firebase
   useEffect(() => {

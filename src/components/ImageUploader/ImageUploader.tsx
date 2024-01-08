@@ -39,7 +39,6 @@ export default function ImageUploader({
   const handleImgUpload = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      // console.log("--> Upload imgFile start:", file);
       uploadImage(file);
     }
     function uploadImage(imgFile: File) {
@@ -62,12 +61,6 @@ export default function ImageUploader({
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
-          // setStorageUploadPercent(progress);
-          // console.log(`Image upload is ${progress} % done`);
-
           // switch (snapshot.state) {
           //   case "paused":
           //     console.log("upload is paused");
@@ -97,8 +90,6 @@ export default function ImageUploader({
             });
 
             toast.success("Image Uploaded Successfully");
-
-            // setStorageUploadPercent(0);
           } catch (error) {
             console.error("Image Upload Error", error);
             toast.error("Image Uploaded Failed");
@@ -134,10 +125,10 @@ export default function ImageUploader({
 
   return (
     <div className="flex justify-center">
-      <div className="grid grid-cols-2 gap-x-6 gap-y-2 xs:grid-cols-3 xs:gap-x-4 xs:gap-y-2 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-6 xs:grid-cols-3 xs:gap-x-4 xs:gap-y-2 sm:grid-cols-4">
         {imgUrlsObj.length > 0 &&
           imgUrlsObj.map((imgUrl) => (
-            <div key={imgUrl.id} className="relative mb-2 h-32 w-32">
+            <div key={imgUrl.id} className="relative h-32 w-32">
               <Image
                 src={imgUrl.url}
                 alt="Uploaded picture"

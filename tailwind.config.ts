@@ -8,6 +8,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      height: {
+        "100dvh": "100dvh",
+      },
+      minHeight: {
+        "100dvh": "100dvh",
+      },
       screens: {
         xs: "475px",
       },
@@ -18,7 +24,6 @@ const config: Config = {
       },
       animation: {
         "bounce-once": "bounce-once 1s ease-out",
-        // "slide-out": "slide-out 0.5s ease-out",
         "slide-in": "slide-in 0.5s ease-out;",
       },
       colors: {

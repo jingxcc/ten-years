@@ -6,7 +6,7 @@ import { FirestoreError, doc, setDoc } from "firebase/firestore";
 const createPotentialMatchDoc = async (
   user: UserData | null,
   matchData: PotentialMatchData,
-): Promise<boolean> => {
+): Promise<PotentialMatchData> => {
   if (!user) {
     console.error("Error: No user data provided");
     throw new Error("Error: No user data provided");
@@ -15,7 +15,7 @@ const createPotentialMatchDoc = async (
   try {
     await setDoc(doc(firestore, "potentialMatches", user.uid), matchData);
 
-    return true;
+    return matchData;
   } catch (error) {
     let errMsg: string;
 

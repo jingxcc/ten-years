@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ChatUser, MessageType } from "@/types/ChatPage";
 import { firestore } from "@/lib/firebase/initialize";
@@ -10,22 +10,17 @@ import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 interface Props {
   user: UserData;
   messages: MessageType[];
-  // currentRecipientUId: string;
   currentRecipient: ChatUser | undefined;
   onBackToList: () => void;
-  //   onNewMessage: (message: Message) => void;
 }
 
 const Chat: React.FC<Props> = ({
   user,
   messages,
-  // currentRecipientUId,
   currentRecipient,
   onBackToList,
-  //   onNewMessage,
 }) => {
   const [newMessage, setNewMessage] = useState("");
-  // const lastMessageRef = useRef(null);
 
   const handleEnterKey = async (
     event: React.KeyboardEvent<HTMLInputElement>,
@@ -35,13 +30,7 @@ const Chat: React.FC<Props> = ({
     }
   };
 
-  // console.log("currentRecipient", currentRecipient);
-
-  // useEffect(() => {
-  //   if (lastMessageRef.current) {
-  //     lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
-  //   }
-  // }, [messages]);
+  console.log("Chat");
 
   const handleSendMessage = async () => {
     sendMessage();
@@ -56,15 +45,6 @@ const Chat: React.FC<Props> = ({
         timestamp: serverTimestamp(),
       });
 
-      const newMessageObj: MessageType = {
-        id: docRef.id,
-        text: newMessage,
-        fromUserId: user.uid,
-        toUserId: currentRecipient.uid,
-        timestamp: null,
-      };
-
-      //   onNewMessage(newMessageObj);
       setNewMessage("");
     }
   };
@@ -93,7 +73,7 @@ const Chat: React.FC<Props> = ({
                 : "/defaultAvatar.jpg"
             }
             alt={`${
-              currentRecipient?.nickname ?? currentRecipient?.email
+              currentRecipient?.nickname ?? currentRecipient.email
             }'s avatar`}
             width={80}
             height={80}
@@ -101,25 +81,15 @@ const Chat: React.FC<Props> = ({
           />
         </div>
         <h2 className=" font-bold">
-          {currentRecipient?.nickname ?? currentRecipient?.email}
+          {currentRecipient?.nickname ?? currentRecipient.email}
         </h2>
       </div>
-      <ul className=" overflow-y-auto pb-14">
+      <ul className="flex-grow overflow-y-auto">
         {messages.map((message, index) => (
           <Message key={message.id} user={user} message={message}></Message>
-          // <li
-          //   key={message.id}
-          //   className={`my-2 max-w-[40%] rounded-2xl border-none p-2 ${
-          //     message.fromUserId === user.uid
-          //       ? "ml-auto mr-2 bg-blue-300 text-white"
-          //       : "ml-2 bg-gray-200"
-          //   }`}
-          // >
-          //   {message.text}
-          // </li>
         ))}
       </ul>
-      <div className="absolute bottom-0 left-0 flex w-full bg-white p-2">
+      <div className="flex w-full bg-white p-2">
         <input
           type="text"
           value={newMessage}

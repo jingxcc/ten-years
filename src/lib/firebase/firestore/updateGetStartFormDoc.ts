@@ -28,8 +28,6 @@ const updateGetStartFormDoc = async (
     }
     console.error(error);
     throw error;
-
-    // throw new Error("Error submitting the form");
   }
 };
 

@@ -7,7 +7,6 @@ import { usePathname, useRouter } from "next/navigation";
 import createUserDocument from "@/lib/firebase/firestore/createUserDocument";
 import toast from "react-hot-toast";
 import AuthBaseForm from "@/components/AuthBaseForm/AuthBaseForm";
-import Link from "next/link";
 
 export default function SignUpPage() {
   const [errorMsg, setErrorMsg] = useState<string>("");

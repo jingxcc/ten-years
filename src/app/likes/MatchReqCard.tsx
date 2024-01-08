@@ -4,10 +4,7 @@ import {
   HeartIcon as SolidHeartIcon,
   SparklesIcon,
 } from "@heroicons/react/24/solid";
-import {
-  MatchRequestData,
-  PotentialMatchData,
-} from "@/types/PotentialMatchesPage";
+import { MatchRequestData } from "@/types/PotentialMatchesPage";
 import { UserDetails } from "@/types/UserData";
 import { useState } from "react";
 
@@ -42,7 +39,7 @@ const MatchReqCard: React.FC<MatchReqCardProps> = ({
   };
 
   return (
-    <div className="relative max-w-sm overflow-hidden rounded-2xl pb-16 shadow-lg">
+    <div className="relative w-full max-w-sm overflow-hidden rounded-2xl pb-16 shadow-lg">
       <div className="relative h-[280px]  overflow-hidden">
         {fromUser["imageUrls"][ImgIndx] ? (
           <Image
@@ -113,9 +110,6 @@ const MatchReqCard: React.FC<MatchReqCardProps> = ({
                 onClick={() => onLike(requestId, matchRequest.fromUserId)}
               >
                 <HeartIcon className="h-8 w-8" />
-                {/* {matchRequest.status === "accepted" && (
-                <SolidHeartIcon className="h-8 w-8" />
-              )} */}
               </button>
             )}
 

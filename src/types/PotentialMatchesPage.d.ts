@@ -1,15 +1,5 @@
 import { UpdateGetStartFormData } from "./GetStartForm";
 
-// interface UserCard extends UpdateGetStartFormData {
-//   aboutMe: string;
-// }
-
-// interface CurrentUser extends UpdateGetStartFormData {
-//   //   aboutMe: string;
-//   uid: string;
-//   friends: string[];
-// }
-
 interface MatchUser extends UpdateGetStartFormData {
   uid: string;
   friends: string[];

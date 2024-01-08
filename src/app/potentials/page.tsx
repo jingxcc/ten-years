@@ -9,7 +9,7 @@ import {
   MatchRequestData,
 } from "@/types/PotentialMatchesPage";
 
-import { genderOptions, matchGenderOptions } from "@/constants/GetStartForm";
+import { matchGenderOptions } from "@/constants/GetStartForm";
 import {
   and,
   collection,
@@ -22,13 +22,11 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { auth, firestore } from "@/lib/firebase/initialize";
+import { firestore } from "@/lib/firebase/initialize";
 import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import { shufflePotentialUsers } from "@/lib/generateMatches";
 import { UpdateGetStartFormData } from "@/types/GetStartForm";
 import Sidebar from "../../components/SideBar/SideBar";
-import { signOut } from "firebase/auth";
-import { FirebaseError } from "firebase/app";
 import fetchPotentialMatchDoc from "@/lib/firebase/firestore/fetchPotentialMatchDoc";
 import createPotentialMatchDoc from "@/lib/firebase/firestore/createPotentialMatchDoc";
 import updatePotentialMatchDoc from "@/lib/firebase/firestore/updatePotentialMatchDoc";
@@ -37,11 +35,11 @@ import fetchAllFriendDocIds from "@/lib/firebase/firestore/fetchFriendDoc";
 import { createMatchRequests } from "@/lib/firebase/firestore/createMatchRequest";
 import toast from "react-hot-toast";
 import { UserData } from "@/types/UserData";
+import PageHeader from "@/components/PageHeader/PageHeader";
 
-// extract/lib
+// todo: extract/lib
 const fetchMatchRequestData = async (user: UserData) => {
   const collectionRef = collection(firestore, "matchRequests");
-  // tmp: consider if the get the same suggestion today!
   const q = query(
     collectionRef,
     and(
@@ -62,7 +60,6 @@ export default function PotentialMatchesPage() {
   const { user, isUserLoading } = useUser();
   const [potentialUsers, setPotentialUsers] = useState<PotentialUser[]>([]);
   const [potentials, setPotentials] = useState<PotentialMatchData | null>(null);
-  // const [likedUser, setLikedUser] = useState<string>("");
 
   useEffect(() => {
     const fetchMatches = async () => {
@@ -72,35 +69,26 @@ export default function PotentialMatchesPage() {
       let selectedPotentialUsers: PotentialUser[] = [];
       let selectedMatchData: PotentialMatchData | null = null;
 
-      // let likedMatchUser: string = "";
-      if (!user) {
-        return false;
-      }
-
       // get potentials doc
       let matchDocResult = await fetchPotentialMatchDoc(user);
       // create potentials doc if not exsits
       if (!matchDocResult) {
-        await createPotentialMatchDoc(user, {
+        matchDocResult = await createPotentialMatchDoc(user, {
           users: [],
         } as PotentialMatchData);
-        matchDocResult = {
-          users: [],
-        };
       } else {
+        // if exists
         const matchUIds =
           matchDocResult && matchDocResult["users"]
             ? matchDocResult["users"]
             : [];
         selectedMatchData = matchDocResult;
-        // likedMatchUser = fetchDocResult ? fetchDocResult["likedUser"] : "";
 
         const matchPromises = matchUIds.map((id: string) => {
           const userRef = doc(firestore, "users", id);
           return getDoc(userRef);
         });
         const matchDocs = await Promise.all(matchPromises);
-        // console.log("matchDocs", matchDocs);
 
         selectedPotentialUsers = matchDocs.map((doc) => ({
           ...(doc.data() as PotentialUser),
@@ -111,13 +99,10 @@ export default function PotentialMatchesPage() {
       const lastUpdatedOn: string = matchDocResult["lastUpdatedOn"]
         ? matchDocResult["lastUpdatedOn"].toDate().toLocaleDateString()
         : "";
-      // const today = new Date().toISOString().split("T")[0];
       const today = new Date().toLocaleDateString();
 
       // document just created, or not today potentials
       if (!(lastUpdatedOn === today) || matchDocResult["users"].length === 0) {
-        // if (!lastUpdatedOn.startsWith(today) || matchDocResult["users"].length === 0) {
-
         const currentUserDoc = await fetchUserDoc(user);
         if (!currentUserDoc) {
           return false;
@@ -150,9 +135,8 @@ export default function PotentialMatchesPage() {
         };
 
         const usersRef = collection(firestore, "users");
-        // tmp: all genders
+        // all genders
         const AllGenderOptionIdx = 2;
-        // const genderOptionValues = Object.values(genderOptions);
         let q;
 
         if (
@@ -168,8 +152,6 @@ export default function PotentialMatchesPage() {
               user.uid,
             ]),
           );
-
-          // tmp: remove some condtions
         } else {
           q = query(
             usersRef,
@@ -183,35 +165,14 @@ export default function PotentialMatchesPage() {
           );
         }
 
-        // console.log(
-        //   "gender test",
-        //   matchGenderOptions[AllGenderOptionIdx]["value"],
-        //   genderOptionValues,
-        // );
-
         const querySnapShot = await getDocs(q);
         const querySnapShotData = querySnapShot.docs.map((doc) => ({
           ...(doc.data() as UpdateGetStartFormData),
         }));
 
-        // const allPotentialUsers: MatchUser[] = querySnapShotData
-        //   .map((data) => ({
-        //     ...(data as UpdateGetStartFormData),
-        //     uid: data["uid"],
-        //   }))
-        //   .filter((user) => user.uid != currentMatchUser.uid);
-
         const selectedUsers = shufflePotentialUsers(querySnapShotData);
 
         selectedPotentialUsers = selectedUsers.map((data, index) => ({
-          // nickname: data["nickname"],
-          // gender: data["gender"],
-          // relationshipStatus: data["relationshipStatus"],
-          // matchGender: data["matchGender"],
-          // expectedRelationships: data["expectedRelationships"],
-          // interests: data["interests"],
-          // imageUrls: data["imageUrls"],
-          // isStartProfileCompleted: data["isStartProfileCompleted"],
           ...(data as UpdateGetStartFormData),
           uid: data["uid"] ?? user.uid,
           aboutMe: data["aboutMe"] ?? "",
@@ -228,13 +189,10 @@ export default function PotentialMatchesPage() {
           dataToUpdate,
         );
         selectedMatchData = dataToUpdate;
-
-        // likedMatchUser = "";
       }
 
       setPotentialUsers(selectedPotentialUsers);
       setPotentials(selectedMatchData);
-      // setLikedUser(likedMatchUser);
     };
 
     fetchMatches();
@@ -268,14 +226,11 @@ export default function PotentialMatchesPage() {
       },
       icon: "✨",
     });
-    // setLikedUser(matchUserId);
   };
-
-  // console.log("Loading", isUserLoading);
 
   if (!user || isUserLoading) {
     return (
-      <div className="h-screen  w-screen text-center text-2xl font-bold text-sky-300 ">
+      <div className="h-100dvh  w-screen text-center text-2xl font-bold text-sky-300 ">
         <h3 className="block py-[20%]"> Loading ...</h3>
       </div>
     );
@@ -284,34 +239,32 @@ export default function PotentialMatchesPage() {
   return (
     <div className="relative">
       <Sidebar user={user}></Sidebar>
-      <main className="pb-20 xs:ml-20 xs:pb-0">
-        <div className="container mx-auto px-4">
-          <div className="mb-4 flex items-center py-8">
-            <h2 className=" mr-4 text-2xl font-bold">
-              {"Today's Suggestions"}
-            </h2>
-            <div className="flex min-w-[75px] items-center justify-between rounded-xl border-2 border-sky-300 px-3 py-1">
-              <SolidHeartIcon className="mr-1 h-5 w-5 text-rose-400" />
-              <span className=" font-bold">
-                {potentials && potentials.userLiked ? "00" : "01"}
-              </span>
-            </div>
+      <div className="relative flex flex-col pb-20 xs:ml-20 xs:pb-0">
+        <PageHeader title="Today's Suggestions">
+          <div className="flex min-w-[75px] items-center justify-between rounded-xl border-2 border-sky-300 px-3 py-1">
+            <SolidHeartIcon className="mr-1 h-5 w-5 text-rose-400" />
+            <span className=" font-bold">
+              {potentials && potentials.userLiked ? "00" : "01"}
+            </span>
           </div>
-          {potentials && (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {potentialUsers.map((potentialUser) => (
-                <MatchCard
-                  key={potentialUser.uid}
-                  potentialUser={potentialUser}
-                  potentials={potentials}
-                  // likedUser={likedUser}
-                  onLike={handleLike}
-                ></MatchCard>
-              ))}
-            </div>
-          )}
-        </div>
-      </main>
+        </PageHeader>
+        <main className="mt-28 ">
+          <div className="container relative mx-auto px-4">
+            {potentials && (
+              <div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2  md:gap-8 xl:grid-cols-3">
+                {potentialUsers.map((potentialUser) => (
+                  <MatchCard
+                    key={potentialUser.uid}
+                    potentialUser={potentialUser}
+                    potentials={potentials}
+                    onLike={handleLike}
+                  ></MatchCard>
+                ))}
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

@@ -15,8 +15,6 @@ interface MessageType {
 
 interface ChatUser extends UpdateGetStartFormData {
   uid: string;
-  //   friends: string[];
-  //   aboutMe: string;
 }
 
 export { Friend, MessageType, ChatUser };

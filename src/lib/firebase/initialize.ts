@@ -1,31 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import {
-  createUserWithEmailAndPassword,
-  getAuth,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 // import { getAnalytics } from "firebase/analytics";
-
-interface FireBaseConfig {
-  apiKey: string;
-  authDomain: string;
-  projectId: string;
-  storageBucket: string;
-  messagingSenderId: string;
-  appId: string;
-}
-
-// const getConfigValue = (key: string): string => {
-//   const value = process.env[key];
-//   if (value === undefined) {
-//     throw new Error("Firebase config error: Missing value for ${key}");
-//   }
-//   return value;
-// };
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,

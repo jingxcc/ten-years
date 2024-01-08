@@ -23,10 +23,9 @@ export default function LoginPage() {
         email,
         password,
       );
-      // const user = userCredential.user;
 
       toast.success("Login success", { position: "top-center" });
-      route.push("/chat");
+      route.push("/potentials");
     } catch (error) {
       let msg = "";
       if (error instanceof FirebaseError) {
@@ -47,7 +46,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-sky-200">
+    <div className="min-h-100dvh bg-sky-200">
       <Header showNav={false}></Header>
       <main className="px-3">
         <AuthBaseForm

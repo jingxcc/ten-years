@@ -1,6 +1,5 @@
 import { MessageType } from "@/types/ChatPage";
 import { UserData } from "@/types/UserData";
-import { memo } from "react";
 
 interface MessageProps {
   message: MessageType;
@@ -8,9 +7,11 @@ interface MessageProps {
 }
 
 const Message: React.FC<MessageProps> = ({ message, user }) => {
+  console.log("render message");
+
   return (
     <li
-      className={`my-2 max-w-[40%] rounded-2xl border-none p-2 ${
+      className={`my-2 max-w-[40%] break-words rounded-2xl border-none p-2 ${
         message.fromUserId === user.uid
           ? "ml-auto mr-2 bg-blue-300 text-white"
           : "ml-2 bg-gray-200"
@@ -21,4 +22,4 @@ const Message: React.FC<MessageProps> = ({ message, user }) => {
   );
 };
 
-export default memo(Message);
+export default Message;
