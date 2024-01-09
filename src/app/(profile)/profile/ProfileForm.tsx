@@ -1,4 +1,3 @@
-import { firestore, storage } from "@/lib/firebase/initialize";
 import { UserData } from "@/types/UserData";
 
 import {
@@ -9,28 +8,12 @@ import {
   interestOptions,
 } from "@/constants/GetStartForm";
 
-import {
-  StorageError,
-  deleteObject,
-  getDownloadURL,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
-import Image from "next/image";
 import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from "react";
-import updateGetStartFormDoc, {
-  autoUpdateImageUrls,
-} from "@/lib/firebase/firestore/updateGetStartFormDoc";
-import {
-  GetStartFormData,
-  ImageUrlsObj,
-  ProfileFormData,
-} from "@/types/GetStartForm";
+import { autoUpdateImageUrls } from "@/lib/firebase/firestore/updateGetStartFormDoc";
+import { ImageUrlsObj, ProfileFormData } from "@/types/GetStartForm";
 import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import updateProfileForm from "@/lib/firebase/firestore/updateProfileForm";
-import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import ImageUploader from "@/components/ImageUploader/ImageUploader";
-import { doc } from "firebase/firestore";
 import toast from "react-hot-toast";
 
 interface ProfileFormProps {
