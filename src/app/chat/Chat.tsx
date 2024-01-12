@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ChatUser, MessageType } from "@/types/ChatPage";
 import { firestore } from "@/lib/firebase/initialize";
@@ -21,6 +21,23 @@ const Chat: React.FC<Props> = ({
   onBackToList,
 }) => {
   const [newMessage, setNewMessage] = useState("");
+  const chatEndRef = useRef<null | HTMLDivElement>(null);
+
+  console.log("Chat");
+
+  useLayoutEffect(() => {
+    scrollToBottom();
+    console.log("useLayoutEffect", chatEndRef);
+  }, []);
+
+  useEffect(() => {
+    console.log("useEffect", chatEndRef);
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const handleEnterKey = async (
     event: React.KeyboardEvent<HTMLInputElement>,
@@ -29,8 +46,6 @@ const Chat: React.FC<Props> = ({
       sendMessage();
     }
   };
-
-  console.log("Chat");
 
   const handleSendMessage = async () => {
     sendMessage();
@@ -84,11 +99,15 @@ const Chat: React.FC<Props> = ({
           {currentRecipient?.nickname ?? currentRecipient.email}
         </h2>
       </div>
-      <ul className="flex-grow overflow-y-auto">
-        {messages.map((message, index) => (
-          <Message key={message.id} user={user} message={message}></Message>
-        ))}
-      </ul>
+
+      <div className=" flex-grow overflow-y-auto">
+        <ul className="">
+          {messages.map((message, index) => (
+            <Message key={message.id} user={user} message={message}></Message>
+          ))}
+        </ul>
+        <div ref={chatEndRef} className="h-0 w-0"></div>
+      </div>
       <div className="flex w-full bg-white p-2">
         <input
           type="text"

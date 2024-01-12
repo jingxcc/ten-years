@@ -22,7 +22,7 @@ const FriendList: React.FC<Props> = ({
         </h2>
       </div>
       {friends.length === 0 ? (
-        <div className="r h-full w-full p-4 text-base font-semibold text-gray-400">
+        <div className="h-full w-full p-4 text-base font-semibold text-gray-400">
           <p className="mb-2 block pt-6">{"No Friend Data "}</p>
           <p className="block">{"Let's start from Today's Suggestions"}</p>
         </div>
