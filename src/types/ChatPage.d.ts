@@ -10,11 +10,13 @@ interface MessageType {
   text: string;
   fromUserId: string;
   toUserId: string;
-  timestamp: firebase.firestore.Timestamp | null;
+  timestamp: firebase.firestore.Timestamp | null | string;
 }
+
+type MessagesWithDate = MessageType | string;
 
 interface ChatUser extends UpdateGetStartFormData {
   uid: string;
 }
 
-export { Friend, MessageType, ChatUser };
+export { Friend, MessageType, ChatUser, MessagesWithDate };

@@ -17,8 +17,9 @@ import {
 import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import Sidebar from "../../components/SideBar/SideBar";
 import FriendList from "./FrendList";
-import { ChatUser, MessageType } from "@/types/ChatPage";
+import { ChatUser, MessageType, MessagesWithDate } from "@/types/ChatPage";
 import Chat from "./Chat";
+import { convertFirestoreTimeStampToDate } from "@/lib/lib";
 
 interface ChatPageLoading {
   currentUser: boolean;
@@ -30,7 +31,7 @@ export default function ChatPage() {
   const { user, isUserLoading } = useUser();
   const [friends, setFriends] = useState<ChatUser[]>([]);
   const [currentUser, setCurrentUser] = useState<ChatUser | null>(null);
-  const [messages, setMessages] = useState<MessageType[]>([]);
+  const [messages, setMessages] = useState<MessagesWithDate[]>([]);
   const [currentRecipientUId, setCurrentRecipientUId] = useState<string>("");
   const [showChat, setShowChat] = useState<boolean>(false);
   const [loadingStates, setLoadingStates] = useState<ChatPageLoading>({
@@ -47,6 +48,28 @@ export default function ChatPage() {
 
   // improve: if ChatRoom then maybe
   useEffect(() => {
+    const addDateSeperator = (messages: MessageType[]) => {
+      let addDateToMessages: MessagesWithDate[] = [];
+      let lastDate: Date | null = null;
+
+      if (!messages) return messages;
+
+      messages.forEach((msg) => {
+        if (
+          msg.timestamp &&
+          (!lastDate ||
+            lastDate.toDateString() !== msg.timestamp.toDate().toDateString())
+        ) {
+          addDateToMessages.push(
+            convertFirestoreTimeStampToDate(msg.timestamp, "YYYY-MM-DD"),
+          );
+          lastDate = msg.timestamp.toDate();
+        }
+        addDateToMessages.push(msg);
+      });
+      return addDateToMessages;
+    };
+
     if (user && currentRecipientUId) {
       // send and receive
       const messagesRef = collection(firestore, "messages");
@@ -70,8 +93,9 @@ export default function ChatPage() {
           id: doc.id,
           ...(doc.data() as MessageType),
         }));
+        const messageToUpdate = addDateSeperator(newMessages);
 
-        setMessages(newMessages);
+        setMessages(messageToUpdate);
         setLoadingStates({ ...loadingStates, messages: false });
         console.log("set message loading to false");
       });
