@@ -174,13 +174,13 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, children }) => {
         </div>
 
         <div>
-          <label htmlFor="nickname" className="mb-2 font-medium">
+          <label htmlFor="email" className="mb-2 font-medium">
             Email
           </label>
           <input
             type="text"
-            id="nickname"
-            name="nickname"
+            id="email"
+            name="email"
             value={user?.email ?? ""}
             disabled
             onChange={handleSelectChange}
@@ -200,7 +200,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, children }) => {
             name="gender"
             value={formData.gender}
             onChange={handleSelectChange}
-            className="block w-full rounded-lg border border-gray-300 p-3 px-4 py-2 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 disabled:bg-gray-50"
+            className="block min-h-[40px] w-full rounded-lg border border-gray-300 p-3 px-4 py-2 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 disabled:bg-gray-50"
             required
           >
             {genderOptions.map((gender) => (
