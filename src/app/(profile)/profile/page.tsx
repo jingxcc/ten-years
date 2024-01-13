@@ -9,6 +9,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/initialize";
 import toast from "react-hot-toast";
 import { FirebaseError } from "firebase/app";
+import { FaGithub } from "react-icons/fa6";
 
 export default function ProfilePage() {
   const { user, isUserLoading } = useUser();
@@ -43,7 +44,7 @@ export default function ProfilePage() {
       <Sidebar user={user}></Sidebar>
       <main className="flex h-full pb-20 xs:ml-20 xs:pb-0">
         <ProfileForm user={user}>
-          <div className="mt-2 block text-center xs:hidden">
+          <div className="mt-2 flex flex-col items-center gap-y-2 text-center xs:hidden">
             <button
               type="submit"
               onClick={handleLogOut}
@@ -51,6 +52,15 @@ export default function ProfilePage() {
             >
               Log Out
             </button>
+            <a
+              href={"https://github.com/jingxcc/ten-years"}
+              className="hover:cursor mt-2 h-9 w-9 overflow-hidden p-1 text-neutral-500"
+              target="_blank"
+            >
+              <div className="h-full w-full object-cover text-[28px] hover:text-sky-300">
+                <FaGithub></FaGithub>
+              </div>
+            </a>
           </div>
         </ProfileForm>
       </main>
