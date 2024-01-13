@@ -210,7 +210,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
             </button>
 
             <button
-              className="hover:cursor flex  h-[60px]  w-[60px] flex-col items-center justify-center rounded bg-sky-200 p-1  text-neutral-100 hover:bg-sky-300 enabled:hover:bg-sky-300 enabled:hover:text-white "
+              className="hover:cursor flex  h-[60px]  w-[60px] flex-col items-center justify-center rounded bg-sky-200 p-1  text-neutral-100 enabled:hover:text-white xs:hover:bg-sky-300 xs:enabled:hover:bg-sky-300 "
               onClick={() => route.push("/profile")}
             >
               <div className="h-8 w-8 overflow-hidden rounded-full">
