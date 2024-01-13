@@ -1,3 +1,4 @@
+import EmptyStateMsg from "@/components/EmptyStateMsg/EmptyStateMsg";
 import { ChatUser } from "@/types/ChatPage";
 import Image from "next/image";
 
@@ -22,10 +23,10 @@ const FriendList: React.FC<Props> = ({
         </h2>
       </div>
       {friends.length === 0 ? (
-        <div className="h-full w-full p-4 text-base font-semibold text-gray-400">
-          <p className="mb-2 block pt-6">{"No Friend Data "}</p>
-          <p className="block">{"Let's start from Today's Suggestions"}</p>
-        </div>
+        <EmptyStateMsg
+          title="No Friend Data"
+          content="Let's start from Today's Suggestions"
+        ></EmptyStateMsg>
       ) : (
         <ul className="flex-grow overflow-y-auto pb-16 xs:pb-0">
           {friends.map((friend) => (

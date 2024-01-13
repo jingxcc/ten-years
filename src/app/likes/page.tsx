@@ -23,6 +23,7 @@ import MatchReqCard from "./MatchReqCard";
 import { createFriendDoc } from "@/lib/firebase/firestore/createFriendDoc";
 import toast from "react-hot-toast";
 import PageHeader from "@/components/PageHeader/PageHeader";
+import EmptyStateMsg from "@/components/EmptyStateMsg/EmptyStateMsg";
 
 interface MatchRequestCardData extends MatchRequestData {
   id: string;
@@ -158,12 +159,10 @@ export default function LikesPage() {
                 ))}
               </div>
             ) : (
-              <div className="r h-full w-full text-lg font-semibold text-gray-400 ">
-                <h3 className="mb-2 block pt-6">{"No Data "}</h3>
-                <h3 className="block">
-                  {"Let's start from Today's Suggestions !"}
-                </h3>
-              </div>
+              <EmptyStateMsg
+                title="No Data"
+                content="Let's start from Today's Suggestions"
+              ></EmptyStateMsg>
             )}
           </div>
         </main>
