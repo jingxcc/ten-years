@@ -168,7 +168,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
             name="gender"
             value={formData.gender}
             onChange={handleSelectChange}
-            className="block w-full rounded-lg border border-gray-300 p-3 px-4 py-2 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 disabled:bg-gray-50"
+            className="block min-h-[40px] w-full rounded-lg border border-gray-300 p-3 px-4 py-2 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 disabled:bg-gray-50"
             required
           >
             {genderOptions.map((gender) => (
