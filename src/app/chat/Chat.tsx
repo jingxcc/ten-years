@@ -6,6 +6,7 @@ import { UserData } from "@/types/UserData";
 import Message from "./Message";
 import Image from "next/image";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { isMobile } from "react-device-detect";
 
 interface Props {
   user: UserData;
@@ -50,7 +51,7 @@ const Chat: React.FC<Props> = ({
   const handleEnterKey = async (
     event: React.KeyboardEvent<HTMLTextAreaElement>,
   ) => {
-    if (event.key === "Enter" && !event.shiftKey) {
+    if (event.key === "Enter" && !event.shiftKey && !isMobile) {
       sendMessage();
     }
   };
