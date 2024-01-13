@@ -125,7 +125,7 @@ export default function ImageUploader({
 
   return (
     <div className="flex justify-center">
-      <div className="[500px]:gap-x-4 [500px]:grid-cols-3 grid grid-cols-2 gap-6 xs:gap-y-2 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-6 xs:grid-cols-3 xs:gap-x-4 xs:gap-y-2 sm:grid-cols-4">
         {imgUrlsObj.length > 0 &&
           imgUrlsObj.map((imgUrl) => (
             <div key={imgUrl.id} className="relative h-32 w-32">
