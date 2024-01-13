@@ -170,7 +170,7 @@ export default function ChatPage() {
     setShowChat(false);
   };
 
-  if (!user || isUserLoading) {
+  if (!user || isUserLoading || loadingStates.friends) {
     return (
       <div className="h-100dvh  w-screen text-center text-2xl font-bold text-sky-300 ">
         <h3 className="block py-[20%]"> Loading ...</h3>
@@ -185,16 +185,12 @@ export default function ChatPage() {
       </div>
       <main className="relative h-full xs:ml-20  md:flex">
         <div className={`friend-list md:animate-none`}>
-          {currentUser && !loadingStates.friends ? (
+          {currentUser && (
             <FriendList
               friends={friends}
               currentUser={currentUser}
               onClickRecipient={handleClickRecipient}
             />
-          ) : (
-            <div className={`p-4 text-center font-semibold text-gray-400 `}>
-              <p className="pt-6">{"Loading"}</p>
-            </div>
           )}
         </div>
         <div
