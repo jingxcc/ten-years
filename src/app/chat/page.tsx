@@ -1,7 +1,7 @@
 "use client";
 
 import { firestore } from "@/lib/firebase/initialize";
-import { useUser } from "@/context/userContext";
+import { useAuth } from "@/context/authContext";
 import { useEffect, useState } from "react";
 import {
   and,
@@ -29,7 +29,7 @@ interface ChatPageLoading {
 }
 
 export default function ChatPage() {
-  const { user, isUserLoading } = useUser();
+  const { user, isAuthLoading } = useAuth();
   const [friends, setFriends] = useState<ChatUser[]>([]);
   const [currentUser, setCurrentUser] = useState<ChatUser | null>(null);
   const [messages, setMessages] = useState<MessagesWithDate[]>([]);
@@ -176,7 +176,7 @@ export default function ChatPage() {
     setShowChat(false);
   };
 
-  if (!user || isUserLoading || loadingStates.friends) {
+  if (!user || isAuthLoading || loadingStates.friends) {
     return (
       <div className="h-100dvh  w-screen text-center text-2xl font-bold text-sky-300 ">
         <h3 className="block py-[20%]"> Loading ...</h3>

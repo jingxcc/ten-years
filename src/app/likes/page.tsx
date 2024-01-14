@@ -1,6 +1,6 @@
 "use client";
 import Sidebar from "@/components/SideBar/SideBar";
-import { useUser } from "@/context/userContext";
+import { useAuth } from "@/context/authContext";
 
 import { useEffect, useState } from "react";
 import {
@@ -31,7 +31,7 @@ interface MatchRequestCardData extends MatchRequestData {
 }
 
 export default function LikesPage() {
-  const { user, isUserLoading } = useUser();
+  const { user, isAuthLoading } = useAuth();
   const [matchRequests, setMatchReqeusts] = useState<MatchRequestCardData[]>(
     [],
   );
@@ -131,7 +131,7 @@ export default function LikesPage() {
     setShowProfilePanel(false);
   };
 
-  if (!user || isUserLoading) {
+  if (!user || isAuthLoading) {
     return (
       <div className="h-100dvh  w-screen text-center text-2xl font-bold text-sky-300 ">
         <h3 className="block py-[20%]"> Loading ...</h3>

@@ -1,13 +1,13 @@
 "use client";
 
 import Header from "@/components/Header/Header";
-import { useUser } from "../../../context/userContext";
+import { useAuth } from "../../../context/authContext";
 import GetStartForm from "./GetStartForm";
 
 export default function GetStartPage() {
-  const { user, isUserLoading } = useUser();
+  const { user, isAuthLoading } = useAuth();
 
-  if (!user || isUserLoading) {
+  if (!user || isAuthLoading) {
     return (
       <div className="h-100dvh  w-screen text-center text-2xl font-bold text-sky-300 ">
         <h3 className="block py-[20%]"> Loading ...</h3>
