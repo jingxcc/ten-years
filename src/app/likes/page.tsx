@@ -19,11 +19,11 @@ import {
 import { firestore } from "@/lib/firebase/initialize";
 import { UserDetails } from "@/types/UserData";
 import { MatchRequestData } from "@/types/PotentialMatchesPage";
-import MatchReqCard from "./MatchReqCard";
 import { createFriendDoc } from "@/lib/firebase/firestore/createFriendDoc";
 import toast from "react-hot-toast";
 import PageHeader from "@/components/PageHeader/PageHeader";
 import EmptyStateMsg from "@/components/EmptyStateMsg/EmptyStateMsg";
+import MatchRequestCard from "./MatchRequestCard";
 
 interface MatchRequestCardData extends MatchRequestData {
   id: string;
@@ -144,7 +144,7 @@ export default function LikesPage() {
             {fromUserData.length > 0 ? (
               <div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {matchRequests.map((request) => (
-                  <MatchReqCard
+                  <MatchRequestCard
                     key={request.id}
                     matchRequest={request}
                     requestId={request.id}
@@ -155,7 +155,7 @@ export default function LikesPage() {
                     }
                     onLike={handleLike}
                     onReject={handleReject}
-                  ></MatchReqCard>
+                  ></MatchRequestCard>
                 ))}
               </div>
             ) : (

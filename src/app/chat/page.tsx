@@ -205,7 +205,7 @@ export default function ChatPage() {
               showChat
                 ? "absolute left-0 top-0 animate-slide-in"
                 : "hidden md:block"
-            } chat z-40 md:relative md:z-0 md:animate-none`}
+            } chat z-40  md:relative md:z-0 md:animate-none`}
           >
             {currentUser && currentRecipientUId ? (
               <Chat
@@ -222,14 +222,6 @@ export default function ChatPage() {
                 title="Your messages"
                 content="Send messages to a match"
               ></EmptyStateMsg>
-              // <div
-              //   className={`flex h-[80%] flex-col items-center justify-center gap-y-2 p-4 text-gray-400 `}
-              // >
-              //   <p className="text-lg font-semibold text-gray-500">
-              //     {"Your messages"}
-              //   </p>
-              //   <p>{"Send messages to a match"}</p>
-              // </div>
             )}
           </div>
         )}

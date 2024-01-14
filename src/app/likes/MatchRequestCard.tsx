@@ -8,7 +8,7 @@ import { MatchRequestData } from "@/types/PotentialMatchesPage";
 import { UserDetails } from "@/types/UserData";
 import { useState } from "react";
 
-interface MatchReqCardProps {
+interface MatchRequestCardProps {
   matchRequest: MatchRequestData;
   requestId: string;
   fromUser: UserDetails;
@@ -16,7 +16,7 @@ interface MatchReqCardProps {
   onReject: (fromUId: string, requestId: string) => void;
 }
 
-const MatchReqCard: React.FC<MatchReqCardProps> = ({
+const MatchRequestCard: React.FC<MatchRequestCardProps> = ({
   matchRequest,
   requestId,
   fromUser,
@@ -124,7 +124,7 @@ const MatchReqCard: React.FC<MatchReqCardProps> = ({
             )}
           </div>
 
-          <h3 className="mb-2 text-base font-bold">興趣</h3>
+          <h3 className="mb-2 text-base font-bold">Interests</h3>
 
           {fromUser.interests.map((interest) => (
             <span key={interest} className="mr-4">
@@ -137,4 +137,4 @@ const MatchReqCard: React.FC<MatchReqCardProps> = ({
   );
 };
 
-export default MatchReqCard;
+export default MatchRequestCard;
