@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useUser } from "../../../context/userContext";
+import { useAuth } from "../../../context/authContext";
 
 import ProfileForm from "./ProfileForm";
 import Sidebar from "@/components/SideBar/SideBar";
@@ -12,7 +12,7 @@ import { FirebaseError } from "firebase/app";
 import { FaGithub } from "react-icons/fa6";
 
 export default function ProfilePage() {
-  const { user, isUserLoading } = useUser();
+  const { user, isAuthLoading } = useAuth();
   const route = useRouter();
   // todo: extract/custom hook
   const handleLogOut = async () => {
@@ -31,7 +31,7 @@ export default function ProfilePage() {
     }
   };
 
-  if (!user || isUserLoading) {
+  if (!user || isAuthLoading) {
     return (
       <div className="h-100dvh  w-screen text-center text-2xl font-bold text-sky-300 ">
         <h3 className="block py-[20%]"> Loading ...</h3>

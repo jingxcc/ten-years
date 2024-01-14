@@ -1,5 +1,5 @@
 "use client";
-import { useUser } from "@/context/userContext";
+import { useAuth } from "@/context/authContext";
 import { useEffect, useState } from "react";
 import {
   PotentialMatchData,
@@ -58,7 +58,7 @@ const fetchMatchRequestData = async (user: UserData) => {
 };
 
 export default function PotentialMatchesPage() {
-  const { user, isUserLoading } = useUser();
+  const { user, isAuthLoading } = useAuth();
   const [potentialUsers, setPotentialUsers] = useState<UserDetails[]>([]);
   const [potentials, setPotentials] = useState<PotentialMatchData | null>(null);
   const [showProfilePanel, setShowProfilePanel] = useState<boolean>(false);
@@ -240,7 +240,7 @@ export default function PotentialMatchesPage() {
     setShowProfilePanel(false);
   };
 
-  if (!user || isUserLoading) {
+  if (!user || isAuthLoading) {
     return (
       <div className="h-100dvh  w-screen text-center text-2xl font-bold text-sky-300 ">
         <h3 className="block py-[20%]"> Loading ...</h3>

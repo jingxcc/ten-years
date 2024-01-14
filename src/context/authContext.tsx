@@ -13,18 +13,18 @@ import {
   useState,
 } from "react";
 
-interface UserContextType {
+interface AuthContextType {
   user: UserData | null;
-  isUserLoading: boolean;
+  isAuthLoading: boolean;
 }
 
-interface UserProviderProps {
+interface AuthProviderProps {
   children?: ReactNode;
 }
 
-const UserContext = createContext<UserContextType>({
+const AuthContext = createContext<AuthContextType>({
   user: null,
-  isUserLoading: true,
+  isAuthLoading: true,
 });
 
 const redirectToPage = async (
@@ -54,9 +54,9 @@ const redirectToPage = async (
   }
 };
 
-export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserData | null>(null);
-  const [isUserLoading, setIsUserLoading] = useState(true);
+  const [isAuthLoading, setisAuthLoading] = useState(true);
   const route = useRouter();
   const pathname = usePathname();
 
@@ -75,10 +75,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         redirectToPage(userData, route, pathname);
 
         setUser(userData);
-        setIsUserLoading(false);
+        setisAuthLoading(false);
       },
       (error) => {
-        console.error(`userContext Auth Error: ${error}`);
+        console.error(`AuthContext Auth Error: ${error}`);
       },
     );
 
@@ -89,13 +89,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   }, [pathname, route]);
 
   return (
-    <UserContext.Provider value={{ user, isUserLoading }}>
+    <AuthContext.Provider value={{ user, isAuthLoading }}>
       {children}
-    </UserContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
 // custom hook
-export const useUser = () => useContext(UserContext);
+export const useAuth = () => useContext(AuthContext);
 
-export default UserContext;
+export default AuthContext;
