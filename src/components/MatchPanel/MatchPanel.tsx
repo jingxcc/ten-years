@@ -37,7 +37,7 @@ const MatchPanel: React.FC<MatchPanelProps> = ({
     <div className="relative w-full">
       <div className="relative flex h-[68px] w-full items-center justify-center border-b border-neutral-200 bg-white p-4">
         <button
-          className="absolute left-2 top-[50%] mr-3 -translate-y-1/2 items-center p-2 lg:hidden"
+          className="absolute left-2 top-[50%] mr-3 -translate-y-1/2 items-center p-2 md:hidden"
           onClick={onBackToList}
         >
           <ChevronLeftIcon className="h-5 w-5"></ChevronLeftIcon>

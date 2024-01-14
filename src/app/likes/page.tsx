@@ -145,8 +145,8 @@ export default function LikesPage() {
         <Sidebar user={user}></Sidebar>
       </div>
       <div className=" flex flex-col pb-20 xs:ml-20 xs:pb-0">
-        <main className="relative lg:flex">
-          <div className=" flex  h-100dvh flex-col lg:flex-grow">
+        <main className="relative md:flex">
+          <div className=" flex  h-100dvh flex-col md:flex-grow">
             <PageHeader title="People Like You"></PageHeader>
             {/* cards*/}
             <div className="overflow-y-auto">
@@ -227,10 +227,10 @@ export default function LikesPage() {
           </div>
           {/* panel */}
           <div
-            className={`z-40 h-100dvh w-full border-x border-neutral-200 bg-white   lg:relative lg:w-[420px] lg:animate-none ${
+            className={`z-40 h-100dvh w-full border-x border-neutral-200 bg-white   md:relative md:w-[420px] md:animate-none ${
               showProfilePanel
                 ? "absolute left-0 top-0 animate-slide-in"
-                : "hidden lg:block"
+                : "hidden md:block"
             }`}
           >
             {selectedFromUId !== "" ? (

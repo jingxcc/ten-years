@@ -254,8 +254,8 @@ export default function PotentialMatchesPage() {
         <Sidebar user={user}></Sidebar>
       </div>
       <div className=" flex flex-col pb-20 xs:ml-20 xs:pb-0">
-        <main className="relative lg:flex">
-          <div className=" flex  h-100dvh flex-col lg:flex-grow">
+        <main className="relative md:flex">
+          <div className=" flex  h-100dvh flex-col md:flex-grow">
             <PageHeader title="Today's Suggestions">
               <div className="flex min-w-[75px] items-center justify-between rounded-xl border-2 border-sky-300 px-3 py-1">
                 <SolidHeartIcon className="mr-1 h-5 w-5 text-rose-400" />
@@ -285,10 +285,10 @@ export default function PotentialMatchesPage() {
           </div>
           {/* panel */}
           <div
-            className={`z-40 h-100dvh w-full border-x border-neutral-200 bg-white   lg:relative lg:w-[420px] lg:animate-none ${
+            className={`z-40 h-100dvh w-full border-x border-neutral-200 bg-white   md:relative md:w-[420px] md:animate-none ${
               showProfilePanel
                 ? "absolute left-0 top-0 animate-slide-in"
-                : "hidden lg:block"
+                : "hidden md:block"
             }`}
           >
             {selectedMatchUId !== "" ? (
