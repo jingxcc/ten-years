@@ -36,7 +36,6 @@ import { UserData, UserDetails } from "@/types/UserData";
 import PageHeader from "@/components/PageHeader/PageHeader";
 import PotentialCard from "./PotentialCard";
 import EmptyStateMsg from "@/components/EmptyStateMsg/EmptyStateMsg";
-import Image from "next/image";
 import MatchPanel from "@/components/MatchPanel/MatchPanel";
 
 // todo: extract/lib
@@ -265,7 +264,7 @@ export default function PotentialMatchesPage() {
                 </span>
               </div>
             </PageHeader>
-            {/* tmp:pageHeader */}
+            {/* cards*/}
             <div className="overflow-y-auto">
               <div className="container relative mx-auto px-4 py-10">
                 {potentials && (
@@ -286,7 +285,7 @@ export default function PotentialMatchesPage() {
           </div>
           {/* panel */}
           <div
-            className={`z-40 h-100dvh w-full border-x border-neutral-200 bg-white   xs:animate-none lg:relative lg:w-[420px] ${
+            className={`z-40 h-100dvh w-full border-x border-neutral-200 bg-white   lg:relative lg:w-[420px] lg:animate-none ${
               showProfilePanel
                 ? "absolute left-0 top-0 animate-slide-in"
                 : "hidden lg:block"

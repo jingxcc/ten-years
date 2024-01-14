@@ -1,9 +1,8 @@
 import { UserDetails } from "@/types/UserData";
 import Image from "next/image";
-import { Children, ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 import { SparklesIcon } from "@heroicons/react/24/solid";
 import Tag from "../Tag/Tag";
-import { child } from "firebase/database";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 
 interface MatchPanelProps {
@@ -108,8 +107,8 @@ const MatchPanel: React.FC<MatchPanelProps> = ({
           <div>
             <h3 className="mb-4 text-base font-bold">Expected Relationship</h3>
             <div className="flex flex-wrap gap-x-3 gap-y-3">
-              {matchUser.interests.map((interest) => (
-                <Tag key={interest} content={interest}></Tag>
+              {matchUser.expectedRelationships.map((relationship) => (
+                <Tag key={relationship} content={relationship}></Tag>
               ))}
             </div>
           </div>
