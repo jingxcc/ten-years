@@ -91,8 +91,8 @@ const MatchCard: React.FC<MatchCardProps> = ({
             ))}
           </div>
         </div>
-        {children}
       </div>
+      {children}
     </div>
   );
 };
