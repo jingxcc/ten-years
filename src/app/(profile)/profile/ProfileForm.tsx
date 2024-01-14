@@ -157,7 +157,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, children }) => {
         {/* text */}
         <div>
           <label htmlFor="nickname" className="mb-2 font-medium">
-            Nickname
+            Nickname*
           </label>
           <input
             type="text"
@@ -172,7 +172,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, children }) => {
 
         <div>
           <label htmlFor="email" className="mb-2 font-medium">
-            Email
+            Email*
           </label>
           <input
             type="text"
@@ -189,7 +189,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, children }) => {
         {/* single-select */}
         <div>
           <label htmlFor="gender" className="mb-2 font-medium">
-            Gender
+            Gender*
           </label>
           <select
             id="gender"
@@ -212,7 +212,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, children }) => {
 
         {/* select-radio */}
         <div>
-          <label className="mb-2 font-medium text-gray-700">Match Gender</label>
+          <label className="mb-2 font-medium text-gray-700">
+            Match Gender*
+          </label>
           <div className="grid grid-cols-2 ">
             {matchGenderOptions.map((item) => (
               <div key={item.id} className="mb-2 mr-4 ">
@@ -236,7 +238,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, children }) => {
         {/* select-radio */}
         <div>
           <label className="mb-2 font-medium text-gray-700">
-            Relationship Status
+            Relationship Status*
           </label>
           <div className="grid grid-cols-2 ">
             {relationshipStatusOptions.map((item) => (
