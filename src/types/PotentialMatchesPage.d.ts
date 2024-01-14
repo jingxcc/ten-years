@@ -5,11 +5,6 @@ interface MatchUser extends UpdateGetStartFormData {
   friends: string[];
 }
 
-interface PotentialUser extends UpdateGetStartFormData {
-  uid: string;
-  aboutMe?: string;
-}
-
 interface PotentialMatchData {
   users: string[];
   lastUpdatedOn?: Date | firebase.firestore.Timestamp;
@@ -25,4 +20,4 @@ interface MatchRequestData {
   sendAt: firebase.firestore.Timestamp;
 }
 
-export { PotentialMatchData, MatchUser, PotentialUser, MatchRequestData };
+export { PotentialMatchData, MatchUser, MatchRequestData };

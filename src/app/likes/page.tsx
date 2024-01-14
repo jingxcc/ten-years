@@ -19,10 +19,12 @@ import {
 import { firestore } from "@/lib/firebase/initialize";
 import { UserDetails } from "@/types/UserData";
 import { MatchRequestData } from "@/types/PotentialMatchesPage";
-import MatchReqCard from "./MatchReqCard";
 import { createFriendDoc } from "@/lib/firebase/firestore/createFriendDoc";
 import toast from "react-hot-toast";
 import PageHeader from "@/components/PageHeader/PageHeader";
+import EmptyStateMsg from "@/components/EmptyStateMsg/EmptyStateMsg";
+import MatchRequestCard from "./MatchRequestCard";
+import MatchPanel from "@/components/MatchPanel/MatchPanel";
 
 interface MatchRequestCardData extends MatchRequestData {
   id: string;
@@ -34,6 +36,8 @@ export default function LikesPage() {
     [],
   );
   const [fromUserData, setFromUserData] = useState<UserDetails[]>([]);
+  const [selectedFromUId, setSelectFromUId] = useState<string>("");
+  const [showProfilePanel, setShowProfilePanel] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchMatchRequestData = () => {
@@ -45,10 +49,7 @@ export default function LikesPage() {
 
       const q = query(
         collectionRef,
-        and(
-          where("toUserId", "==", user.uid),
-          or(where("status", "==", "sent"), where("status", "==", "accepted")),
-        ),
+        and(where("toUserId", "==", user.uid)),
         orderBy("sendAt", "desc"),
       );
 
@@ -81,11 +82,7 @@ export default function LikesPage() {
       return () => unsubscribe();
     };
 
-    // const fetchMatchRequestDocs = async (user: UserData) => {
-
-    // };
     const reusult = fetchMatchRequestData();
-    // return () => (reusult ? reusult() : null);
   }, [user]);
 
   const handleLike = async (requestId: string, fromUId: string) => {
@@ -125,6 +122,15 @@ export default function LikesPage() {
     });
   };
 
+  const handleSelect = (matchUserId: string) => {
+    setSelectFromUId(matchUserId);
+    setShowProfilePanel(true);
+  };
+
+  const handleBackToList = () => {
+    setShowProfilePanel(false);
+  };
+
   if (!user || isUserLoading) {
     return (
       <div className="h-100dvh  w-screen text-center text-2xl font-bold text-sky-300 ">
@@ -135,35 +141,110 @@ export default function LikesPage() {
 
   return (
     <div className="relative">
-      <Sidebar user={user}></Sidebar>
-      <div className="relative flex flex-col pb-20 xs:ml-20 xs:pb-0">
-        <PageHeader title="People Like You"></PageHeader>
-        <main className="mt-28 ">
-          <div className="container mx-auto px-4">
-            {fromUserData.length > 0 ? (
-              <div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {matchRequests.map((request) => (
-                  <MatchReqCard
-                    key={request.id}
-                    matchRequest={request}
-                    requestId={request.id}
-                    fromUser={
-                      fromUserData.filter(
-                        (data) => data.uid === request.fromUserId,
-                      )[0]
-                    }
-                    onLike={handleLike}
-                    onReject={handleReject}
-                  ></MatchReqCard>
-                ))}
+      <div className={`${showProfilePanel && "hidden xs:block"}`}>
+        <Sidebar user={user}></Sidebar>
+      </div>
+      <div className=" flex flex-col pb-20 xs:ml-20 xs:pb-0">
+        <main className="relative md:flex">
+          <div className=" flex  h-100dvh flex-col md:flex-grow">
+            <PageHeader title="People Like You"></PageHeader>
+            {/* cards*/}
+            <div className="overflow-y-auto">
+              <div className="container mx-auto px-4 py-10">
+                {fromUserData.length > 0 ? (
+                  <>
+                    {/* sent */}
+                    <div className="mb-8">
+                      <h3 className="mb-6 pb-2 text-lg font-semibold text-gray-700">
+                        Request
+                      </h3>
+
+                      {matchRequests.filter((r) => r.status === "sent").length >
+                      0 ? (
+                        <div className="grid grid-cols-1 justify-items-center gap-4 xl:grid-cols-2 xl:gap-8">
+                          {matchRequests
+                            .filter((r) => r.status === "sent")
+                            .map((request) => (
+                              <MatchRequestCard
+                                key={request.id}
+                                matchRequest={request}
+                                requestId={request.id}
+                                fromUser={
+                                  fromUserData.filter(
+                                    (data) => data.uid === request.fromUserId,
+                                  )[0]
+                                }
+                                onLike={handleLike}
+                                onReject={handleReject}
+                                onSelect={handleSelect}
+                              ></MatchRequestCard>
+                            ))}
+                        </div>
+                      ) : (
+                        <EmptyStateMsg title="No Pending Request"></EmptyStateMsg>
+                      )}
+                    </div>
+                    {/* history */}
+                    <div>
+                      <h3 className="mb-6 pb-2 text-lg font-semibold text-gray-700">
+                        History
+                      </h3>
+
+                      {matchRequests.filter((r) => r.status !== "sent").length >
+                      0 ? (
+                        <div className="grid grid-cols-1 justify-items-center gap-4 xl:grid-cols-2 xl:gap-8">
+                          {matchRequests
+                            .filter((r) => r.status !== "sent")
+                            .map((request) => (
+                              <MatchRequestCard
+                                key={request.id}
+                                matchRequest={request}
+                                requestId={request.id}
+                                fromUser={
+                                  fromUserData.filter(
+                                    (data) => data.uid === request.fromUserId,
+                                  )[0]
+                                }
+                                onLike={handleLike}
+                                onReject={handleReject}
+                                onSelect={handleSelect}
+                              ></MatchRequestCard>
+                            ))}
+                        </div>
+                      ) : (
+                        <EmptyStateMsg title="No Data"></EmptyStateMsg>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <EmptyStateMsg
+                    title="No Data"
+                    content="Let's start from Today's Suggestions"
+                  ></EmptyStateMsg>
+                )}
               </div>
+            </div>
+          </div>
+          {/* panel */}
+          <div
+            className={`z-40 h-100dvh w-full border-x border-neutral-200 bg-white   md:relative md:w-[420px] md:animate-none ${
+              showProfilePanel
+                ? "absolute left-0 top-0 animate-slide-in"
+                : "hidden md:block"
+            }`}
+          >
+            {selectedFromUId !== "" ? (
+              <MatchPanel
+                onBackToList={handleBackToList}
+                matchUser={fromUserData.find(
+                  (user) => user.uid === selectedFromUId,
+                )}
+              ></MatchPanel>
             ) : (
-              <div className="r h-full w-full text-lg font-semibold text-gray-400 ">
-                <h3 className="mb-2 block pt-6">{"No Data "}</h3>
-                <h3 className="block">
-                  {"Let's start from Today's Suggestions !"}
-                </h3>
-              </div>
+              <EmptyStateMsg
+                title="User Likes You"
+                content="Select a card to check profile"
+              ></EmptyStateMsg>
             )}
           </div>
         </main>

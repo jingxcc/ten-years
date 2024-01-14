@@ -7,6 +7,5 @@ export interface UserData {
 
 export interface UserDetails extends UpdateGetStartFormData {
   uid: string;
-  friends?: string[];
   aboutMe?: string;
 }

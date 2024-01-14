@@ -21,6 +21,8 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "gradiant-white-b":
+          "linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 1) 50%,rgba(255, 255, 255, 1) 100%)",
       },
       animation: {
         "bounce-once": "bounce-once 1s ease-out",

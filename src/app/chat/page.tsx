@@ -20,6 +20,7 @@ import FriendList from "./FrendList";
 import { ChatUser, MessageType, MessagesWithDate } from "@/types/ChatPage";
 import Chat from "./Chat";
 import { convertFirestoreTimeStampToDate } from "@/lib/lib";
+import EmptyStateMsg from "@/components/EmptyStateMsg/EmptyStateMsg";
 
 interface ChatPageLoading {
   currentUser: boolean;
@@ -130,7 +131,12 @@ export default function ChatPage() {
     const unsubscribe = onSnapshot(friendsQuery, async (snapshot) => {
       const friendsDocs = snapshot.docs.map((doc) => doc.data() as ChatUser);
 
-      if (friendsDocs.length === 0) return false;
+      if (friendsDocs.length === 0) {
+        setLoadingStates({ ...loadingStates, friends: false });
+        console.log("set friends loading to false");
+
+        return false;
+      }
 
       const friendUIds = friendsDocs.map((data) => data.uid);
 
@@ -193,34 +199,32 @@ export default function ChatPage() {
             />
           )}
         </div>
-        <div
-          className={`${
-            showChat
-              ? "absolute left-0 top-0 animate-slide-in"
-              : "hidden md:block"
-          } chat z-40 md:relative md:z-0 md:animate-none`}
-        >
-          {currentUser && currentRecipientUId ? (
-            <Chat
-              key={currentRecipientUId}
-              user={user}
-              messages={messages}
-              currentRecipient={friends.find(
-                (friend) => friend.uid === currentRecipientUId,
-              )}
-              onBackToList={handleBackToList}
-            />
-          ) : (
-            <div
-              className={`flex h-[80%] flex-col items-center justify-center gap-y-2 p-4 text-gray-400 `}
-            >
-              <p className="text-lg font-semibold text-gray-500">
-                {"Your messages"}
-              </p>
-              <p>{"Send messages to a match"}</p>
-            </div>
-          )}
-        </div>
+        {friends.length > 0 && (
+          <div
+            className={`${
+              showChat
+                ? "absolute left-0 top-0 animate-slide-in"
+                : "hidden md:block"
+            } chat z-40  md:relative md:z-0 md:animate-none`}
+          >
+            {currentUser && currentRecipientUId ? (
+              <Chat
+                key={currentRecipientUId}
+                user={user}
+                messages={messages}
+                currentRecipient={friends.find(
+                  (friend) => friend.uid === currentRecipientUId,
+                )}
+                onBackToList={handleBackToList}
+              />
+            ) : (
+              <EmptyStateMsg
+                title="Your messages"
+                content="Send messages to a match"
+              ></EmptyStateMsg>
+            )}
+          </div>
+        )}
       </main>
     </div>
   );

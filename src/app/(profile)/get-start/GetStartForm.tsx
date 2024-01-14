@@ -26,9 +26,9 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
   const [formData, setFormData] = useState<GetStartFormData>({
     // isStartProfileCompleted: false,
     nickname: "",
-    gender: genderOptions[0]["value"],
-    relationshipStatus: relationshipStatusOptions[0]["value"],
-    matchGender: matchGenderOptions[0]["value"],
+    gender: "",
+    relationshipStatus: "",
+    matchGender: "",
     expectedRelationships: [],
     interests: [],
     imageUrls: [],
@@ -44,12 +44,9 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
       const fetchUpdateFormData = fetchUserDocResult.data;
       const fetchData = {
         nickname: fetchUpdateFormData?.nickname ?? "",
-        gender: fetchUpdateFormData?.gender ?? genderOptions[0]["value"],
-        relationshipStatus:
-          fetchUpdateFormData?.relationshipStatus ??
-          relationshipStatusOptions[0]["value"],
-        matchGender:
-          fetchUpdateFormData?.matchGender ?? matchGenderOptions[0]["value"],
+        gender: fetchUpdateFormData?.gender ?? "",
+        relationshipStatus: fetchUpdateFormData?.relationshipStatus ?? "",
+        matchGender: fetchUpdateFormData?.matchGender ?? "",
         expectedRelationships: fetchUpdateFormData?.expectedRelationships ?? [],
         interests: fetchUpdateFormData?.interests ?? [],
         imageUrls: fetchUpdateFormData?.imageUrls ?? [],
@@ -168,9 +165,12 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
             name="gender"
             value={formData.gender}
             onChange={handleSelectChange}
-            className="block w-full rounded-lg border border-gray-300 p-3 px-4 py-2 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 disabled:bg-gray-50"
+            className="block min-h-[40px] w-full rounded-lg border border-gray-300 p-3 px-4 py-2 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 disabled:bg-gray-50"
             required
           >
+            <option key={"Please choose"} value={""} disabled>
+              {"請選擇"}
+            </option>
             {genderOptions.map((gender) => (
               <option key={gender.id} value={gender.value}>
                 {gender.value}
@@ -193,6 +193,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
                     checked={formData.matchGender === item.value}
                     onChange={handleSelectChange}
                     className="h-4 w-4 focus:ring-indigo-500"
+                    required
                   />
                   <span className="ml-4 text-sm">{item.value}</span>
                 </label>
@@ -217,6 +218,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
                     checked={formData.relationshipStatus === item.value}
                     onChange={handleSelectChange}
                     className="h-4 w-4 focus:ring-indigo-500"
+                    required
                   />
                   <span className="ml-4 text-sm">{item.value}</span>
                 </label>
@@ -257,16 +259,21 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
           <div className="flex flex-wrap items-center justify-center">
             {interestOptions.map((item) => (
               <div key={item.id} className="mb-2 mr-4">
-                <label className="mb-2 flex items-center rounded-lg border border-gray-300 px-3 py-2">
+                <label
+                  className={`rounded-full border border-gray-300 px-4 py-2 hover:border-sky-300 hover:bg-sky-100 ${
+                    formData.interests.includes(item.value) &&
+                    "text-b border-sky-200 bg-sky-200 hover:bg-sky-200"
+                  }`}
+                >
                   <input
                     type="checkbox"
                     name="interests"
                     value={item.value}
                     checked={formData.interests.includes(item.value)}
                     onChange={handleMultiSelectChange}
-                    className="h-4 w-4 focus:ring-indigo-500"
+                    className="hidden h-4 w-4 focus:ring-indigo-500"
                   />
-                  <span className="ml-4 text-sm">{item.value}</span>
+                  <span className="">{item.value}</span>
                 </label>
               </div>
             ))}
