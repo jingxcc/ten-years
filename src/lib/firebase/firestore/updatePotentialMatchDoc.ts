@@ -1,10 +1,7 @@
 import { FirestoreError, doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../initialize";
 import { UserData } from "@/types/UserData";
-import {
-  PotentialMatchData,
-  PotentialUser,
-} from "@/types/PotentialMatchesPage";
+import { PotentialMatchData } from "@/types/PotentialMatchesPage";
 
 const updatePotentialMatchDoc = async (
   user: UserData,

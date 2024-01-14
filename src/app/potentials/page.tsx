@@ -1,11 +1,9 @@
 "use client";
 import { useUser } from "@/context/userContext";
-import MatchCard from "./MatchCard";
 import { useEffect, useState } from "react";
 import {
   PotentialMatchData,
   MatchUser,
-  PotentialUser,
   MatchRequestData,
 } from "@/types/PotentialMatchesPage";
 
@@ -34,8 +32,11 @@ import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
 import fetchAllFriendDocIds from "@/lib/firebase/firestore/fetchFriendDoc";
 import { createMatchRequests } from "@/lib/firebase/firestore/createMatchRequest";
 import toast from "react-hot-toast";
-import { UserData } from "@/types/UserData";
+import { UserData, UserDetails } from "@/types/UserData";
 import PageHeader from "@/components/PageHeader/PageHeader";
+import PotentialCard from "./PotentialCard";
+import EmptyStateMsg from "@/components/EmptyStateMsg/EmptyStateMsg";
+import MatchPanel from "@/components/MatchPanel/MatchPanel";
 
 // todo: extract/lib
 const fetchMatchRequestData = async (user: UserData) => {
@@ -58,15 +59,17 @@ const fetchMatchRequestData = async (user: UserData) => {
 
 export default function PotentialMatchesPage() {
   const { user, isUserLoading } = useUser();
-  const [potentialUsers, setPotentialUsers] = useState<PotentialUser[]>([]);
+  const [potentialUsers, setPotentialUsers] = useState<UserDetails[]>([]);
   const [potentials, setPotentials] = useState<PotentialMatchData | null>(null);
+  const [showProfilePanel, setShowProfilePanel] = useState<boolean>(false);
+  const [selectedMatchUId, setSelectMatchUId] = useState<string>("");
 
   useEffect(() => {
     const fetchMatches = async () => {
       if (!user) {
         return false;
       }
-      let selectedPotentialUsers: PotentialUser[] = [];
+      let selectedPotentialUsers: UserDetails[] = [];
       let selectedMatchData: PotentialMatchData | null = null;
 
       // get potentials doc
@@ -91,7 +94,7 @@ export default function PotentialMatchesPage() {
         const matchDocs = await Promise.all(matchPromises);
 
         selectedPotentialUsers = matchDocs.map((doc) => ({
-          ...(doc.data() as PotentialUser),
+          ...(doc.data() as UserDetails),
           uid: doc.id,
         }));
       }
@@ -228,6 +231,15 @@ export default function PotentialMatchesPage() {
     });
   };
 
+  const handleSelect = (matchUserId: string) => {
+    setSelectMatchUId(matchUserId);
+    setShowProfilePanel(true);
+  };
+
+  const handleBackToList = () => {
+    setShowProfilePanel(false);
+  };
+
   if (!user || isUserLoading) {
     return (
       <div className="h-100dvh  w-screen text-center text-2xl font-bold text-sky-300 ">
@@ -237,30 +249,60 @@ export default function PotentialMatchesPage() {
   }
 
   return (
-    <div className="relative">
-      <Sidebar user={user}></Sidebar>
-      <div className="relative flex flex-col pb-20 xs:ml-20 xs:pb-0">
-        <PageHeader title="Today's Suggestions">
-          <div className="flex min-w-[75px] items-center justify-between rounded-xl border-2 border-sky-300 px-3 py-1">
-            <SolidHeartIcon className="mr-1 h-5 w-5 text-rose-400" />
-            <span className=" font-bold">
-              {potentials && potentials.userLiked ? "00" : "01"}
-            </span>
-          </div>
-        </PageHeader>
-        <main className="mt-28 ">
-          <div className="container relative mx-auto px-4">
-            {potentials && (
-              <div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2  md:gap-8 xl:grid-cols-3">
-                {potentialUsers.map((potentialUser) => (
-                  <MatchCard
-                    key={potentialUser.uid}
-                    potentialUser={potentialUser}
-                    potentials={potentials}
-                    onLike={handleLike}
-                  ></MatchCard>
-                ))}
+    <div className="">
+      <div className={`${showProfilePanel && "hidden xs:block"}`}>
+        <Sidebar user={user}></Sidebar>
+      </div>
+      <div className=" flex flex-col pb-20 xs:ml-20 xs:pb-0">
+        <main className="relative md:flex">
+          <div className=" flex  h-100dvh flex-col md:flex-grow">
+            <PageHeader title="Today's Suggestions">
+              <div className="flex min-w-[75px] items-center justify-between rounded-xl border-2 border-sky-300 px-3 py-1">
+                <SolidHeartIcon className="mr-1 h-5 w-5 text-rose-400" />
+                <span className=" font-semibold">
+                  {potentials && potentials.liked === false ? "01" : "00"}
+                </span>
               </div>
+            </PageHeader>
+            {/* cards*/}
+            <div className="overflow-y-auto">
+              <div className="container relative mx-auto px-4 py-10">
+                {potentials && (
+                  <div className="grid grid-cols-1 justify-items-center gap-4 xl:grid-cols-2 xl:gap-8">
+                    {potentialUsers.map((potentialUser) => (
+                      <PotentialCard
+                        key={potentialUser.uid}
+                        potentialUser={potentialUser}
+                        potentials={potentials}
+                        onLike={handleLike}
+                        onSelect={handleSelect}
+                      ></PotentialCard>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          {/* panel */}
+          <div
+            className={`z-40 h-100dvh w-full border-x border-neutral-200 bg-white   md:relative md:w-[420px] md:animate-none ${
+              showProfilePanel
+                ? "absolute left-0 top-0 animate-slide-in"
+                : "hidden md:block"
+            }`}
+          >
+            {selectedMatchUId !== "" ? (
+              <MatchPanel
+                onBackToList={handleBackToList}
+                matchUser={potentialUsers.find(
+                  (user) => user.uid === selectedMatchUId,
+                )}
+              ></MatchPanel>
+            ) : (
+              <EmptyStateMsg
+                title="Suggested User"
+                content="Select a card to check profile"
+              ></EmptyStateMsg>
             )}
           </div>
         </main>
