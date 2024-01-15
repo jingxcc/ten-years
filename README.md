@@ -1,46 +1,87 @@
-# Ten Years
+<!-- TODO: study repaint -->
+<!-- TODO: img 仔入 -->
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# [Ten Years](https://ten-years-lilac.vercel.app)
 
-## folder structure
+<!-- TODO: text center -->
 
-- /app: routes, logic for application
-- /lib: utility functions
-- /public: static assets
-<!-- - /scripts: populate database
-- /types: define types -->
+ＡTen Years is a matching website allows you to meet new people and chat with them.
 
-## Getting Started
+<img src="./public/README/home.svg" width="900" alt="home"></img>
 
-First, run the development server:
+- Test Account
+  - Email: test01@test.com
+  - Password: 000000
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# Tech Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<!-- TODO: img/補上圖片 -->
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Front-end
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- React
+  - `useContext`, `useLayoutEffect`, `React.memo`
+- TypeScript
+- Next.js
+  - Router, Image
+- Tailwind CSS
 
-## Learn More
+## Back-end
 
-To learn more about Next.js, take a look at the following resources:
+- Firebase
+  - Authentication
+  - Firestore Database
+  - Storage
+- Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tools
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- ESLint/Prettier
+- Git
 
-## Deploy on Vercel
+# Main Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Sign up and fill in basic information
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+   - Your image will be automatically saved after upload.
+
+   ![start-profile](./public/README/gif/signupProfile.gif)
+
+2. Start Finding Your Match from "Today's Suggestions"!
+
+   - After login each day, you'll be provided with today's potential matches. Click on the photo to view images, and the text area to view user profiles.
+   - Depending on your quota of hearts, send likes to your favorite one !
+   - Matchmaking logic: - candidates who are not friends - have not sent a friend request previously. -
+
+   ![suggest](./public/README/gif/suggest.gif)
+
+3. Successful Matchmaking
+
+   - Go to "Like You" to see if someone likes you!
+   - Historical data is also available below for review.
+   - A match is successful when the other person likes you back, and you can see the matched individuals in the Chat!
+
+   ![match](./public/README/gif/match.gif)
+
+4. Instant Messaging
+
+- Chat with the other person through text to get to know them better :)
+
+  ![chat](./public/README/gif/chat.gif)
+
+<!-- TODO: improvemenets -->
+<!-- 4.1 傳送圖片 -->
+<!-- 5. **心理測驗** --
+<!-- 1. 心理測驗可幫助你了自己、找到更適合的配對對象 -->
+<!-- 1. **不再感興趣了嗎** --
+<!-- 1. 可以在這裡取消配對，朝向下一段緣份邁進～ -->
+
+# Database Schema
+
+<img src="./public/README/databaseSchema.svg" width="900" alt="database-schema"></img>
+
+# Contact
+
+- Name: Xiao-Jing Chen 陳筱靜
+- Email: vera.xj.chen@gmail.com
+- LinkedIn: [in/vera-xj-chen](https://www.linkedin.com/in/vera-xj-chen/)
