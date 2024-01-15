@@ -142,7 +142,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
         {/* text */}
         <div>
           <label htmlFor="nickname" className="mb-2 font-medium">
-            Nickname
+            Nickname*
           </label>
           <input
             type="text"
@@ -158,7 +158,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
         {/* single-select */}
         <div>
           <label htmlFor="gender" className="mb-2 font-medium">
-            Gender
+            Gender*
           </label>
           <select
             id="gender"
@@ -181,7 +181,9 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
 
         {/* select-radio */}
         <div>
-          <label className="mb-2 font-medium text-gray-700">Match Gender</label>
+          <label className="mb-2 font-medium text-gray-700">
+            Match Gender*
+          </label>
           <div className="grid grid-cols-2 ">
             {matchGenderOptions.map((item) => (
               <div key={item.id} className="mb-2 mr-4">
@@ -205,7 +207,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
         {/* select-radio */}
         <div>
           <label className="mb-2 font-medium text-gray-700">
-            Relationship Status
+            Relationship Status*
           </label>
           <div className=" grid grid-cols-2 ">
             {relationshipStatusOptions.map((item) => (
