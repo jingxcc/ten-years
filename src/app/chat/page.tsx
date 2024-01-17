@@ -44,7 +44,6 @@ export default function ChatPage() {
   useEffect(() => {
     fetchCurrentUser();
     fetchFriendData();
-    console.log("use effect");
   }, [user]);
 
   // improve: if ChatRoom then maybe
@@ -98,7 +97,6 @@ export default function ChatPage() {
 
         setMessages(messageToUpdate);
         setLoadingStates({ ...loadingStates, messages: false });
-        console.log("set message loading to false");
       });
 
       return () => {
@@ -116,7 +114,6 @@ export default function ChatPage() {
     if (fetchUserDocResult) {
       setCurrentUser({ ...(fetchUserDocResult["data"] as ChatUser) });
       setLoadingStates({ ...loadingStates, currentUser: false });
-      console.log("set currentUser loading to false");
     }
   };
 
@@ -133,7 +130,6 @@ export default function ChatPage() {
 
       if (friendsDocs.length === 0) {
         setLoadingStates({ ...loadingStates, friends: false });
-        console.log("set friends loading to false");
 
         return false;
       }
@@ -157,7 +153,6 @@ export default function ChatPage() {
         })
         .finally(() => {
           setLoadingStates({ ...loadingStates, friends: false });
-          console.log("set friends loading to false");
         });
     });
 
@@ -167,7 +162,6 @@ export default function ChatPage() {
   const handleClickRecipient = (recipientUId: string) => {
     setLoadingStates({ ...loadingStates, messages: true });
 
-    console.log("set message loading to true");
     setCurrentRecipientUId(recipientUId);
     setShowChat(true);
   };
