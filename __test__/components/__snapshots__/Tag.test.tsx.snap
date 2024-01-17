@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<span
+  className="rounded-full border border-sky-300 px-3 py-1"
+>
+  sample tag
+</span>
+`;
