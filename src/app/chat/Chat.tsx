@@ -27,25 +27,12 @@ const Chat: React.FC<Props> = ({
 
   // console.log("Chat");
 
-  useLayoutEffect(() => {
-    showEndOfContainer();
-    // console.log("useLayoutEffect", chatEndRef);
-  }, []);
-
   useEffect(() => {
-    // console.log("useEffect", chatEndRef);
     scrollToBottom();
   }, [messages]);
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const showEndOfContainer = () => {
-    if (messageContainerRef.current) {
-      messageContainerRef.current.scrollTop =
-        messageContainerRef.current.scrollHeight;
-    }
   };
 
   const handleEnterKey = async (

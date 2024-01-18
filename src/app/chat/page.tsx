@@ -129,10 +129,8 @@ export default function ChatPage() {
           id: doc.id,
           ...(doc.data() as MessageType),
         }));
-        console.log("new message", newMessages);
 
         const messageToUpdate = addDateSeperator(newMessages);
-        console.log("messageToUpdate", messageToUpdate);
         setMessages(messageToUpdate);
         setLoadingStates({ ...loadingStates, messages: false });
       });
@@ -164,7 +162,6 @@ export default function ChatPage() {
     });
     return addDateToMessages;
   };
-
 
   const handleClickRecipient = (recipientUId: string) => {
     setLoadingStates({ ...loadingStates, messages: true });
