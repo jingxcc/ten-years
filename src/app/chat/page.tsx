@@ -48,61 +48,7 @@ export default function ChatPage() {
 
   // improve: if ChatRoom then maybe
   useEffect(() => {
-    const addDateSeperator = (messages: MessageType[]) => {
-      let addDateToMessages: MessagesWithDate[] = [];
-      let lastDate: Date | null = null;
-
-      if (!messages) return messages;
-
-      messages.forEach((msg) => {
-        if (
-          msg.timestamp &&
-          (!lastDate ||
-            lastDate.toDateString() !== msg.timestamp.toDate().toDateString())
-        ) {
-          addDateToMessages.push(
-            convertFirestoreTimeStampToDate(msg.timestamp, "YYYY-MM-DD"),
-          );
-          lastDate = msg.timestamp.toDate();
-        }
-        addDateToMessages.push(msg);
-      });
-      return addDateToMessages;
-    };
-
-    if (user && currentRecipientUId) {
-      // send and receive
-      const messagesRef = collection(firestore, "messages");
-      const queryMessages = query(
-        messagesRef,
-        or(
-          and(
-            where("fromUserId", "==", user.uid),
-            where("toUserId", "==", currentRecipientUId),
-          ),
-          and(
-            where("fromUserId", "==", currentRecipientUId),
-            where("toUserId", "==", user.uid),
-          ),
-        ),
-        orderBy("timestamp", "asc"),
-      );
-
-      const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
-        const newMessages = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...(doc.data() as MessageType),
-        }));
-        const messageToUpdate = addDateSeperator(newMessages);
-
-        setMessages(messageToUpdate);
-        setLoadingStates({ ...loadingStates, messages: false });
-      });
-
-      return () => {
-        unsubscribe();
-      };
-    }
+    fetchMessageData();
   }, [user, currentRecipientUId]);
 
   const fetchCurrentUser = async () => {
@@ -158,6 +104,67 @@ export default function ChatPage() {
 
     return () => unsubscribe();
   };
+
+  const fetchMessageData = () => {
+    if (user && currentRecipientUId) {
+      // send and receive
+      const messagesRef = collection(firestore, "messages");
+      const queryMessages = query(
+        messagesRef,
+        or(
+          and(
+            where("fromUserId", "==", user.uid),
+            where("toUserId", "==", currentRecipientUId),
+          ),
+          and(
+            where("fromUserId", "==", currentRecipientUId),
+            where("toUserId", "==", user.uid),
+          ),
+        ),
+        orderBy("timestamp", "asc"),
+      );
+
+      const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
+        const newMessages = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as MessageType),
+        }));
+        console.log("new message", newMessages);
+
+        const messageToUpdate = addDateSeperator(newMessages);
+        console.log("messageToUpdate", messageToUpdate);
+        setMessages(messageToUpdate);
+        setLoadingStates({ ...loadingStates, messages: false });
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    }
+  };
+
+  const addDateSeperator = (messages: MessageType[]) => {
+    let addDateToMessages: MessagesWithDate[] = [];
+    let lastDate: Date | null = null;
+
+    if (!messages) return messages;
+
+    messages.forEach((msg) => {
+      if (
+        msg.timestamp &&
+        (!lastDate ||
+          lastDate.toDateString() !== msg.timestamp.toDate().toDateString())
+      ) {
+        addDateToMessages.push(
+          convertFirestoreTimeStampToDate(msg.timestamp, "YYYY-MM-DD"),
+        );
+        lastDate = msg.timestamp.toDate();
+      }
+      addDateToMessages.push(msg);
+    });
+    return addDateToMessages;
+  };
+
 
   const handleClickRecipient = (recipientUId: string) => {
     setLoadingStates({ ...loadingStates, messages: true });

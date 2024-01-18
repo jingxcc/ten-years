@@ -25,15 +25,15 @@ const Chat: React.FC<Props> = ({
   const chatEndRef = useRef<null | HTMLDivElement>(null);
   const messageContainerRef = useRef<null | HTMLDivElement>(null);
 
-  console.log("Chat");
+  // console.log("Chat");
 
   useLayoutEffect(() => {
     showEndOfContainer();
-    console.log("useLayoutEffect", chatEndRef);
+    // console.log("useLayoutEffect", chatEndRef);
   }, []);
 
   useEffect(() => {
-    console.log("useEffect", chatEndRef);
+    // console.log("useEffect", chatEndRef);
     scrollToBottom();
   }, [messages]);
 
