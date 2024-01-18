@@ -1,4 +1,3 @@
-<!-- TODO: study repaint -->
 <!-- TODO: img 仔入 -->
 
 # [Ten Years](https://ten-years-lilac.vercel.app)
@@ -20,7 +19,7 @@
 ## Front-end
 
 - React
-  - `useContext`, `useLayoutEffect`, `React.memo`
+  - `useContext`, `React.memo`
 - TypeScript
 - Next.js
   - Router, Image

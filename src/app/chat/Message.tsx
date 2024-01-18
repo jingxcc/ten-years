@@ -15,7 +15,7 @@ const Message: React.FC<MessageProps> = ({
   user,
   currentRecipient,
 }) => {
-  console.log("render message");
+  // console.log("message");
 
   return (
     <>

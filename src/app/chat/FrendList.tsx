@@ -13,7 +13,7 @@ const FriendList: React.FC<Props> = ({
   currentUser,
   onClickRecipient,
 }) => {
-  console.log("friendslist");
+  // console.log("friendslist");
 
   return (
     <>

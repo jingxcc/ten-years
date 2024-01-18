@@ -46,7 +46,6 @@ const MatchRequestCard: React.FC<MatchRequestCardProps> = ({
         {matchRequest.status === "accepted" && (
           <button
             className={`mb-4 mr-4 flex h-[60px] w-[60px] items-center rounded-[30px] bg-rose-300 px-4 py-2 text-white shadow-lg `}
-            onClick={() => onLike(requestId, matchRequest.fromUserId)}
             disabled
           >
             <SolidHeartIcon className="h-8 w-8" />
@@ -56,7 +55,6 @@ const MatchRequestCard: React.FC<MatchRequestCardProps> = ({
         {matchRequest.status === "rejected" && (
           <button
             className={`mb-4 mr-4 flex h-[60px] w-[60px] items-center rounded-[30px] bg-neutral-300 px-4 py-2 text-white shadow-lg `}
-            onClick={() => onLike(requestId, matchRequest.fromUserId)}
             disabled
           >
             <XMarkIcon className="h-8 w-8 " />
