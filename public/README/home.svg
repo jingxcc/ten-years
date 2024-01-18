@@ -1,9 +1,11 @@
 <svg width="1552" height="793" viewBox="0 0 1552 793" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g filter="url(#filter0_d_267_5)">
 <rect x="0.5" width="1411.5" height="720" fill="url(#pattern0)" shape-rendering="crispEdges"/>
+<rect x="1" y="0.5" width="1410.5" height="719" stroke="black" stroke-opacity="0.25" shape-rendering="crispEdges"/>
 </g>
 <g filter="url(#filter1_d_267_5)">
 <rect x="1225" y="133" width="319" height="652" fill="url(#pattern1)" shape-rendering="crispEdges"/>
+<rect x="1225.5" y="133.5" width="318" height="651" stroke="black" stroke-opacity="0.25" shape-rendering="crispEdges"/>
 </g>
 <defs>
 <filter id="filter0_d_267_5" x="0.5" y="0" width="1419.5" height="728" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
