@@ -19,11 +19,13 @@
 ## Front-end
 
 - React
-  - `useContext`, `React.memo`
+  - `useContext`: Used for verifying login status on each page
+  - `React memo`: Prevents re-rendering of the Message component when typing in textarea (i.e. triggered by `onChange`) events occur
 - TypeScript
 - Next.js
   - Router, Image
 - Tailwind CSS
+- Jest
 
 ## Back-end
 
