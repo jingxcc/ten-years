@@ -1,5 +1,3 @@
-<!-- TODO: img 仔入 -->
-
 # [Ten Years](https://ten-years-lilac.vercel.app)
 
 <!-- TODO: text center -->
@@ -79,7 +77,9 @@
 
 # Database Schema
 
-<img src="./public/README/databaseSchema.svg" width="900" alt="database-schema"></img>
+- ID: document ID in Firebase
+
+  <img src="./public/README/databaseSchema.svg" width="900" alt="database-schema"></img>
 
 # Contact
 
