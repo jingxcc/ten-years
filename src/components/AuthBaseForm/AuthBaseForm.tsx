@@ -1,28 +1,32 @@
 import Link from "next/link";
 import { ReactNode, useState } from "react";
+import { demoAccount } from "@/constants/AuthForm";
 
 interface AuthFormProps {
   formType: "Login" | "SignUp";
   formTitle: string;
   btnContent: string;
   errorMsg?: string;
-  defaultValues?: { email: string; password: string };
   onFormSubmit: (email: string, password: string) => void;
   children?: ReactNode;
 }
 
 const AuthBaseForm: React.FC<AuthFormProps> = ({
   formType,
-  defaultValues,
   formTitle,
   btnContent,
   errorMsg,
   onFormSubmit,
   children,
 }) => {
-  const [email, setEmail] = useState(defaultValues?.email || "");
-  const [password, setPassword] = useState(defaultValues?.password || "");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleDemoClick = () => {
+    setEmail(demoAccount.email);
+    setPassword(demoAccount.password);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,22 +62,31 @@ const AuthBaseForm: React.FC<AuthFormProps> = ({
         </div>
         {children}
         {errorMsg && <p className="mb-2 text-sm text-red-500">{errorMsg}</p>}
-        <button type="submit" disabled={isLoading} className="btn">
+        <button type="submit" disabled={isLoading} className="btn mb-2">
           {btnContent}
         </button>
         <div className="flex justify-center">
           {formType === "Login" && (
-            <Link
-              href="/signup"
-              className="block px-12  py-3 text-center text-sm text-sky-500 hover:font-bold"
-            >
-              {"I'm new here"}
-            </Link>
+            <div className="">
+              <Link
+                href="/signup"
+                className="block w-full px-12 py-2 text-center text-sm text-sky-500 hover:font-bold"
+              >
+                {"I'm new here"}
+              </Link>
+              <button
+                type="button"
+                className="block w-full px-12 py-2 text-center text-sm text-sky-500 hover:font-bold"
+                onClick={handleDemoClick}
+              >
+                {"Try a Demo"}
+              </button>
+            </div>
           )}
           {formType === "SignUp" && (
             <Link
               href="/login"
-              className="p-3 text-sm hover:underline hover:underline-offset-2"
+              className="p-2 text-sm hover:underline hover:underline-offset-2"
             >
               Already have an account
             </Link>
