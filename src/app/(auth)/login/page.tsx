@@ -51,7 +51,6 @@ export default function LoginPage() {
       <main className="px-3">
         <AuthBaseForm
           formType="Login"
-          defaultValues={{ email: "test01@test.com", password: "000000" }}
           formTitle="Log In"
           btnContent="Log In"
           errorMsg={errorMsg}

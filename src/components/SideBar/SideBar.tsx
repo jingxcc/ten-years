@@ -5,13 +5,11 @@ import {
   ChatBubbleLeftEllipsisIcon,
   EnvelopeIcon,
   StarIcon,
-  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import {
   ChatBubbleLeftEllipsisIcon as SolidChatBubbleLeftEllipsisIcon,
   EnvelopeIcon as SolidEnvelopeIcon,
   StarIcon as SolidStarIcon,
-  UserCircleIcon as SolidUserCircleIcon,
 } from "@heroicons/react/24/solid";
 import { FirebaseError } from "firebase/app";
 import { signOut } from "firebase/auth";
@@ -22,6 +20,7 @@ import toast from "react-hot-toast";
 import Tooltip from "../Tooltip/Tooltip";
 import { UserData } from "@/types/UserData";
 import { FaGithub } from "react-icons/fa6";
+import Link from "next/link";
 
 interface SideBarProps {
   user: UserData;
@@ -72,13 +71,12 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
     <>
       {/* non-mobile */}
       <div className="fixed z-50 hidden h-100dvh w-[80px] flex-col items-center border-r  border-neutral-200 bg-sky-200 px-2 py-4 xs:flex">
-        <Image
-          src={"logo.svg"}
-          width={48}
-          height={48}
-          alt="logo"
-          className=""
-        ></Image>
+        <Link href={`${process.env.NEXT_PUBLIC_LOGIN_SUCCESS_PATHNAME}`}>
+          <div className="p-2">
+            <Image src={"logo.svg"} width={32} height={32} alt="logo"></Image>
+          </div>
+        </Link>
+
         <div className="flex flex-grow flex-col items-center justify-between">
           <div>
             <Tooltip text="Chat">
@@ -185,18 +183,25 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
             </button>
 
             <button
-              className="hover:cursor h-8 w-8 overflow-hidden rounded-full bg-gray-50 "
+              className="hover:cursor flex  w-[60px] flex-col items-center justify-center rounded bg-sky-200 p-1  text-neutral-100 enabled:hover:text-white xs:hover:bg-sky-300 xs:enabled:hover:bg-sky-300 "
               onClick={() => route.push("/profile")}
             >
-              {avatarUrl && (
-                <Image
-                  src={avatarUrl}
-                  alt={`avatar`}
-                  width={80}
-                  height={80}
-                  className=" h-full w-full border-sky-300  bg-sky-100 object-cover text-sky-300"
-                />
-              )}
+              <div className="h-8 w-8 overflow-hidden rounded-full">
+                {avatarUrl && (
+                  <Image
+                    src={avatarUrl}
+                    alt={`avatar`}
+                    width={80}
+                    height={80}
+                    className=" h-full w-full border-sky-300  bg-sky-100 object-cover text-sky-300"
+                  />
+                )}
+              </div>
+              <span
+                className={`whitespace-nowrap text-xs font-medium ${
+                  pathname === "/profile" && "text-white"
+                }`}
+              >{`Me`}</span>
             </button>
           </div>
         </div>
