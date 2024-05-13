@@ -79,7 +79,7 @@ const AuthBaseForm: React.FC<AuthFormProps> = ({
                 className="block w-full px-12 py-2 text-center text-sm text-sky-500 hover:font-bold"
                 onClick={handleDemoClick}
               >
-                {"Try a Demo"}
+                {"Try Demo Account"}
               </button>
             </div>
           )}
