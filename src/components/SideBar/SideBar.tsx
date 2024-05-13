@@ -82,19 +82,19 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
             <Tooltip text="Chat">
               <button className="btn-icon" onClick={() => route.push("/chat")}>
                 {pathname === "/chat" ? (
-                  <SolidChatBubbleLeftEllipsisIcon className="h-8 w-8"></SolidChatBubbleLeftEllipsisIcon>
+                  <SolidChatBubbleLeftEllipsisIcon className="h-8 w-8 text-white"></SolidChatBubbleLeftEllipsisIcon>
                 ) : (
                   <ChatBubbleLeftEllipsisIcon className="h-8 w-8"></ChatBubbleLeftEllipsisIcon>
                 )}
               </button>
             </Tooltip>
-            <Tooltip text="Suggestions">
+            <Tooltip text="Suggested">
               <button
                 className="btn-icon"
                 onClick={() => route.push("/potentials")}
               >
                 {pathname === "/potentials" ? (
-                  <SolidStarIcon className="h-8 w-8"></SolidStarIcon>
+                  <SolidStarIcon className="h-8 w-8 text-white"></SolidStarIcon>
                 ) : (
                   <StarIcon className="h-8 w-8"></StarIcon>
                 )}
@@ -103,7 +103,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
             <Tooltip text="Like You">
               <button className="btn-icon" onClick={() => route.push("/likes")}>
                 {pathname === "/likes" ? (
-                  <SolidEnvelopeIcon className="h-8 w-8"></SolidEnvelopeIcon>
+                  <SolidEnvelopeIcon className="h-8 w-8 text-white"></SolidEnvelopeIcon>
                 ) : (
                   <EnvelopeIcon className="h-8 w-8"></EnvelopeIcon>
                 )}
@@ -139,7 +139,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
             <Tooltip text="GitHub">
               <a
                 href={"https://github.com/jingxcc/ten-years"}
-                className="btn-icon"
+                className="btn-icon "
                 target="_blank"
               >
                 <div className="text-[32px]">
@@ -155,31 +155,56 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
       <div className="fixed bottom-0 z-50 flex h-16 w-screen items-center border-t  border-neutral-200 bg-sky-200 p-2 xs:hidden">
         <div className="flex flex-grow items-center">
           <div className="flex flex-grow items-center justify-center gap-x-8">
-            <button className="btn-icon" onClick={() => route.push("/chat")}>
+            <button
+              className="btn-icon flex w-[60px] flex-col"
+              onClick={() => route.push("/chat")}
+            >
               {pathname === "/chat" ? (
-                <SolidChatBubbleLeftEllipsisIcon className="h-8 w-8"></SolidChatBubbleLeftEllipsisIcon>
+                <SolidChatBubbleLeftEllipsisIcon className="h-8 w-8 text-white"></SolidChatBubbleLeftEllipsisIcon>
               ) : (
                 <ChatBubbleLeftEllipsisIcon className="h-8 w-8"></ChatBubbleLeftEllipsisIcon>
               )}
+              <span
+                className={`whitespace-nowrap text-xs font-medium ${
+                  pathname === "/chat" && "text-white"
+                }`}
+              >
+                Chat
+              </span>
             </button>
 
             <button
-              className="btn-icon"
+              className="btn-icon flex w-[60px] flex-col"
               onClick={() => route.push("/potentials")}
             >
               {pathname === "/potentials" ? (
-                <SolidStarIcon className="h-8 w-8"></SolidStarIcon>
+                <SolidStarIcon className="h-8 w-8 text-white"></SolidStarIcon>
               ) : (
                 <StarIcon className="h-8 w-8"></StarIcon>
               )}
+              <span
+                className={`whitespace-nowrap text-xs font-medium ${
+                  pathname === "/potentials" && "text-white"
+                }`}
+              >
+                Suggested
+              </span>
             </button>
 
-            <button className="btn-icon" onClick={() => route.push("/likes")}>
+            <button
+              className="btn-icon flex flex-col "
+              onClick={() => route.push("/likes")}
+            >
               {pathname === "/likes" ? (
-                <SolidEnvelopeIcon className="h-8 w-8"></SolidEnvelopeIcon>
+                <SolidEnvelopeIcon className="h-8 w-8 text-white"></SolidEnvelopeIcon>
               ) : (
                 <EnvelopeIcon className="h-8 w-8"></EnvelopeIcon>
               )}
+              <span
+                className={`whitespace-nowrap text-xs font-medium ${
+                  pathname === "/likes" && "text-white"
+                }`}
+              >{`Like You`}</span>
             </button>
 
             <button
