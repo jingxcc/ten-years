@@ -15,7 +15,7 @@
     "@types/react-test-renderer": "^18.0.7",
     "clsx": "^2.0.0",
     "firebase": "^10.5.2",
-    "next": "14.0.1",
+    "next": "^14.2.3",
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
