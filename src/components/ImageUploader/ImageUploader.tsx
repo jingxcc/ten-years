@@ -28,7 +28,7 @@ export default function ImageUploader({
   onImageUpload,
   onImageDelete,
 }: ImageUploaderProps) {
-  const [uploadingImgs, setUplodingImgs] = useState<{ [id: string]: Boolean }>(
+  const [uploadingImgs, setUploadingImgs] = useState<{ [id: string]: Boolean }>(
     {},
   );
   const remainingSlots =
@@ -56,7 +56,7 @@ export default function ImageUploader({
         imageMetadata,
       );
       const newImgId = crypto.randomUUID();
-      setUplodingImgs((prev) => ({ ...prev, [newImgId]: true }));
+      setUploadingImgs((prev) => ({ ...prev, [newImgId]: true }));
 
       uploadTask.on(
         "state_changed",
@@ -83,7 +83,7 @@ export default function ImageUploader({
 
             onImageUpload(downloadUrl);
 
-            setUplodingImgs((prev) => {
+            setUploadingImgs((prev) => {
               const updateData = { ...prev };
               delete updateData[newImgId];
               return updateData;

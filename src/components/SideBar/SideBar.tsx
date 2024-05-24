@@ -21,6 +21,7 @@ import Tooltip from "../Tooltip/Tooltip";
 import { UserData } from "@/types/UserData";
 import { FaGithub } from "react-icons/fa6";
 import Link from "next/link";
+import { loginSuccessPathname } from "@/constants/config";
 
 interface SideBarProps {
   user: UserData;
@@ -71,7 +72,7 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
     <>
       {/* non-mobile */}
       <div className="fixed z-50 hidden h-100dvh w-[80px] flex-col items-center border-r  border-neutral-200 bg-sky-200 px-2 py-4 xs:flex">
-        <Link href={`${process.env.NEXT_PUBLIC_LOGIN_SUCCESS_PATHNAME}`}>
+        <Link href={`${loginSuccessPathname}`}>
           <div className="p-2">
             <Image src={"logo.svg"} width={32} height={32} alt="logo"></Image>
           </div>
@@ -91,9 +92,9 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
             <Tooltip text="Suggested">
               <button
                 className="btn-icon"
-                onClick={() => route.push("/potentials")}
+                onClick={() => route.push(loginSuccessPathname)}
               >
-                {pathname === "/potentials" ? (
+                {pathname === loginSuccessPathname ? (
                   <SolidStarIcon className="h-8 w-8 text-white"></SolidStarIcon>
                 ) : (
                   <StarIcon className="h-8 w-8"></StarIcon>
@@ -175,16 +176,16 @@ const Sidebar: React.FC<SideBarProps> = ({ user, children }) => {
 
             <button
               className="btn-icon flex w-[60px] flex-col"
-              onClick={() => route.push("/potentials")}
+              onClick={() => route.push(loginSuccessPathname)}
             >
-              {pathname === "/potentials" ? (
+              {pathname === loginSuccessPathname ? (
                 <SolidStarIcon className="h-8 w-8 text-white"></SolidStarIcon>
               ) : (
                 <StarIcon className="h-8 w-8"></StarIcon>
               )}
               <span
                 className={`whitespace-nowrap text-xs font-medium ${
-                  pathname === "/potentials" && "text-white"
+                  pathname === loginSuccessPathname && "text-white"
                 }`}
               >
                 Suggested
