@@ -16,6 +16,7 @@ import updateGetStartFormDoc, {
 import ImageUploader from "@/components/ImageUploader/ImageUploader";
 import toast from "react-hot-toast";
 import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
+import { loginSuccessPathname } from "@/constants/config";
 
 interface GetStartFormProps {
   user: UserData;
@@ -93,7 +94,7 @@ const GetStartForm: React.FC<GetStartFormProps> = ({ user }) => {
       if (result) {
         setErrorMsg("");
         toast.success(`Welcome ! ${formData.nickname}`, { icon: "🎉🎉" });
-        route.push("/potentials");
+        route.push(loginSuccessPathname);
       }
     } catch (error) {
       toast.error("Profile Created Failed");

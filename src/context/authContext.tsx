@@ -1,4 +1,5 @@
 "use client";
+import { loginSuccessPathname } from "@/constants/config";
 import fetchUserDoc from "@/lib/firebase/firestore/fetchUserDoc";
 import { auth } from "@/lib/firebase/initialize";
 import { UserData } from "@/types/UserData";
@@ -39,7 +40,7 @@ const redirectToPage = async (
   }
 
   if (user && pathname === "/") {
-    route.push("/potentials");
+    route.push(loginSuccessPathname);
     return true;
   }
 

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Header from "@/components/Header/Header";
 import AuthBaseForm from "@/components/AuthBaseForm/AuthBaseForm";
+import { loginSuccessPathname } from "@/constants/config";
 
 export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState<string>("");
@@ -25,7 +26,7 @@ export default function LoginPage() {
       );
 
       toast.success("Login success", { position: "top-center" });
-      route.push("/potentials");
+      route.push(loginSuccessPathname);
     } catch (error) {
       let msg = "";
       if (error instanceof FirebaseError) {
