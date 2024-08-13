@@ -23,7 +23,7 @@
 - Next.js
   - Router, Image
 - Tailwind CSS
-- Jest
+- Jest: Takes snapshots of the component to ensure they remain consistent over time
 
 ## Back-end
 
