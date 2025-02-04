@@ -2,7 +2,7 @@
 
 <!-- TODO: text center -->
 
-ＡTen Years is a matching website allows you to meet new people and chat with them.
+ＡTen Years is a matching website that allows you to meet and chat with new people.
 
 <img src="./public/README/home.svg" width="900" alt="home"></img>
 
@@ -48,8 +48,8 @@
 
 2. Start Finding Your Match from "Today's Suggestions"!
 
-   - After login each day, you'll be provided with today's potential matches. Click on the photo to view images, and the text area to view user profiles.
-   - Depending on your quota of hearts, send likes to your favorite one !
+   - After logging each day, you'll receive today's potential matches. Click on the photo to view images, and the text area to view user profiles.
+   - Depending on your heart quota, send likes to your favorite one!
    - Matchmaking logic: - candidates who are not friends - have not sent a friend request previously. -
 
    ![suggest](./public/README/gif/suggest.gif)
@@ -68,12 +68,6 @@
 
   ![chat](./public/README/gif/chat.gif)
 
-<!-- TODO: improvemenets -->
-<!-- 4.1 傳送圖片 -->
-<!-- 5. **心理測驗** --
-<!-- 1. 心理測驗可幫助你了自己、找到更適合的配對對象 -->
-<!-- 1. **不再感興趣了嗎** --
-<!-- 1. 可以在這裡取消配對，朝向下一段緣份邁進～ -->
 
 # Database Schema
 
