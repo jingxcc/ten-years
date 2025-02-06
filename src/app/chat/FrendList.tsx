@@ -13,8 +13,6 @@ const FriendList: React.FC<Props> = ({
   currentUser,
   onClickRecipient,
 }) => {
-  // console.log("friendslist");
-
   return (
     <>
       <div className="max-h-[60px] bg-white xs:left-20 ">

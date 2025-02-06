@@ -60,16 +60,7 @@ export default function ImageUploader({
 
       uploadTask.on(
         "state_changed",
-        (snapshot) => {
-          // switch (snapshot.state) {
-          //   case "paused":
-          //     console.log("upload is paused");
-          //     break;
-          //   case "running":
-          //     console.log("upload is running");
-          //     break;
-          // }
-        },
+        (snapshot) => {},
         (error) => {
           if (error instanceof StorageError) {
             console.error("Image Upload Error: ", error.message);
