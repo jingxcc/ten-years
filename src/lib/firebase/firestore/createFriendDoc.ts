@@ -27,15 +27,6 @@ const createFriendDoc = async (userId: string, friendData: Friend) => {
     console.error(error);
     throw error;
   }
-  // Check if the friend document exists
-  // const docSnap = await getDoc(friendDocRef);
-
-  // if (!docSnap.exists()) {
-  //   await setDoc(friendDocRef, friendData);
-  //   console.log("Friend document created!");
-  // } else {
-  //   console.log("Friend document already exists.");
-  // }
 };
 
 export { createFriendDoc };

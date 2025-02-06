@@ -21,10 +21,14 @@ const Chat: React.FC<Props> = ({
   onBackToList,
 }) => {
   const [newMessage, setNewMessage] = useState("");
+  const [isTextComposing, setIsTextComposing] = useState(false);
   const chatEndRef = useRef<null | HTMLDivElement>(null);
   const messageContainerRef = useRef<null | HTMLDivElement>(null);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
-  // console.log("Chat");
+  useEffect(() => {
+    setIsTouchDevice(navigator.maxTouchPoints > 0);
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
@@ -37,7 +41,13 @@ const Chat: React.FC<Props> = ({
   const handleEnterKey = async (
     event: React.KeyboardEvent<HTMLTextAreaElement>,
   ) => {
-    if (event.key === "Enter" && !event.shiftKey) {
+    if (
+      !isTouchDevice &&
+      !isTextComposing &&
+      event.key === "Enter" &&
+      !event.shiftKey
+    ) {
+      event.preventDefault();
       sendMessage();
     }
   };
@@ -125,6 +135,8 @@ const Chat: React.FC<Props> = ({
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Shift + Enter for a new line"
           onKeyDown={handleEnterKey}
+          onCompositionStart={() => setIsTextComposing(true)}
+          onCompositionEnd={() => setIsTextComposing(false)}
           rows={1}
           className="flex-grow resize-none p-2 focus:outline-none"
         />
